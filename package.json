@@ -1,0 +1,27 @@
+{
+  "name": "bodhi-api",
+  "version": "0.0.1",
+  "description": "An open source blockchain explorer for monitoring Bodhi platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bodhiproject/bodhi-api.git"
+  },
+  "keywords": [
+    "qtum",
+    "bodhi",
+    "api"
+  ],
+  "author": "Chris Li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bodhiproject/bodhi-api/issues"
+  },
+  "homepage": "https://github.com/bodhiproject/bodhi-api#readme",
+  "dependencies": {
+    "restify": "^6.3.4"
+  }
+}
