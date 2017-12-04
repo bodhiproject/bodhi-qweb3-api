@@ -1,8 +1,11 @@
 import _ from 'lodash';
-import utils from './src/modules/qweb3/src/utils';
+import moment from 'moment';
 
+import utils from './src/modules/qweb3/src/utils';
 import Contracts from './config/contracts';
 import Topic from './src/models/topic';
+import logger from './src/modules/logger';
+import JobQueue from './src/modules/jobqueue';
 
 var restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -166,3 +169,71 @@ server.post('/hello', function create(req, res, next) {
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
+
+scheduleMonitorJob({
+  name: `job-searchlogs`,
+  cb: () => {
+    const fromBlock = 0;
+    const toBlock = -1;
+    const addresses = Contracts.EventFactory.address;
+    const topics = ['null'];
+
+    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
+      .then((result) => {
+        console.log(`Retrieved ${result.length} entries from searchLogs.`);
+
+        let topicArray = [];
+        _.each(result, (event, index) => {
+          console.log(event);
+
+          // Parse out logs
+          if (!_.isEmpty(event.log)) {
+            _.each(event.log, (logItem) => {
+              topicArray.push(new Topic(logItem));
+            });
+          }
+        });
+
+        return _.map(topicArray, (topic) => topic.toJson());
+      });
+  },
+  options: { interval: 10000, attempts: 3, silent: false },
+});
+
+/**
+ * [scheduleMonitorJob description]
+ * @param  {[type]} params [description]
+ * @return {Parse.Promise}  A promise resolved upon job completion
+ */
+function scheduleMonitorJob(params) {
+  const { name, cb, options } = params;
+
+  const jobName = `${name}`;
+  const interval = (options && options.interval) || 0; // Default 0, meaning run immediately
+  const jobOptions = {
+    // Retry 3 times on failure 
+    attempts: (options && options.attempts) || 3,
+    silent: (options && options.silent) || false,
+  };
+
+  let job = JobQueue.scheduleJob({
+      jobName,
+      interval,
+      cb,
+    },
+    jobOptions,
+  );
+
+  job.on('complete', function(result) {
+    console.log('Job completed with data ', result);
+
+  }).on('failed attempt', function(errorMessage, doneAttempts) {
+    console.log('Job failed', errorMessage, doneAttempts);
+
+  }).on('failed', function(errorMessage) {
+    console.log('Job failed', errorMessage);
+
+  }).on('progress', function(progress, data) {
+    console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
+  })
+}

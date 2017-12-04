@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import kue from 'kue-scheduler';
-import { paramsCheck, logDebug, logError } from './utils';
+import logger from '../logger';
+logger.setDebug(true);
 
 const Queue = kue.createQueue();
 Queue.clear();
@@ -18,12 +19,12 @@ class JobQueue {
   /**
    * Add a job to queue and start it
    * @param  {string} jobName
-   * @param  {number} interval
+   * @param  {number} interval in milliseconds
    * @param  {func} cb  callback function which needs to return a promise
    * @return {[type]}        [description]
    */
   static scheduleJob(params, options) {
-    paramsCheck('scheduleJob', params, ['jobName', 'interval', 'cb']);
+    // paramsCheck('scheduleJob', params, ['jobName', 'interval', 'cb']);
     const { jobName, interval, cb } = params;
 
     const { silent, attempts, backoff: bo } = options;
@@ -31,7 +32,6 @@ class JobQueue {
 
     const job = Queue.createJob(jobName)
       .priority('normal')
-      .unique(jobName)
       .attempts(attempts || Defaults.attempts)
       .backoff(backoff)
       .removeOnComplete(true);
@@ -45,19 +45,21 @@ class JobQueue {
 
     // Processing a scheduled job.
     Queue.process(jobName, (instance, done) => {
-      if (!silent) { logDebug(jobName, 'Run instance'); }
+      if (!silent) { logger.debug(`${jobName} - Run instance`); }
 
       // Execute callback func
       cb().then(() => {
-        if (!silent) { logDebug(jobName, 'Completed!'); }
+        if (!silent) {
+          logger.debug(`${jobName} - Completed!`);
+        }
         done();
       }, (err) => {
-        logError(jobName, err.stack ? err.stack : err.message);
+        logger.error(err.stack ? err.stack : err.message);
         done(new Error(err.message));
       });
     });
 
-    logDebug('scheduleJob', `Scheduled job ${jobName} to run ${interval === 0 ? 'now.' : (`every ${interval / 1000} seconds.`)}`);
+    logger.debug(`Scheduled job ${jobName} to run ${interval === 0 ? 'now.' : (`every ${interval / 1000} seconds.`)}`);
 
     return job;
   }
@@ -69,25 +71,25 @@ class JobQueue {
    * @return {Parse.Promise}        [description]
    */
   static cancelJob(params) {
-    paramsCheck('cancelJob', params, ['jobName']);
+    // paramsCheck('cancelJob', params, ['jobName']);
     const { jobName, cb } = params;
 
     Queue.remove({ unique: jobName }, (err, res) => {
       if (err) {
-        logError('JobQueue.cancelJob', err);
+        logger.error(`JobQueue.cancelJob - ${err}`);
         return;
       }
 
-      logDebug(jobName, 'Job is successfully removed from Queue.');
+      logger.debug(`${jobName} - Job is successfully removed from Queue.`);
 
       if (!_.isUndefined(cb)) {
         // Execute callback func
         cb()
           .then(() => {
-              logDebug('JobQueue.cancelJob', 'Finished');
+              logger.debug(`JobQueue.cancelJob - Finished`);
             },
             (error) => {
-              logError('JobQueue.cancelJob', error);
+              logger.error(`JobQueue.cancelJob - ${error}`);
             });
       }
     });

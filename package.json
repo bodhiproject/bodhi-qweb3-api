@@ -25,6 +25,8 @@
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "kue-scheduler": "^0.7.4",
+    "moment": "^2.19.3",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.0.1"
   }
