@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
+import promise from 'bluebird';
 
 import utils from './src/modules/qweb3/src/utils';
 import Contracts from './config/contracts';
@@ -13,6 +14,8 @@ const corsMiddleware = require('restify-cors-middleware')
 var Qweb3 = require('./src/modules/qweb3').default;
 const qweb3 = new Qweb3('http://bodhi:bodhi@localhost:13889');
 const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
+
+let topicsSnapshot = [];
 
 function respond(req, res, next) {
   res.send('hello ' + req.params.name);
@@ -132,30 +135,41 @@ server.post('/createTopic', (req, res, next) => {
 
 server.get('/topics', (req, res, next) => {
 
-  const fromBlock = 0;
-  const toBlock = -1;
-  const addresses = Contracts.EventFactory.address;
-  const topics = ['null'];
+  if (_.isEmpty(topicsSnapshot)) {
+    const fromBlock = 0;
+    const toBlock = -1;
+    const addresses = Contracts.EventFactory.address;
+    const topics = ['null'];
 
-  return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-    .then((result) => {
-      console.log(`Retrieved ${result.length} entries from searchLogs.`);
+    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
+      .then((result) => {
+          console.log(`Retrieved ${result.length} entries from searchLogs.`);
 
-      let topicArray = [];
-      _.each(result, (event, index) => {
-        console.log(event);
+          let topicArray = [];
+          _.each(result, (event, index) => {
+            console.log(event);
 
-        // Parse out logs
-        if (!_.isEmpty(event.log)) {
-          _.each(event.log, (logItem) => {
-            topicArray.push(new Topic(logItem));
+            // Parse out logs
+            if (!_.isEmpty(event.log)) {
+              _.each(event.log, (logItem) => {
+                topicArray.push(new Topic(logItem));
+              });
+            }
           });
-        }
-      });
 
-      res.send(200, _.map(topicArray, (topic) => topic.toJson()));
-      next();
-    });
+          res.send(200, _.map(topicArray, (topic) => topic.toJson()));
+          next();
+        },
+        (err) => {
+          console.log(err.message);
+          res.send(500, err.message);
+          next();
+        }
+      );
+  } else {
+    res.send(200, topicsSnapshot);
+    next();
+  }
 });
 
 
@@ -170,6 +184,8 @@ server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
 
+// Run schedule monitoring job on startup
+// TODO: We might want to add a switch to turn in on and off
 scheduleMonitorJob({
   name: `job-searchlogs`,
   cb: () => {
@@ -194,7 +210,9 @@ scheduleMonitorJob({
           }
         });
 
-        return _.map(topicArray, (topic) => topic.toJson());
+        topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
+
+        return promise.resolve();
       });
   },
   options: { interval: 10000, attempts: 3, silent: false },
