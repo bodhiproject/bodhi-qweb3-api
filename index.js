@@ -24,6 +24,7 @@ function respond(req, res, next) {
 
 var server = restify.createServer();
 
+/** Set up CORS to allow request from a different server */
 const cors = corsMiddleware({
   // preflightMaxAge: 5, //Optional 
   origins: ['*'],
@@ -34,6 +35,13 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 
+/**
+ * GET requests goes here
+ */
+
+/**
+ * Return true if qweb3 is able to get blockinfo from blockchain
+ */
 server.post('/isconnected', (req, res, next) => {
 
   qweb3.isConnected()
@@ -45,6 +53,101 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
+/** Start blockchain synchronizer */
+server.get('/start', (req, res, next) => {
+
+  // Run schedule monitoring job on startup
+  // TODO: We might want to add a switch to turn in on and off
+  scheduleMonitorJob({
+      name: `job-searchlogs`,
+      cb: () => {
+        const fromBlock = 0;
+        const toBlock = -1;
+        const addresses = Contracts.EventFactory.address;
+        const topics = ['null'];
+
+        return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
+          .then((result) => {
+            console.log(`Retrieved ${result.length} entries from searchLogs.`);
+
+            let topicArray = [];
+            _.each(result, (event, index) => {
+              console.log(event);
+
+              // Parse out logs
+              if (!_.isEmpty(event.log)) {
+                _.each(event.log, (logItem) => {
+                  topicArray.push(new Topic(logItem));
+                });
+              }
+            });
+
+            topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
+
+            return promise.resolve();
+          });
+      },
+      options: { interval: 10000, attempts: 3, silent: false },
+    })
+    .then(() => {
+      res.send(200, "Synchronizer started.");
+      next();
+    });
+});
+
+/** Stop blockchain synchronizer */
+server.get('/stop', (req, res, next) => {
+  JobQueue.clear();
+  res.send(200, "Synchronizer stopped.");
+  next();
+});
+
+/** List Topics from searchlog */
+server.get('/topics', (req, res, next) => {
+
+  if (_.isEmpty(topicsSnapshot)) {
+    const fromBlock = 0;
+    const toBlock = -1;
+    const addresses = Contracts.EventFactory.address;
+    const topics = ['null'];
+
+    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
+      .then((result) => {
+          console.log(`Retrieved ${result.length} entries from searchLogs.`);
+
+          let topicArray = [];
+          _.each(result, (event, index) => {
+            console.log(event);
+
+            // Parse out logs
+            if (!_.isEmpty(event.log)) {
+              _.each(event.log, (logItem) => {
+                topicArray.push(new Topic(logItem));
+              });
+            }
+          });
+
+          res.send(200, _.map(topicArray, (topic) => topic.toJson()));
+          next();
+        },
+        (err) => {
+          console.log(err.message);
+          res.send(500, err.message);
+          next();
+        }
+      );
+  } else {
+    res.send(200, topicsSnapshot);
+    next();
+  }
+});
+
+
+/**
+ * POST requests goes here
+ */
+
+/** Create Topic event */
 server.post('/createTopic', (req, res, next) => {
 
   let senderAddress = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
@@ -52,7 +155,6 @@ server.post('/createTopic', (req, res, next) => {
   let oracle = '0x17e7888aa7412a735f336d2f6d784caefabb6fa3';
   const addresses = Contracts.EventFactory.address;
   const topics = ['null'];
-
 
   let nameStr = utils.toHex('What am I gonna eat tonight???');
 
@@ -133,90 +235,12 @@ server.post('/createTopic', (req, res, next) => {
       });
 });
 
-server.get('/topics', (req, res, next) => {
 
-  if (_.isEmpty(topicsSnapshot)) {
-    const fromBlock = 0;
-    const toBlock = -1;
-    const addresses = Contracts.EventFactory.address;
-    const topics = ['null'];
-
-    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-      .then((result) => {
-          console.log(`Retrieved ${result.length} entries from searchLogs.`);
-
-          let topicArray = [];
-          _.each(result, (event, index) => {
-            console.log(event);
-
-            // Parse out logs
-            if (!_.isEmpty(event.log)) {
-              _.each(event.log, (logItem) => {
-                topicArray.push(new Topic(logItem));
-              });
-            }
-          });
-
-          res.send(200, _.map(topicArray, (topic) => topic.toJson()));
-          next();
-        },
-        (err) => {
-          console.log(err.message);
-          res.send(500, err.message);
-          next();
-        }
-      );
-  } else {
-    res.send(200, topicsSnapshot);
-    next();
-  }
-});
-
-
-server.head('/hello/:name', respond);
-
-server.post('/hello', function create(req, res, next) {
-  res.send(201, Math.random().toString(36).substr(3, 8));
-  return next();
-});
-
+/** Start API server */
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
 
-// Run schedule monitoring job on startup
-// TODO: We might want to add a switch to turn in on and off
-scheduleMonitorJob({
-  name: `job-searchlogs`,
-  cb: () => {
-    const fromBlock = 0;
-    const toBlock = -1;
-    const addresses = Contracts.EventFactory.address;
-    const topics = ['null'];
-
-    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-      .then((result) => {
-        console.log(`Retrieved ${result.length} entries from searchLogs.`);
-
-        let topicArray = [];
-        _.each(result, (event, index) => {
-          console.log(event);
-
-          // Parse out logs
-          if (!_.isEmpty(event.log)) {
-            _.each(event.log, (logItem) => {
-              topicArray.push(new Topic(logItem));
-            });
-          }
-        });
-
-        topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
-
-        return promise.resolve();
-      });
-  },
-  options: { interval: 10000, attempts: 3, silent: false },
-});
 
 /**
  * [scheduleMonitorJob description]
@@ -253,5 +277,7 @@ function scheduleMonitorJob(params) {
 
   }).on('progress', function(progress, data) {
     console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
-  })
+  });
+
+  return promise.resolve();
 }

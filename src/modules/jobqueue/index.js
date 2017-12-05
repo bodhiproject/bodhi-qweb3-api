@@ -94,6 +94,14 @@ class JobQueue {
       }
     });
   }
+
+  /**
+   * Cancel all jobs
+   * @return {} 
+   */
+  static clear(){
+    Queue.clear();
+  }
 }
 
 // start kue UI to monitor jobs
