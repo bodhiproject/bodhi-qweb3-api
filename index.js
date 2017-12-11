@@ -257,14 +257,22 @@ function scheduleMonitorJob(params) {
   })
 }
 
-async function createTopic() {
+async function createTopic(
+  _oracleAddress, 
+  _eventName, 
+  _resultNames,
+  _bettingEndBlock, 
+  _resultSettingEndBlock, 
+  _senderAddress) 
+{
   console.log('Creating TopicEvent:');
   
   const functionSig = 'd0613dce';
-  const oracle = '00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3';
 
-  // Construct name array
-  let nameStr = Web3Utils.toHex('Best movie of 2017?');
+  let oracle = await qweb3.getHexAddress(_oracleAddress);
+  oracle = Web3Utils.padLeft(oracle, 64);
+
+  let nameStr = Web3Utils.toHex(_eventName);
   if (nameStr.indexOf('0x') === 0) {
     nameStr = nameStr.slice(2);
   }
@@ -272,19 +280,20 @@ async function createTopic() {
   let nameArray = nameStr.match(/.{1,64}/g);
 
   let resultNames = new Array(10).fill('\u0000');
-  resultNames[0] = 'Thor: Ragnarok';
-  resultNames[1] = 'Star Wars';
-  resultNames = _.map(resultNames, (value) => {
-    let resultName = Web3Utils.toHex(value);
-    return Web3Utils.padRight(resultName, 64).slice(2);
-  });
+  for (let i = 0; i < 10; i++) {
+    let resultName;
+    if (i < _resultNames.length - 1) {
+      resultName = Web3Utils.toHex(_resultNames[i]);
+    } else {
+      resultName = Web3Utils.toHex('');
+    }
+    resultNames[i] = Web3Utils.padRight(resultName, 64).slice(2);
+  }
 
-  let bettingEndBlock = 48255;
-  bettingEndBlock = Web3Utils.toHex(bettingEndBlock);
+  let bettingEndBlock = Web3Utils.toHex(_bettingEndBlock);
   bettingEndBlock = Web3Utils.padLeft(bettingEndBlock, 64).slice(2);
 
-  let resultSettingEndBlock = 48257;
-  resultSettingEndBlock = Web3Utils.toHex(resultSettingEndBlock);
+  let resultSettingEndBlock = Web3Utils.toHex(_resultSettingEndBlock);
   resultSettingEndBlock = Web3Utils.padLeft(resultSettingEndBlock, 64).slice(2);
 
   const dataHex = 
@@ -296,16 +305,15 @@ async function createTopic() {
     .concat(resultSettingEndBlock);
   console.log(dataHex);
 
-  const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-
   let result = await contractEventFactory.sendWithDataHex({
     dataHex: dataHex,
     gasLimit: 6000000,
-    senderAddress: senderAddress,
+    senderAddress: _senderAddress,
   });
   console.log(result);
 }
-createTopic();
+createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', 'Best movie of 2017?', ['Thor: Ragnarok', 'Star Wars'], 48400, 48500, 
+  'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
 
 // async function listUnspent() {
 //   console.log('Listing unspent outputs:');
