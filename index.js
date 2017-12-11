@@ -7,6 +7,7 @@ import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
 import JobQueue from './src/modules/jobqueue';
+import Web3Utils from './src/modules/qweb3/node_modules/web3-utils';
 
 var restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -14,6 +15,7 @@ const corsMiddleware = require('restify-cors-middleware')
 var Qweb3 = require('./src/modules/qweb3').default;
 const qweb3 = new Qweb3('http://bodhi:bodhi@localhost:13889');
 const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
+const contractCentralizedOracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
 
 let topicsSnapshot = [];
 
@@ -46,7 +48,6 @@ server.post('/isconnected', (req, res, next) => {
 });
 
 server.post('/createTopic', (req, res, next) => {
-
   let senderAddress = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
   let resultSetter = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
   let oracle = '0x17e7888aa7412a735f336d2f6d784caefabb6fa3';
@@ -186,37 +187,37 @@ server.listen(8080, function() {
 
 // Run schedule monitoring job on startup
 // TODO: We might want to add a switch to turn in on and off
-scheduleMonitorJob({
-  name: `job-searchlogs`,
-  cb: () => {
-    const fromBlock = 0;
-    const toBlock = -1;
-    const addresses = Contracts.EventFactory.address;
-    const topics = ['null'];
+// scheduleMonitorJob({
+//   name: `job-searchlogs`,
+//   cb: () => {
+//     const fromBlock = 0;
+//     const toBlock = -1;
+//     const addresses = Contracts.EventFactory.address;
+//     const topics = ['null'];
 
-    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-      .then((result) => {
-        console.log(`Retrieved ${result.length} entries from searchLogs.`);
+//     return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
+//       .then((result) => {
+//         console.log(`Retrieved ${result.length} entries from searchLogs.`);
 
-        let topicArray = [];
-        _.each(result, (event, index) => {
-          console.log(event);
+//         let topicArray = [];
+//         _.each(result, (event, index) => {
+//           console.log(event);
 
-          // Parse out logs
-          if (!_.isEmpty(event.log)) {
-            _.each(event.log, (logItem) => {
-              topicArray.push(new Topic(logItem));
-            });
-          }
-        });
+//           // Parse out logs
+//           if (!_.isEmpty(event.log)) {
+//             _.each(event.log, (logItem) => {
+//               topicArray.push(new Topic(logItem));
+//             });
+//           }
+//         });
 
-        topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
+//         topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
 
-        return promise.resolve();
-      });
-  },
-  options: { interval: 10000, attempts: 3, silent: false },
-});
+//         return promise.resolve();
+//       });
+//   },
+//   options: { interval: 10000, attempts: 3, silent: false },
+// });
 
 /**
  * [scheduleMonitorJob description]
@@ -255,3 +256,74 @@ function scheduleMonitorJob(params) {
     console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
   })
 }
+
+async function createTopic() {
+  console.log('Creating TopicEvent:');
+  
+  const functionSig = 'd0613dce';
+  const oracle = '00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3';
+
+  // Construct name array
+  let nameStr = Web3Utils.toHex('Best movie of 2017?');
+  if (nameStr.indexOf('0x') === 0) {
+    nameStr = nameStr.slice(2);
+  }
+  nameStr = Web3Utils.padRight(nameStr, 640);
+  let nameArray = nameStr.match(/.{1,64}/g);
+
+  let resultNames = new Array(10).fill('\u0000');
+  resultNames[0] = 'Thor: Ragnarok';
+  resultNames[1] = 'Star Wars';
+  resultNames = _.map(resultNames, (value) => {
+    let resultName = Web3Utils.toHex(value);
+    return Web3Utils.padRight(resultName, 64).slice(2);
+  });
+
+  let bettingEndBlock = 48255;
+  bettingEndBlock = Web3Utils.toHex(bettingEndBlock);
+  bettingEndBlock = Web3Utils.padLeft(bettingEndBlock, 64).slice(2);
+
+  let resultSettingEndBlock = 48257;
+  resultSettingEndBlock = Web3Utils.toHex(resultSettingEndBlock);
+  resultSettingEndBlock = Web3Utils.padLeft(resultSettingEndBlock, 64).slice(2);
+
+  const dataHex = 
+    functionSig
+    .concat(oracle)
+    .concat(nameStr)
+    .concat(resultNames.join(''))
+    .concat(bettingEndBlock)
+    .concat(resultSettingEndBlock);
+  console.log(dataHex);
+
+  const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
+
+  let result = await contractEventFactory.sendWithDataHex({
+    dataHex: dataHex,
+    gasLimit: 6000000,
+    senderAddress: senderAddress,
+  });
+  console.log(result);
+}
+createTopic();
+
+// async function listUnspent() {
+//   console.log('Listing unspent outputs:');
+//   let result = await qweb3.listUnspent();
+//   console.log(result);
+// }
+// listUnspent();
+
+// async function bet() {
+//   console.log('Placing bet:')
+//   let senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
+//   let resultIndex = 2;
+
+//   let result = await contractCentralizedOracle.send('bet', {
+//       data: [resultIndex],
+//       amount: 10,
+//       senderAddress: senderAddress,
+//     });
+//   console.log(result);
+// }
+// bet();
