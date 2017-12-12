@@ -1,7 +1,6 @@
 [submodule "src/modules/qweb3"]
 	path = src/modules/qweb3
 	url = https://github.com/bodhiproject/qweb3.js.git
-	branch = add_demo_functions
 [submodule "jobqueue"]
 	path = src/modules/jobqueue
 	url = https://github.com/chrisli30/jobqueue.git
