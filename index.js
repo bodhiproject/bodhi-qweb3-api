@@ -14,6 +14,7 @@ const corsMiddleware = require('restify-cors-middleware')
 var Qweb3 = require('./src/modules/qweb3').default;
 const qweb3 = new Qweb3('http://bodhi:bodhi@localhost:13889');
 const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
+const contractCentralizedOracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
 
 let topicsSnapshot = [];
 
@@ -46,7 +47,6 @@ server.post('/isconnected', (req, res, next) => {
 });
 
 server.post('/createTopic', (req, res, next) => {
-
   let senderAddress = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
   let resultSetter = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
   let oracle = '0x17e7888aa7412a735f336d2f6d784caefabb6fa3';
@@ -186,37 +186,37 @@ server.listen(8080, function() {
 
 // Run schedule monitoring job on startup
 // TODO: We might want to add a switch to turn in on and off
-scheduleMonitorJob({
-  name: `job-searchlogs`,
-  cb: () => {
-    const fromBlock = 0;
-    const toBlock = -1;
-    const addresses = Contracts.EventFactory.address;
-    const topics = ['null'];
+// scheduleMonitorJob({
+//   name: `job-searchlogs`,
+//   cb: () => {
+//     const fromBlock = 0;
+//     const toBlock = -1;
+//     const addresses = Contracts.EventFactory.address;
+//     const topics = ['null'];
 
-    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-      .then((result) => {
-        console.log(`Retrieved ${result.length} entries from searchLogs.`);
+//     return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
+//       .then((result) => {
+//         console.log(`Retrieved ${result.length} entries from searchLogs.`);
 
-        let topicArray = [];
-        _.each(result, (event, index) => {
-          console.log(event);
+//         let topicArray = [];
+//         _.each(result, (event, index) => {
+//           console.log(event);
 
-          // Parse out logs
-          if (!_.isEmpty(event.log)) {
-            _.each(event.log, (logItem) => {
-              topicArray.push(new Topic(logItem));
-            });
-          }
-        });
+//           // Parse out logs
+//           if (!_.isEmpty(event.log)) {
+//             _.each(event.log, (logItem) => {
+//               topicArray.push(new Topic(logItem));
+//             });
+//           }
+//         });
 
-        topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
+//         topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
 
-        return promise.resolve();
-      });
-  },
-  options: { interval: 10000, attempts: 3, silent: false },
-});
+//         return promise.resolve();
+//       });
+//   },
+//   options: { interval: 10000, attempts: 3, silent: false },
+// });
 
 /**
  * [scheduleMonitorJob description]
@@ -255,3 +255,104 @@ function scheduleMonitorJob(params) {
     console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
   })
 }
+
+const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
+
+// async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
+//   _senderAddress) {
+//   console.log('Creating TopicEvent:');
+//   let result = await contractEventFactory.send('createTopic', {
+//     methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
+//     gasLimit: 5000000,
+//     senderAddress: _senderAddress,
+//   });
+//   console.log(result);
+// }
+// createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2019 NBA Finals winner?','','','','','','','','',''], 
+//   ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
+
+async function listUnspent() {
+  console.log('Listing unspent outputs:');
+  let result = await qweb3.listUnspent();
+  console.log(result);
+}
+listUnspent();
+
+// async function getBlockCount() {
+//   console.log('getBlockCount');
+//   console.log(await qweb3.getBlockCount());
+// }
+// getBlockCount();
+
+// async function bet() {
+//   console.log('Placing bet:')
+//   let senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
+//   let resultIndex = 2;
+
+//   let result = await contractCentralizedOracle.send('bet', {
+//       data: [resultIndex],
+//       amount: 10,
+//       senderAddress: senderAddress,
+//     });
+//   console.log(result);
+// }
+// bet();
+
+// async function getBetBalances() {
+//   const result = await contractCentralizedOracle.call('getBetBalances', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getBetBalances();
+
+// async function getVoteBalances() {
+//   const result = await contractCentralizedOracle.call('getVoteBalances', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getVoteBalances();
+
+// async function getTotalBets() {
+//   const result = await contractCentralizedOracle.call('getTotalBets', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getTotalBets();
+
+// async function getTotalVotes() {
+//   const result = await contractCentralizedOracle.call('getTotalVotes', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getTotalVotes();
+
+// async function getResult() {
+//   const result = await contractCentralizedOracle.call('getResult', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getResult();
+
+// async function finished(centralizedOracleAddress, senderAddress) {
+//   try {
+//     const result = await contractCentralizedOracle.call('finished', {
+//       methodArgs: [],
+//       senderAddress: senderAddress,
+//     });
+//     console.log(result);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+// finished();
+
