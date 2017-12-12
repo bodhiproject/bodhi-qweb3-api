@@ -257,25 +257,33 @@ function scheduleMonitorJob(params) {
   })
 }
 
-async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
-  _senderAddress) {
-  console.log('Creating TopicEvent:');
-  let result = await contractEventFactory.send('createTopic', {
-    methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
-    gasLimit: 5000000,
-    senderAddress: _senderAddress,
-  });
-  console.log(result);
-}
-createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2018 NBA Finals Winner?','','','','','','','','',''], 
-  ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
+const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
 
-// async function listUnspent() {
-//   console.log('Listing unspent outputs:');
-//   let result = await qweb3.listUnspent();
+// async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
+//   _senderAddress) {
+//   console.log('Creating TopicEvent:');
+//   let result = await contractEventFactory.send('createTopic', {
+//     methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
+//     gasLimit: 5000000,
+//     senderAddress: _senderAddress,
+//   });
 //   console.log(result);
 // }
-// listUnspent();
+// createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2019 NBA Finals winner?','','','','','','','','',''], 
+//   ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
+
+async function listUnspent() {
+  console.log('Listing unspent outputs:');
+  let result = await qweb3.listUnspent();
+  console.log(result);
+}
+listUnspent();
+
+// async function getBlockCount() {
+//   console.log('getBlockCount');
+//   console.log(await qweb3.getBlockCount());
+// }
+// getBlockCount();
 
 // async function bet() {
 //   console.log('Placing bet:')
@@ -290,3 +298,62 @@ createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2018 NBA Finals Winner?','',
 //   console.log(result);
 // }
 // bet();
+
+// async function getBetBalances() {
+//   const result = await contractCentralizedOracle.call('getBetBalances', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getBetBalances();
+
+// async function getVoteBalances() {
+//   const result = await contractCentralizedOracle.call('getVoteBalances', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getVoteBalances();
+
+// async function getTotalBets() {
+//   const result = await contractCentralizedOracle.call('getTotalBets', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getTotalBets();
+
+// async function getTotalVotes() {
+//   const result = await contractCentralizedOracle.call('getTotalVotes', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getTotalVotes();
+
+// async function getResult() {
+//   const result = await contractCentralizedOracle.call('getResult', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getResult();
+
+// async function finished(centralizedOracleAddress, senderAddress) {
+//   try {
+//     const result = await contractCentralizedOracle.call('finished', {
+//       methodArgs: [],
+//       senderAddress: senderAddress,
+//     });
+//     console.log(result);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+// finished();
+
