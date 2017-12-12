@@ -267,53 +267,56 @@ async function createTopic(
 {
   console.log('Creating TopicEvent:');
   
-  const functionSig = 'd0613dce';
+  // const functionSig = 'd0613dce';
+  // console.log(Web3Utils.soliditySha3('createTopic(address,bytes32[10],bytes32[10],uint256,uint256'));
 
-  let oracle = await qweb3.getHexAddress(_oracleAddress);
-  oracle = Web3Utils.padLeft(oracle, 64);
+  // let oracle = await qweb3.getHexAddress(_oracleAddress);
+  // oracle = Web3Utils.padLeft(oracle, 64);
 
-  let nameStr = Web3Utils.toHex(_eventName);
-  if (nameStr.indexOf('0x') === 0) {
-    nameStr = nameStr.slice(2);
-  }
-  nameStr = Web3Utils.padRight(nameStr, 640);
-  let nameArray = nameStr.match(/.{1,64}/g);
+  // let nameStr = Web3Utils.toHex(_eventName);
+  // if (nameStr.indexOf('0x') === 0) {
+  //   nameStr = nameStr.slice(2);
+  // }
+  // nameStr = Web3Utils.padRight(nameStr, 640);
+  // let nameArray = nameStr.match(/.{1,64}/g);
 
-  let resultNames = new Array(10).fill('\u0000');
-  for (let i = 0; i < 10; i++) {
-    let resultName;
-    if (i < _resultNames.length - 1) {
-      resultName = Web3Utils.toHex(_resultNames[i]);
-    } else {
-      resultName = Web3Utils.toHex('');
-    }
-    resultNames[i] = Web3Utils.padRight(resultName, 64).slice(2);
-  }
+  // let resultNames = new Array(10).fill('\u0000');
+  // for (let i = 0; i < 10; i++) {
+  //   let resultName;
+  //   if (i < _resultNames.length - 1) {
+  //     resultName = Web3Utils.toHex(_resultNames[i]);
+  //   } else {
+  //     resultName = Web3Utils.toHex('');
+  //   }
+  //   resultNames[i] = Web3Utils.padRight(resultName, 64).slice(2);
+  // }
 
-  let bettingEndBlock = Web3Utils.toHex(_bettingEndBlock);
-  bettingEndBlock = Web3Utils.padLeft(bettingEndBlock, 64).slice(2);
+  // let bettingEndBlock = Web3Utils.toHex(_bettingEndBlock);
+  // bettingEndBlock = Web3Utils.padLeft(bettingEndBlock, 64).slice(2);
 
-  let resultSettingEndBlock = Web3Utils.toHex(_resultSettingEndBlock);
-  resultSettingEndBlock = Web3Utils.padLeft(resultSettingEndBlock, 64).slice(2);
+  // let resultSettingEndBlock = Web3Utils.toHex(_resultSettingEndBlock);
+  // resultSettingEndBlock = Web3Utils.padLeft(resultSettingEndBlock, 64).slice(2);
 
-  const dataHex = 
-    functionSig
-    .concat(oracle)
-    .concat(nameStr)
-    .concat(resultNames.join(''))
-    .concat(bettingEndBlock)
-    .concat(resultSettingEndBlock);
-  console.log(dataHex);
+  // const dataHex = 
+  //   functionSig
+  //   .concat(oracle)
+  //   .concat(nameStr)
+  //   .concat(resultNames.join(''))
+  //   .concat(bettingEndBlock)
+  //   .concat(resultSettingEndBlock);
+  // console.log(dataHex);
 
-  let result = await contractEventFactory.sendWithDataHex({
-    dataHex: dataHex,
+  const args = [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock];
+  let result = await contractEventFactory.send({
+    methodName: 'createTopic',
+    args: args,
     gasLimit: 6000000,
     senderAddress: _senderAddress,
   });
-  console.log(result);
+  // console.log(result);
 }
-createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', 'Best movie of 2017?', ['Thor: Ragnarok', 'Star Wars'], 48400, 48500, 
-  'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
+createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['NBA Winner of 2018?','','','','','','','','',''], 
+  ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
 
 // async function listUnspent() {
 //   console.log('Listing unspent outputs:');
