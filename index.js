@@ -7,7 +7,6 @@ import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
 import JobQueue from './src/modules/jobqueue';
-import Web3Utils from './src/modules/qweb3/node_modules/web3-utils';
 
 var restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
