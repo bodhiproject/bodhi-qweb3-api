@@ -8,6 +8,7 @@ import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
 import { createTopic } from './src/contracts/event_factory.js';
+import { bet } from './src/contracts/centralized_oracle.js';
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -103,7 +104,7 @@ server.post('/createTopic', (req, res, next) => {
 });
 
 server.post('/bet', (req, res, next) => {
-  bet(req.params)
+  bet(qweb3, req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -119,26 +120,6 @@ server.listen(8080, function() {
 });
 
 const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-
-async function bet(args) {
-  const { index, amount, senderAddress } = args;
-
-  console.log('bet(): index', index, 'amount', amount, 'senderAddress', senderAddress);
-
-  if (index === undefined || amount === undefined) {
-    res.send(500, 'Both index and amount needs to be defined.');
-    return;
-  }
-
-  const result = await contractCentralizedOracle.send('bet', {
-    methodArgs: [index],
-    amount: amount,
-    senderAddress: senderAddress,
-  });
-
-  console.log(result);
-  return result;
-}
 
 // Run schedule monitoring job on startup
 // TODO: We might want to add a switch to turn in on and off
@@ -221,19 +202,6 @@ async function listUnspent() {
 async function getBlockCount() {
   console.log('getBlockCount');
   console.log(await qweb3.getBlockCount());
-}
-
-async function bet() {
-  console.log('Placing bet:')
-  let senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-  let resultIndex = 2;
-
-  let result = await contractCentralizedOracle.send('bet', {
-      data: [resultIndex],
-      amount: 10,
-      senderAddress: senderAddress,
-    });
-  console.log(result);
 }
 
 async function getBetBalances() {
