@@ -6,14 +6,14 @@ import utils from './src/modules/qweb3/src/utils';
 import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
-import JobQueue from './src/modules/jobqueue';
 
 var restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
 
-var Qweb3 = require('./src/modules/qweb3').default;
+var Qweb3 = require('./src/modules/qweb3/index');
 const qweb3 = new Qweb3('http://bodhi:bodhi@localhost:13889');
 const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
+const contractCentralizedOracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
 
 let topicsSnapshot = [];
 
@@ -34,6 +34,7 @@ const cors = corsMiddleware({
 
 server.pre(cors.preflight);
 server.use(cors.actual);
+server.use(restify.plugins.bodyParser({ mapParams: true }));
 
 /**
  * GET requests goes here
@@ -53,54 +54,6 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
-/** Start blockchain synchronizer */
-server.get('/start', (req, res, next) => {
-
-  // Run schedule monitoring job on startup
-  // TODO: We might want to add a switch to turn in on and off
-  scheduleMonitorJob({
-      name: `job-searchlogs`,
-      cb: () => {
-        const fromBlock = 0;
-        const toBlock = -1;
-        const addresses = Contracts.EventFactory.address;
-        const topics = ['null'];
-
-        return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-          .then((result) => {
-            console.log(`Retrieved ${result.length} entries from searchLogs.`);
-
-            let topicArray = [];
-            _.each(result, (event, index) => {
-              console.log(event);
-
-              // Parse out logs
-              if (!_.isEmpty(event.log)) {
-                _.each(event.log, (logItem) => {
-                  topicArray.push(new Topic(logItem));
-                });
-              }
-            });
-
-            topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
-
-            return promise.resolve();
-          });
-      },
-      options: { interval: 10000, attempts: 3, silent: false },
-    })
-    .then(() => {
-      res.send(200, "Synchronizer started.");
-      next();
-    });
-});
-
-/** Stop blockchain synchronizer */
-server.get('/stop', (req, res, next) => {
-  JobQueue.clear();
-  res.send(200, "Synchronizer stopped.");
-  next();
-});
 
 /** List Topics from searchlog */
 server.get('/topics', (req, res, next) => {
@@ -142,6 +95,16 @@ server.get('/topics', (req, res, next) => {
   }
 });
 
+/** List Topics from searchlog */
+server.get('/listunspent', (req, res, next) => {
+
+  listUnspent()
+    .then((result) => {
+      res.send(200, result);
+    }, (err) => {
+      res.send(500, result);
+    });
+});
 
 /**
  * POST requests goes here
@@ -149,7 +112,6 @@ server.get('/topics', (req, res, next) => {
 
 /** Create Topic event */
 server.post('/createTopic', (req, res, next) => {
-
   let senderAddress = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
   let resultSetter = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
   let oracle = '0x17e7888aa7412a735f336d2f6d784caefabb6fa3';
@@ -235,6 +197,17 @@ server.post('/createTopic', (req, res, next) => {
       });
 });
 
+server.post('/bet', (req, res, next) => {
+
+  bet(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (error) => {
+      console.log(error);
+      res.send(500, { error });
+    });
+});
 
 /** Start API server */
 server.listen(8080, function() {
@@ -242,42 +215,114 @@ server.listen(8080, function() {
 });
 
 
-/**
- * [scheduleMonitorJob description]
- * @param  {[type]} params [description]
- * @return {Parse.Promise}  A promise resolved upon job completion
- */
-function scheduleMonitorJob(params) {
-  const { name, cb, options } = params;
+const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
 
-  const jobName = `${name}`;
-  const interval = (options && options.interval) || 0; // Default 0, meaning run immediately
-  const jobOptions = {
-    // Retry 3 times on failure 
-    attempts: (options && options.attempts) || 3,
-    silent: (options && options.silent) || false,
-  };
+// async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
+//   _senderAddress) {
+//   console.log('Creating TopicEvent:');
+//   let result = await contractEventFactory.send('createTopic', {
+//     methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
+//     gasLimit: 5000000,
+//     senderAddress: _senderAddress,
+//   });
+//   console.log(result);
+// }
+// createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2019 NBA Finals winner?','','','','','','','','',''], 
+//   ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
 
-  let job = JobQueue.scheduleJob({
-      jobName,
-      interval,
-      cb,
-    },
-    jobOptions,
-  );
+async function listUnspent() {
+  console.log('Listing unspent outputs:');
+  let result = await qweb3.listUnspent();
+  console.log(result);
 
-  job.on('complete', function(result) {
-    console.log('Job completed with data ', result);
+  return result;
+}
 
-  }).on('failed attempt', function(errorMessage, doneAttempts) {
-    console.log('Job failed', errorMessage, doneAttempts);
+// listUnspent();
 
-  }).on('failed', function(errorMessage) {
-    console.log('Job failed', errorMessage);
+// async function getBlockCount() {
+//   console.log('getBlockCount');
+//   console.log(await qweb3.getBlockCount());
+// }
+// getBlockCount();
 
-  }).on('progress', function(progress, data) {
-    console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
+async function bet(args) {
+
+  const { index, amount, senderAddress } = args;
+
+  console.log('bet(): index', index, 'amount', amount, 'senderAddress', senderAddress);
+
+  if (index === undefined || amount === undefined) {
+    res.send(500, 'Both index and amount needs to be defined.');
+    return;
+  }
+
+  const result = await contractCentralizedOracle.send('bet', {
+    methodArgs: [index],
+    amount: amount,
+    senderAddress: senderAddress,
   });
 
-  return promise.resolve();
+  console.log(result);
+  return result;
 }
+
+// bet();
+
+// async function getBetBalances() {
+//   const result = await contractCentralizedOracle.call('getBetBalances', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getBetBalances();
+
+// async function getVoteBalances() {
+//   const result = await contractCentralizedOracle.call('getVoteBalances', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getVoteBalances();
+
+// async function getTotalBets() {
+//   const result = await contractCentralizedOracle.call('getTotalBets', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getTotalBets();
+
+// async function getTotalVotes() {
+//   const result = await contractCentralizedOracle.call('getTotalVotes', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getTotalVotes();
+
+// async function getResult() {
+//   const result = await contractCentralizedOracle.call('getResult', {
+//     methodArgs: [],
+//     senderAddress: senderAddress,
+//   });
+//   console.log(result);
+// }
+// getResult();
+
+// async function finished(centralizedOracleAddress, senderAddress) {
+//   try {
+//     const result = await contractCentralizedOracle.call('finished', {
+//       methodArgs: [],
+//       senderAddress: senderAddress,
+//     });
+//     console.log(result);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+// finished();
