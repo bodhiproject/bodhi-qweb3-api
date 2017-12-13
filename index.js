@@ -17,46 +17,30 @@ const contractCentralizedOracle = new qweb3.Contract(Contracts.CentralizedOracle
 
 let topicsSnapshot = [];
 
-function respond(req, res, next) {
-  res.send('hello ' + req.params.name);
-  next();
-}
-
-var server = restify.createServer();
-
 /** Set up CORS to allow request from a different server */
+const server = restify.createServer();
 const cors = corsMiddleware({
   // preflightMaxAge: 5, //Optional 
   origins: ['*'],
   // allowHeaders: ['API-Token'],
   // exposeHeaders: ['API-Token-Expiry']
-})
-
+});
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
 
-/**
- * GET requests goes here
- */
-
-/**
- * Return true if qweb3 is able to get blockinfo from blockchain
- */
-server.post('/isconnected', (req, res, next) => {
-
-  qweb3.isConnected()
+/* GET Requests */
+server.get('/listunspent', (req, res, next) => {
+  listUnspent()
     .then((result) => {
-      res.send(200, {
-        isConnected: result
-      });
-      next();
-    })
+      res.send(200, result);
+    }, (err) => {
+      res.send(500, result);
+    });
 });
 
 /** List Topics from searchlog */
 server.get('/topics', (req, res, next) => {
-
   if (_.isEmpty(topicsSnapshot)) {
     const fromBlock = 0;
     const toBlock = -1;
@@ -94,111 +78,30 @@ server.get('/topics', (req, res, next) => {
   }
 });
 
-/** List Topics from searchlog */
-server.get('/listunspent', (req, res, next) => {
-
-  listUnspent()
+/* POST Requests */
+server.post('/isconnected', (req, res, next) => {
+  qweb3.isConnected()
     .then((result) => {
-      res.send(200, result);
-    }, (err) => {
-      res.send(500, result);
-    });
-});
-
-/**
- * POST requests goes here
- */
-
-/** Create Topic event */
-server.post('/createTopic', (req, res, next) => {
-  let senderAddress = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
-  let resultSetter = '0x57676fb32b6c7aca8ceafd04495c69a9956d948d1e0c8e7d6dc89d3cb2912909';
-  let oracle = '0x17e7888aa7412a735f336d2f6d784caefabb6fa3';
-  const addresses = Contracts.EventFactory.address;
-  const topics = ['null'];
-
-  let nameStr = utils.toHex('What am I gonna eat tonight???');
-
-  if (nameStr.indexOf('0x') === 0) {
-    nameStr = nameStr.slice(2);
-  }
-
-  let name = [];
-  let maxArrayLength = 10;
-  let arrayCapacity = 32 * 2; // 32 bytes times 2 hex character
-
-  let currentIdx = 0;
-  let lastIdx = nameStr.length - 1;
-
-  while (currentIdx < lastIdx) {
-    console.log("currentIdx is " + currentIdx);
-    let subStr;
-    let endIdx;
-
-    if (currentIdx + arrayCapacity <= lastIdx) {
-      endIdx = currentIdx + arrayCapacity;
-      subStr = nameStr.slice(currentIdx, endIdx);
-    } else {
-      endIdx = lastIdx;
-      subStr = nameStr.slice(currentIdx);
-    }
-
-    // _.padEnd(subStr, arrayCapacity, '0');
-
-    currentIdx = endIdx;
-
-    // Push hex string to name array.
-    // Break the loop if max array length is reached
-    if (name.length < maxArrayLength) {
-      name.push('0x' + subStr);
-    } else {
-      console.log("Name array reach max length " + maxArrayLength);
-      break;
-    }
-  }
-
-  // construct rest arrays to make the length maxArrayLength
-  for (let index = 0; index < maxArrayLength; index += 1) {
-    if (name[index] === undefined) {
-      name[index] = utils.toHex('\u0000');
-    }
-  }
-
-  let resultNames = new Array(10).fill('\u0000');
-  resultNames[0] = 'American';
-  resultNames[1] = 'Italian';
-  resultNames[2] = 'French';
-  resultNames[3] = 'Vietnamese';
-  resultNames[4] = 'Burmese';
-  resultNames[5] = 'Mexican';
-  resultNames[6] = 'Mediterrenian';
-  resultNames[7] = 'Idian';
-  resultNames[8] = 'Sichuan';
-  resultNames = _.map(resultNames, (value) => utils.toHex(value));
-
-  const bettingEndBlock = 54000;
-  const resultSettingEndBlock = 55000;
-
-  return contractEventFactory.send('createTopic', {
-      senderAddress: senderAddress,
-      data: [oracle, name, resultNames, bettingEndBlock, resultSettingEndBlock],
-    })
-    .then((result) => {
-
-        console.log(result);
-        res.send(200, result);
-        next();
-      },
-      (err) => {
-        console.log(err.message);
-        res.send(500, err.message);
-        next();
+      res.send(200, {
+        isConnected: result
       });
+      next();
+    })
 });
 
 server.post('/bet', (req, res, next) => {
-
   bet(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (error) => {
+      console.log(error);
+      res.send(500, { error });
+    });
+});
+
+server.post('/createTopic', (req, res, next) => {
+  createTopic(...Object.values(req.params))
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -213,40 +116,21 @@ server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
 
-
 const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
 
-// async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
-//   _senderAddress) {
-//   console.log('Creating TopicEvent:');
-//   let result = await contractEventFactory.send('createTopic', {
-//     methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
-//     gasLimit: 5000000,
-//     senderAddress: _senderAddress,
-//   });
-//   console.log(result);
-// }
+async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
+  _senderAddress) {
+  console.log('Creating TopicEvent:');
+  return await contractEventFactory.send('createTopic', {
+    methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
+    gasLimit: 5000000,
+    senderAddress: _senderAddress,
+  });
+}
 // createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2019 NBA Finals winner?','','','','','','','','',''], 
 //   ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
 
-async function listUnspent() {
-  console.log('Listing unspent outputs:');
-  let result = await qweb3.listUnspent();
-  console.log(result);
-
-  return result;
-}
-
-// listUnspent();
-
-// async function getBlockCount() {
-//   console.log('getBlockCount');
-//   console.log(await qweb3.getBlockCount());
-// }
-// getBlockCount();
-
 async function bet(args) {
-
   const { index, amount, senderAddress } = args;
 
   console.log('bet(): index', index, 'amount', amount, 'senderAddress', senderAddress);
@@ -338,103 +222,78 @@ function scheduleMonitorJob(params) {
   })
 }
 
-const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-
-// async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
-//   _senderAddress) {
-//   console.log('Creating TopicEvent:');
-//   let result = await contractEventFactory.send('createTopic', {
-//     methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
-//     gasLimit: 5000000,
-//     senderAddress: _senderAddress,
-//   });
-//   console.log(result);
-// }
-// createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2019 NBA Finals winner?','','','','','','','','',''], 
-//   ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
-
 async function listUnspent() {
   console.log('Listing unspent outputs:');
   let result = await qweb3.listUnspent();
   console.log(result);
 }
-listUnspent();
 
-// async function getBlockCount() {
-//   console.log('getBlockCount');
-//   console.log(await qweb3.getBlockCount());
-// }
-// getBlockCount();
+async function getBlockCount() {
+  console.log('getBlockCount');
+  console.log(await qweb3.getBlockCount());
+}
 
-// async function bet() {
-//   console.log('Placing bet:')
-//   let senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-//   let resultIndex = 2;
+async function bet() {
+  console.log('Placing bet:')
+  let senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
+  let resultIndex = 2;
 
-//   let result = await contractCentralizedOracle.send('bet', {
-//       data: [resultIndex],
-//       amount: 10,
-//       senderAddress: senderAddress,
-//     });
-//   console.log(result);
-// }
+  let result = await contractCentralizedOracle.send('bet', {
+      data: [resultIndex],
+      amount: 10,
+      senderAddress: senderAddress,
+    });
+  console.log(result);
+}
 
-// bet();
+async function getBetBalances() {
+  const result = await contractCentralizedOracle.call('getBetBalances', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+  console.log(result);
+}
 
-// async function getBetBalances() {
-//   const result = await contractCentralizedOracle.call('getBetBalances', {
-//     methodArgs: [],
-//     senderAddress: senderAddress,
-//   });
-//   console.log(result);
-// }
-// getBetBalances();
+async function getVoteBalances() {
+  const result = await contractCentralizedOracle.call('getVoteBalances', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+  console.log(result);
+}
 
-// async function getVoteBalances() {
-//   const result = await contractCentralizedOracle.call('getVoteBalances', {
-//     methodArgs: [],
-//     senderAddress: senderAddress,
-//   });
-//   console.log(result);
-// }
-// getVoteBalances();
+async function getTotalBets() {
+  const result = await contractCentralizedOracle.call('getTotalBets', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+  console.log(result);
+}
 
-// async function getTotalBets() {
-//   const result = await contractCentralizedOracle.call('getTotalBets', {
-//     methodArgs: [],
-//     senderAddress: senderAddress,
-//   });
-//   console.log(result);
-// }
-// getTotalBets();
+async function getTotalVotes() {
+  const result = await contractCentralizedOracle.call('getTotalVotes', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+  console.log(result);
+}
 
-// async function getTotalVotes() {
-//   const result = await contractCentralizedOracle.call('getTotalVotes', {
-//     methodArgs: [],
-//     senderAddress: senderAddress,
-//   });
-//   console.log(result);
-// }
-// getTotalVotes();
+async function getResult() {
+  const result = await contractCentralizedOracle.call('getResult', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+  console.log(result);
+}
 
-// async function getResult() {
-//   const result = await contractCentralizedOracle.call('getResult', {
-//     methodArgs: [],
-//     senderAddress: senderAddress,
-//   });
-//   console.log(result);
-// }
-// getResult();
-
-// async function finished(centralizedOracleAddress, senderAddress) {
-//   try {
-//     const result = await contractCentralizedOracle.call('finished', {
-//       methodArgs: [],
-//       senderAddress: senderAddress,
-//     });
-//     console.log(result);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-// finished();
+async function finished(centralizedOracleAddress, senderAddress) {
+  try {
+    const result = await contractCentralizedOracle.call('finished', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+    console.log(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
