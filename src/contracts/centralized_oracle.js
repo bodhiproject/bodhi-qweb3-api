@@ -35,3 +35,15 @@ export async function getBetBalances(args) {
     senderAddress: senderAddress,
   });
 }
+
+export async function getVoteBalances(args) {
+  const { 
+    senderAddress,
+  } = args;
+
+  let oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  return await oracle.call('getVoteBalances', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+}

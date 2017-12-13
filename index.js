@@ -10,7 +10,7 @@ import logger from './src/modules/logger';
 import { getBlockCount } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
-import { bet, getBetBalances } from './src/contracts/centralized_oracle.js';
+import { bet, getBetBalances, getVoteBalances } from './src/contracts/centralized_oracle.js';
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -59,6 +59,17 @@ server.get('/getblockcount', (req, res, next) => {
 
 server.post('/betbalances', (req, res, next) => {
   getBetBalances(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
+server.post('/votebalances', (req, res, next) => {
+  getVoteBalances(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, result);
@@ -217,14 +228,6 @@ function scheduleMonitorJob(params) {
   }).on('progress', function(progress, data) {
     console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
   })
-}
-
-async function getVoteBalances() {
-  const result = await contractCentralizedOracle.call('getVoteBalances', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-  console.log(result);
 }
 
 async function getTotalBets() {
