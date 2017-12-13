@@ -18,3 +18,15 @@ export async function vote(args) {
     senderAddress: senderAddress,
   });
 }
+
+export async function finalizeResult(args) {
+  const { 
+    senderAddress,
+  } = args;
+
+  const oracle = new qweb3.Contract(Contracts.DecentralizedOracle.address, Contracts.DecentralizedOracle.abi);
+  return await oracle.send('finalizeResult', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+}

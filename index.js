@@ -12,7 +12,7 @@ import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
   from './src/contracts/centralized_oracle.js';
-import { vote } from './src/contracts/decentralized_oracle.js';
+import { vote, finalizeResult } from './src/contracts/decentralized_oracle.js';
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -144,6 +144,17 @@ server.post('/vote', (req, res, next) => {
 
 server.post('/setresult', (req, res, next) => {
   setResult(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (error) => {
+      console.log(error);
+      res.send(500, { error });
+    });
+});
+
+server.post('/finalizeresult', (req, res, next) => {
+  finalizeResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
