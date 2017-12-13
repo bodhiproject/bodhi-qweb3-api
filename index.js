@@ -10,7 +10,7 @@ import logger from './src/modules/logger';
 import { getBlockCount } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
-import { withdrawWinnings } from './src/contracts/topic_event.js';
+import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
 import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
   from './src/contracts/centralized_oracle.js';
 import { vote, finalizeResult } from './src/contracts/decentralized_oracle.js';
@@ -167,6 +167,17 @@ server.post('/finalizeresult', (req, res, next) => {
 
 server.post('/withdraw', (req, res, next) => {
   withdrawWinnings(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (error) => {
+      console.log(error);
+      res.send(500, { error });
+    });
+});
+
+server.post('/didwithdraw', (req, res, next) => {
+  didWithdraw(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });

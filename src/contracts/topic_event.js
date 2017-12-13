@@ -15,3 +15,16 @@ export async function withdrawWinnings(args) {
     senderAddress: senderAddress,
   });
 }
+
+export async function didWithdraw(args) {
+  const { 
+    address,
+    senderAddress,
+  } = args;
+
+  const topicEvent = new qweb3.Contract(Contracts.TopicEvent.address, Contracts.TopicEvent.abi);
+  return await topicEvent.call('didWithdraw', {
+    methodArgs: [address],
+    senderAddress: senderAddress,
+  });
+}
