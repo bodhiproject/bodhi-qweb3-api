@@ -1,6 +1,10 @@
+import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-export async function bet(qweb3, args) {
+const Qweb3 = require('../modules/qweb3/index');
+const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+
+export async function bet(args) {
   const { 
     index, 
     amount, 
@@ -12,7 +16,6 @@ export async function bet(qweb3, args) {
     return;
   }
 
-  console.log('bet');
   const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
   return await oracle.send('bet', {
     methodArgs: [index],

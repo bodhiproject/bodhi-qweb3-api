@@ -1,6 +1,10 @@
+import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-export async function createTopic(qweb3, args) {
+const Qweb3 = require('../modules/qweb3/index');
+const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+
+export async function createTopic(args) {
   const { 
     oracleAddress, 
     eventName, 
@@ -10,7 +14,6 @@ export async function createTopic(qweb3, args) {
     senderAddress,
   } = args;
 
-  console.log('createTopic');
   const eventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
   return await eventFactory.send('createTopic', {
     methodArgs: [oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock],

@@ -7,6 +7,7 @@ import utils from './src/modules/qweb3/src/utils';
 import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
+import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { bet } from './src/contracts/centralized_oracle.js';
 
@@ -36,8 +37,10 @@ server.use(restify.plugins.bodyParser({ mapParams: true }));
 server.get('/listunspent', (req, res, next) => {
   listUnspent()
     .then((result) => {
+      console.log(result);
       res.send(200, result);
     }, (err) => {
+      console.log(err);
       res.send(500, result);
     });
 });
@@ -92,8 +95,8 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
-server.post('/createTopic', (req, res, next) => {
-  createTopic(qweb3, req.params)
+server.post('/topics', (req, res, next) => {
+  createTopic(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -104,7 +107,7 @@ server.post('/createTopic', (req, res, next) => {
 });
 
 server.post('/bet', (req, res, next) => {
-  bet(qweb3, req.params)
+  bet(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -191,12 +194,6 @@ function scheduleMonitorJob(params) {
   }).on('progress', function(progress, data) {
     console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
   })
-}
-
-async function listUnspent() {
-  console.log('Listing unspent outputs:');
-  let result = await qweb3.listUnspent();
-  console.log(result);
 }
 
 async function getBlockCount() {
