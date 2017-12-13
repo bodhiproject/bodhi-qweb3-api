@@ -16,7 +16,7 @@ export async function bet(args) {
     return;
   }
 
-  let oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
   return await oracle.send('bet', {
     methodArgs: [index],
     amount: amount,
@@ -29,7 +29,7 @@ export async function getBetBalances(args) {
     senderAddress,
   } = args;
 
-  let oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
   return await oracle.call('getBetBalances', {
     methodArgs: [],
     senderAddress: senderAddress,
@@ -41,9 +41,58 @@ export async function getVoteBalances(args) {
     senderAddress,
   } = args;
 
-  let oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
   return await oracle.call('getVoteBalances', {
     methodArgs: [],
     senderAddress: senderAddress,
   });
+}
+
+export async function getTotalBets(args) {
+  const { 
+    senderAddress,
+  } = args;
+
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  return await oracle.call('getTotalBets', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+  console.log(result);
+}
+
+export async function getTotalVotes(args) {
+  const { 
+    senderAddress,
+  } = args;
+
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  return await oracle.call('getTotalVotes', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+}
+
+export async function getResult(args) {
+  const { 
+    senderAddress,
+  } = args;
+
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  return await oracle.call('getResult', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+}
+
+export async function finished(args) {
+  const { 
+    senderAddress,
+  } = args;
+
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  return await oracle.call('finished', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
 }

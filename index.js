@@ -10,7 +10,8 @@ import logger from './src/modules/logger';
 import { getBlockCount } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
-import { bet, getBetBalances, getVoteBalances } from './src/contracts/centralized_oracle.js';
+import { bet, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
+  from './src/contracts/centralized_oracle.js';
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -48,28 +49,6 @@ server.get('/listunspent', (req, res, next) => {
 
 server.get('/getblockcount', (req, res, next) => {
   getBlockCount()
-    .then((result) => {
-      console.log(result);
-      res.send(200, result);
-    }, (err) => {
-      console.log(err);
-      res.send(500, result);
-    });
-});
-
-server.post('/betbalances', (req, res, next) => {
-  getBetBalances(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, result);
-    }, (err) => {
-      console.log(err);
-      res.send(500, result);
-    });
-});
-
-server.post('/votebalances', (req, res, next) => {
-  getVoteBalances(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, result);
@@ -151,6 +130,72 @@ server.post('/bet', (req, res, next) => {
     });
 });
 
+server.post('/betbalances', (req, res, next) => {
+  getBetBalances(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
+server.post('/votebalances', (req, res, next) => {
+  getVoteBalances(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
+server.post('/totalbets', (req, res, next) => {
+  getTotalBets(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
+server.post('/totalvotes', (req, res, next) => {
+  getTotalVotes(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
+server.post('/getresult', (req, res, next) => {
+  getResult(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
+server.post('/finished', (req, res, next) => {
+  finished(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
 /** Start API server */
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
@@ -228,40 +273,4 @@ function scheduleMonitorJob(params) {
   }).on('progress', function(progress, data) {
     console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
   })
-}
-
-async function getTotalBets() {
-  const result = await contractCentralizedOracle.call('getTotalBets', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-  console.log(result);
-}
-
-async function getTotalVotes() {
-  const result = await contractCentralizedOracle.call('getTotalVotes', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-  console.log(result);
-}
-
-async function getResult() {
-  const result = await contractCentralizedOracle.call('getResult', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-  console.log(result);
-}
-
-async function finished(centralizedOracleAddress, senderAddress) {
-  try {
-    const result = await contractCentralizedOracle.call('finished', {
-      methodArgs: [],
-      senderAddress: senderAddress,
-    });
-    console.log(result);
-  } catch (err) {
-    console.log(err);
-  }
 }
