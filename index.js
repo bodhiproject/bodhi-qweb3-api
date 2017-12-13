@@ -2,16 +2,18 @@ import _ from 'lodash';
 import moment from 'moment';
 import promise from 'bluebird';
 
+import Config from './config/config';
 import utils from './src/modules/qweb3/src/utils';
 import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
+import { createTopic } from './src/contracts/event_factory.js';
 
-var restify = require('restify');
+const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
 
-var Qweb3 = require('./src/modules/qweb3/index');
-const qweb3 = new Qweb3('http://bodhi:bodhi@localhost:13889');
+const Qweb3 = require('./src/modules/qweb3/index');
+const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
 const contractCentralizedOracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
 
@@ -89,8 +91,8 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
-server.post('/bet', (req, res, next) => {
-  bet(req.params)
+server.post('/createTopic', (req, res, next) => {
+  createTopic(qweb3, req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -100,8 +102,8 @@ server.post('/bet', (req, res, next) => {
     });
 });
 
-server.post('/createTopic', (req, res, next) => {
-  createTopic(...Object.values(req.params))
+server.post('/bet', (req, res, next) => {
+  bet(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -117,18 +119,6 @@ server.listen(8080, function() {
 });
 
 const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-
-async function createTopic(_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock, 
-  _senderAddress) {
-  console.log('Creating TopicEvent:');
-  return await contractEventFactory.send('createTopic', {
-    methodArgs: [_oracleAddress, _eventName, _resultNames, _bettingEndBlock, _resultSettingEndBlock],
-    gasLimit: 5000000,
-    senderAddress: _senderAddress,
-  });
-}
-// createTopic('qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy', ['2019 NBA Finals winner?','','','','','','','','',''], 
-//   ['Lakers','Warriors','Spurs','','','','','','',''], 50000, 50100, 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy');
 
 async function bet(args) {
   const { index, amount, senderAddress } = args;
