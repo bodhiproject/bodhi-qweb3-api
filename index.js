@@ -10,6 +10,7 @@ import logger from './src/modules/logger';
 import { getBlockCount } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
+import { withdrawWinnings } from './src/contracts/topic_event.js';
 import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
   from './src/contracts/centralized_oracle.js';
 import { vote, finalizeResult } from './src/contracts/decentralized_oracle.js';
@@ -39,17 +40,6 @@ server.use(restify.plugins.bodyParser({ mapParams: true }));
 /* GET Requests */
 server.get('/listunspent', (req, res, next) => {
   listUnspent()
-    .then((result) => {
-      console.log(result);
-      res.send(200, result);
-    }, (err) => {
-      console.log(err);
-      res.send(500, result);
-    });
-});
-
-server.get('/getblockcount', (req, res, next) => {
-  getBlockCount()
     .then((result) => {
       console.log(result);
       res.send(200, result);
@@ -109,6 +99,17 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
+server.post('/getblockcount', (req, res, next) => {
+  getBlockCount()
+    .then((result) => {
+      console.log(result);
+      res.send(200, result);
+    }, (err) => {
+      console.log(err);
+      res.send(500, result);
+    });
+});
+
 server.post('/createtopic', (req, res, next) => {
   createTopic(req.params)
     .then((result) => {
@@ -155,6 +156,17 @@ server.post('/setresult', (req, res, next) => {
 
 server.post('/finalizeresult', (req, res, next) => {
   finalizeResult(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (error) => {
+      console.log(error);
+      res.send(500, { error });
+    });
+});
+
+server.post('/withdraw', (req, res, next) => {
+  withdrawWinnings(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
