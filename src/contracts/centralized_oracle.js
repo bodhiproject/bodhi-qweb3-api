@@ -24,6 +24,25 @@ export async function bet(args) {
   });
 }
 
+export async function setResult(args) {
+  const { 
+    resultIndex, 
+    senderAddress,
+  } = args;
+
+  if (resultIndex === undefined) {
+    res.send(500, 'resultIndex needs to be set');
+    return;
+  }
+
+  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  return await oracle.send('setResult', {
+    methodArgs: [resultIndex],
+    gasLimit: 3000000,
+    senderAddress: senderAddress,
+  });
+}
+
 export async function getBetBalances(args) {
   const { 
     senderAddress,

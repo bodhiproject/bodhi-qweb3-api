@@ -10,7 +10,7 @@ import logger from './src/modules/logger';
 import { getBlockCount } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
-import { bet, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
+import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
   from './src/contracts/centralized_oracle.js';
 
 const restify = require('restify');
@@ -108,7 +108,7 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
-server.post('/topics', (req, res, next) => {
+server.post('/createtopic', (req, res, next) => {
   createTopic(req.params)
     .then((result) => {
       console.log(result);
@@ -121,6 +121,17 @@ server.post('/topics', (req, res, next) => {
 
 server.post('/bet', (req, res, next) => {
   bet(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (error) => {
+      console.log(error);
+      res.send(500, { error });
+    });
+});
+
+server.post('/setresult', (req, res, next) => {
+  setResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -200,8 +211,6 @@ server.post('/finished', (req, res, next) => {
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
-
-const senderAddress = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
 
 // Run schedule monitoring job on startup
 // TODO: We might want to add a switch to turn in on and off
