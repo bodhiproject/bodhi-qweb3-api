@@ -14,6 +14,17 @@ export async function createTopic(args) {
     senderAddress,
   } = args;
 
+  if (oracleAddress === undefined 
+    || eventName === undefined 
+    || resultNames === undefined 
+    || bettingEndBlock === undefined
+    || resultSettingEndBlock === undefined
+    || senderAddress === undefined) 
+  {
+    throw new TypeError('oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock, and senderAddress need to be defined');
+    return;
+  }
+
   const eventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
   return await eventFactory.send('createTopic', {
     methodArgs: [oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock],
