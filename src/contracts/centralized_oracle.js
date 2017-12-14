@@ -1,5 +1,6 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
+import Validator from '../utils/validator';
 
 const Qweb3 = require('../modules/qweb3/index');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
@@ -26,16 +27,18 @@ export async function bet(args) {
 
 export async function setResult(args) {
   const { 
+    contractAddress,
     resultIndex, 
     senderAddress,
   } = args;
 
-  if (resultIndex === undefined) {
-    throw new Error('resultIndex needs to be set');
-    return;
-  }
+  // if (resultIndex === undefined) {
+  //   throw new Error('resultIndex needs to be set');
+  //   return;
+  // }
+  Validator.validateArgs(args);
 
-  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
   return await oracle.send('setResult', {
     methodArgs: [resultIndex],
     gasLimit: 3000000,
