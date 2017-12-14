@@ -45,7 +45,7 @@ server.get('/listunspent', (req, res, next) => {
       res.send({result});
     }, (err) => {
       console.log(err);
-      res.send({ error: error.message });
+      res.send({ error: err.message });
     });
 });
 
@@ -126,9 +126,9 @@ server.post('/bet', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send({ error: error.message });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
