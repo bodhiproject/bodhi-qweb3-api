@@ -12,8 +12,8 @@ export async function getTransactionReceipt(args) {
     transactionId, 
   } = args;
 
-  if (!transactionId) { 
-    throw new TypeError('transactionId is undefined');
+  if (transactionId === undefined) { 
+    throw new TypeError('transactionId need to be defined');
   }
 
   return await qweb3.getTransactionReceipt(transactionId);

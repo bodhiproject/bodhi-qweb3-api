@@ -103,10 +103,10 @@ server.post('/getblockcount', (req, res, next) => {
   getBlockCount()
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send(200, { result });
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: err.message });
     });
 });
 
@@ -126,9 +126,9 @@ server.post('/createtopic', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send(500, { error });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
@@ -148,9 +148,9 @@ server.post('/vote', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send(500, { error });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
@@ -159,9 +159,9 @@ server.post('/setresult', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send(500, { error });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
@@ -170,9 +170,9 @@ server.post('/finalizeresult', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send(500, { error });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
@@ -181,9 +181,9 @@ server.post('/withdraw', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send(500, { error });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
@@ -192,9 +192,9 @@ server.post('/didwithdraw', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send(500, { error });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
@@ -202,10 +202,10 @@ server.post('/betbalances', (req, res, next) => {
   getBetBalances(req.params)
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send(200, { result });
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: err.message });
     });
 });
 
@@ -213,10 +213,10 @@ server.post('/votebalances', (req, res, next) => {
   getVoteBalances(req.params)
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send(200, { result });
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: err.message });
     });
 });
 
@@ -224,10 +224,10 @@ server.post('/totalbets', (req, res, next) => {
   getTotalBets(req.params)
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send(200, { result });
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: err.message });
     });
 });
 
@@ -235,10 +235,10 @@ server.post('/totalvotes', (req, res, next) => {
   getTotalVotes(req.params)
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send(200, { result });
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: err.message });
     });
 });
 
@@ -246,10 +246,10 @@ server.post('/getresult', (req, res, next) => {
   getResult(req.params)
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send(200, { result });
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: err.message });
     });
 });
 
@@ -257,10 +257,10 @@ server.post('/finished', (req, res, next) => {
   finished(req.params)
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send(200, { result });
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: err.message });
     });
 });
 
