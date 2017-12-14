@@ -32,11 +32,16 @@ export async function setResult(args) {
     senderAddress,
   } = args;
 
-  // if (resultIndex === undefined) {
-  //   throw new Error('resultIndex needs to be set');
-  //   return;
-  // }
-  Validator.validateArgs(args);
+  if (contractAddress === undefined) {
+    throw new TypeError('contractAddress is undefined');
+    return;
+  } else if (resultIndex === undefined) {
+    throw new TypeError('resultIndex is undefined');
+    return;
+  } else if (senderAddress === undefined) {
+    throw new TypeError('senderAddress is undefined');
+    return;
+  }
 
   const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
   return await oracle.send('setResult', {

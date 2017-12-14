@@ -159,9 +159,9 @@ server.post('/setresult', (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.send(200, { result });
-    }, (error) => {
-      console.log(error);
-      res.send(500, { error });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
