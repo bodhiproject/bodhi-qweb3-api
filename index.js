@@ -7,7 +7,7 @@ import utils from './src/modules/qweb3/src/utils';
 import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
-import { getBlockCount } from './src/contracts/blockchain.js';
+import { getBlockCount, getTransactionReceipt } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
@@ -107,6 +107,17 @@ server.post('/getblockcount', (req, res, next) => {
     }, (err) => {
       console.log(err);
       res.send(500, result);
+    });
+});
+
+server.post('/gettransactionreceipt', (req, res, next) => {
+  getTransactionReceipt(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
     });
 });
 
