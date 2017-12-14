@@ -6,10 +6,16 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 export async function withdrawWinnings(args) {
   const { 
+    contractAddress,
     senderAddress,
   } = args;
 
-  const topicEvent = new qweb3.Contract(Contracts.TopicEvent.address, Contracts.TopicEvent.abi);
+  if (contractAddress === undefined || senderAddress === undefined) {
+    throw new TypeError('contractAddress and senderAddress need to be defined');
+    return;
+  }
+
+  const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
   return await topicEvent.send('withdrawWinnings', {
     methodArgs: [],
     senderAddress: senderAddress,
@@ -18,11 +24,17 @@ export async function withdrawWinnings(args) {
 
 export async function didWithdraw(args) {
   const { 
+    contractAddress,
     address,
     senderAddress,
   } = args;
 
-  const topicEvent = new qweb3.Contract(Contracts.TopicEvent.address, Contracts.TopicEvent.abi);
+  if (contractAddress === undefined || address === undefined || senderAddress === undefined) {
+    throw new TypeError('contractAddress, address, and senderAddress need to be defined');
+    return;
+  }
+
+  const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
   return await topicEvent.call('didWithdraw', {
     methodArgs: [address],
     senderAddress: senderAddress,
