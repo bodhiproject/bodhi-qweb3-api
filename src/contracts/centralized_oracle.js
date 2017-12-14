@@ -12,7 +12,7 @@ export async function bet(args) {
   } = args;
 
   if (index === undefined || amount === undefined) {
-    res.send(500, 'Both index and amount needs to be defined.');
+    throw new Error('Both index and amount needs to be defined.');
     return;
   }
 
@@ -31,7 +31,7 @@ export async function setResult(args) {
   } = args;
 
   if (resultIndex === undefined) {
-    res.send(500, 'resultIndex needs to be set');
+    throw new Error('resultIndex needs to be set');
     return;
   }
 

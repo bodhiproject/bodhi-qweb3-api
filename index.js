@@ -11,8 +11,8 @@ import { getBlockCount } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
-import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
-  from './src/contracts/centralized_oracle.js';
+import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished }
+from './src/contracts/centralized_oracle.js';
 import { vote, finalizeResult } from './src/contracts/decentralized_oracle.js';
 
 const restify = require('restify');
@@ -42,10 +42,10 @@ server.get('/listunspent', (req, res, next) => {
   listUnspent()
     .then((result) => {
       console.log(result);
-      res.send(200, result);
+      res.send({result});
     }, (err) => {
       console.log(err);
-      res.send(500, result);
+      res.send({ error: error.message });
     });
 });
 
@@ -128,7 +128,7 @@ server.post('/bet', (req, res, next) => {
       res.send(200, { result });
     }, (error) => {
       console.log(error);
-      res.send(500, { error });
+      res.send({ error: error.message });
     });
 });
 
