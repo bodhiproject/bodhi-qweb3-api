@@ -14,7 +14,7 @@ import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
 import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished }
 from './src/contracts/centralized_oracle.js';
-import { vote, finalizeResult } from './src/contracts/decentralized_oracle.js';
+import { vote, finalizeResult, arbitrationEndBlock } from './src/contracts/decentralized_oracle.js';
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -272,6 +272,17 @@ server.post('/vote', (req, res, next) => {
 
 server.post('/finalizeresult', (req, res, next) => {
   finalizeResult(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/arbitrationendblock', (req, res, next) => {
+  arbitrationEndBlock(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
