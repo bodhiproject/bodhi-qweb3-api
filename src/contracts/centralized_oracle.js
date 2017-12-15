@@ -17,7 +17,7 @@ export async function bet(args) {
     return;
   }
 
-  const oracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
+  const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
   return await oracle.send('bet', {
     methodArgs: [index],
     amount: amount,
