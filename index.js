@@ -36,18 +36,6 @@ server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
 
-/* GET Requests */
-server.get('/listunspent', (req, res, next) => {
-  listUnspent()
-    .then((result) => {
-      console.log(result);
-      res.send({result});
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
 /** List Topics from searchlog */
 server.get('/topics', (req, res, next) => {
   if (_.isEmpty(topicsSnapshot)) {
@@ -87,7 +75,7 @@ server.get('/topics', (req, res, next) => {
   }
 });
 
-/* POST Requests */
+/* Misc */
 server.post('/isconnected', (req, res, next) => {
   qweb3.isConnected()
     .then((result) => {
@@ -98,6 +86,19 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
+/* Wallet */
+server.get('/listunspent', (req, res, next) => {
+  listUnspent()
+    .then((result) => {
+      console.log(result);
+      res.send({result});
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* Blockchain */
 server.post('/getblockcount', (req, res, next) => {
   getBlockCount()
     .then((result) => {
@@ -120,6 +121,7 @@ server.post('/gettransactionreceipt', (req, res, next) => {
     });
 });
 
+/* EventFactory */
 server.post('/createtopic', (req, res, next) => {
   createTopic(req.params)
     .then((result) => {
@@ -131,50 +133,7 @@ server.post('/createtopic', (req, res, next) => {
     });
 });
 
-server.post('/bet', (req, res, next) => {
-  bet(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/vote', (req, res, next) => {
-  vote(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/setresult', (req, res, next) => {
-  setResult(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/finalizeresult', (req, res, next) => {
-  finalizeResult(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
+/* TopicEvent */
 server.post('/withdraw', (req, res, next) => {
   withdrawWinnings(req.params)
     .then((result) => {
@@ -188,6 +147,29 @@ server.post('/withdraw', (req, res, next) => {
 
 server.post('/didwithdraw', (req, res, next) => {
   didWithdraw(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* CentralizedOracle */
+server.post('/bet', (req, res, next) => {
+  bet(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/setresult', (req, res, next) => {
+  setResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -254,6 +236,29 @@ server.post('/getresult', (req, res, next) => {
 
 server.post('/finished', (req, res, next) => {
   finished(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* DecentralizedOracle */
+server.post('/vote', (req, res, next) => {
+  vote(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/finalizeresult', (req, res, next) => {
+  finalizeResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
