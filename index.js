@@ -21,7 +21,6 @@ const corsMiddleware = require('restify-cors-middleware')
 const Qweb3 = require('./src/modules/qweb3/index');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
-const contractCentralizedOracle = new qweb3.Contract(Contracts.CentralizedOracle.address, Contracts.CentralizedOracle.abi);
 
 let topicsSnapshot = [];
 
