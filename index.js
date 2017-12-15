@@ -9,11 +9,12 @@ import Topic from './src/models/topic';
 import logger from './src/modules/logger';
 import { getBlockCount, getTransactionReceipt } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
+import { approve } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
 import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished }
 from './src/contracts/centralized_oracle.js';
-import { vote, finalizeResult } from './src/contracts/decentralized_oracle.js';
+import { vote, finalizeResult, arbitrationEndBlock, lastResultIndex } from './src/contracts/decentralized_oracle.js';
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -35,18 +36,6 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
-
-/* GET Requests */
-server.get('/listunspent', (req, res, next) => {
-  listUnspent()
-    .then((result) => {
-      console.log(result);
-      res.send({result});
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
 
 /** List Topics from searchlog */
 server.get('/topics', (req, res, next) => {
@@ -87,7 +76,7 @@ server.get('/topics', (req, res, next) => {
   }
 });
 
-/* POST Requests */
+/* Misc */
 server.post('/isconnected', (req, res, next) => {
   qweb3.isConnected()
     .then((result) => {
@@ -98,6 +87,19 @@ server.post('/isconnected', (req, res, next) => {
     })
 });
 
+/* Wallet */
+server.get('/listunspent', (req, res, next) => {
+  listUnspent()
+    .then((result) => {
+      console.log(result);
+      res.send({result});
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* Blockchain */
 server.post('/getblockcount', (req, res, next) => {
   getBlockCount()
     .then((result) => {
@@ -120,6 +122,19 @@ server.post('/gettransactionreceipt', (req, res, next) => {
     });
 });
 
+/* BodhiToken */
+server.post('/approve', (req, res, next) => {
+  approve(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* EventFactory */
 server.post('/createtopic', (req, res, next) => {
   createTopic(req.params)
     .then((result) => {
@@ -131,50 +146,7 @@ server.post('/createtopic', (req, res, next) => {
     });
 });
 
-server.post('/bet', (req, res, next) => {
-  bet(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/vote', (req, res, next) => {
-  vote(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/setresult', (req, res, next) => {
-  setResult(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/finalizeresult', (req, res, next) => {
-  finalizeResult(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
+/* TopicEvent */
 server.post('/withdraw', (req, res, next) => {
   withdrawWinnings(req.params)
     .then((result) => {
@@ -188,6 +160,29 @@ server.post('/withdraw', (req, res, next) => {
 
 server.post('/didwithdraw', (req, res, next) => {
   didWithdraw(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* CentralizedOracle */
+server.post('/bet', (req, res, next) => {
+  bet(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/setresult', (req, res, next) => {
+  setResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -254,6 +249,51 @@ server.post('/getresult', (req, res, next) => {
 
 server.post('/finished', (req, res, next) => {
   finished(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* DecentralizedOracle */
+server.post('/vote', (req, res, next) => {
+  vote(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/finalizeresult', (req, res, next) => {
+  finalizeResult(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/arbitrationendblock', (req, res, next) => {
+  arbitrationEndBlock(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/lastresultindex', (req, res, next) => {
+  lastResultIndex(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });

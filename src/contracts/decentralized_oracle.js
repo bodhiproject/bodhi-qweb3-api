@@ -46,3 +46,39 @@ export async function finalizeResult(args) {
     senderAddress: senderAddress,
   });
 }
+
+export async function arbitrationEndBlock(args) {
+  const { 
+    contractAddress,
+    senderAddress,
+  } = args;
+
+  if (contractAddress === undefined || senderAddress === undefined) {
+    throw new TypeError('contractAddress and senderAddress need to be defined');
+    return;
+  }
+
+  const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+  return await oracle.call('arbitrationEndBlock', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+}
+
+export async function lastResultIndex(args) {
+  const { 
+    contractAddress,
+    senderAddress,
+  } = args;
+
+  if (contractAddress === undefined || senderAddress === undefined) {
+    throw new TypeError('contractAddress and senderAddress need to be defined');
+    return;
+  }
+
+  const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+  return await oracle.call('lastResultIndex', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+}
