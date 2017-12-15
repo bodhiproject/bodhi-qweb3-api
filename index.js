@@ -9,6 +9,7 @@ import Topic from './src/models/topic';
 import logger from './src/modules/logger';
 import { getBlockCount, getTransactionReceipt } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
+import { approve } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
 import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished }
@@ -112,6 +113,18 @@ server.post('/getblockcount', (req, res, next) => {
 
 server.post('/gettransactionreceipt', (req, res, next) => {
   getTransactionReceipt(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* BodhiToken */
+server.post('/approve', (req, res, next) => {
+  approve(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
