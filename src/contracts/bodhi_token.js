@@ -36,7 +36,7 @@ export async function allowance(args) {
   }
 
   const oracle = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
-  return await oracle.send('approve', {
+  return await oracle.call('allowance', {
     methodArgs: [owner, spender],
     senderAddress: senderAddress,
   });
