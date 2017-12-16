@@ -22,3 +22,22 @@ export async function approve(args) {
     senderAddress: senderAddress,
   });
 }
+
+export async function allowance(args) {
+  const { 
+    owner, 
+    spender, 
+    senderAddress,
+  } = args;
+
+  if (owner === undefined || spender === undefined || senderAddress === undefined) {
+    throw new TypeError('owner, spender, and senderAddress need to be defined');
+    return;
+  }
+
+  const oracle = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+  return await oracle.call('allowance', {
+    methodArgs: [owner, spender],
+    senderAddress: senderAddress,
+  });
+}
