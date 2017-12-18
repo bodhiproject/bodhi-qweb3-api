@@ -6,7 +6,7 @@ const Qweb3 = require('../modules/qweb3/index');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 /** @type {number} Length of string of eventName */
-const EVENTNAME_STR_LENGTH = 32 * 2; // 32 bytes times 2 hex character
+const EVENTNAME_STR_LENGTH = 32;
 
 /** @type {number} Max capacity of eventName array */
 const EVENTNAME_ARRAY_CAPACITY = 10;
