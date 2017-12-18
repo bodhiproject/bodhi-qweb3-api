@@ -7,23 +7,23 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 export async function vote(args) {
   const { 
     contractAddress,
-    index, 
-    amount, 
+    resultIndex, 
+    botAmount, 
     senderAddress,
   } = args;
 
   if (contractAddress === undefined 
-    || index === undefined 
-    || amount === undefined 
+    || resultIndex === undefined 
+    || botAmount === undefined 
     || senderAddress === undefined) 
   {
-    throw new TypeError('contractAddress, index, amount, and senderAddress need to be defined');
+    throw new TypeError('contractAddress, resultIndex, botAmount, and senderAddress need to be defined');
     return;
   }
 
   const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
   return await oracle.send('voteResult', {
-    methodArgs: [index, amount],
+    methodArgs: [resultIndex, botAmount],
     gasLimit: 2000000,
     senderAddress: senderAddress,
   });
