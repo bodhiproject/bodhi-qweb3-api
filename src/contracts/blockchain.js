@@ -9,7 +9,7 @@ export async function getBlockCount() {
 
 export async function getTransactionReceipt(args) {
   const { 
-    transactionId, 
+    transactionId, // string
   } = args;
 
   if (transactionId === undefined) { 

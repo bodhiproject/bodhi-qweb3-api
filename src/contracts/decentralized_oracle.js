@@ -6,10 +6,10 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 export async function vote(args) {
   const { 
-    contractAddress,
-    resultIndex, 
-    botAmount, 
-    senderAddress,
+    contractAddress, // address
+    resultIndex, // number
+    botAmount, // number (Botoshi)
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined 
@@ -31,8 +31,8 @@ export async function vote(args) {
 
 export async function finalizeResult(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -49,8 +49,8 @@ export async function finalizeResult(args) {
 
 export async function arbitrationEndBlock(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -67,8 +67,8 @@ export async function arbitrationEndBlock(args) {
 
 export async function lastResultIndex(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {

@@ -6,8 +6,8 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 export async function withdrawWinnings(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -24,9 +24,9 @@ export async function withdrawWinnings(args) {
 
 export async function didWithdraw(args) {
   const { 
-    contractAddress,
-    address,
-    senderAddress,
+    contractAddress, // address
+    address, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || address === undefined || senderAddress === undefined) {

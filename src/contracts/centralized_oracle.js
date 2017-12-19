@@ -6,10 +6,10 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 export async function bet(args) {
   const { 
-    contractAddress,
-    index, 
-    amount, 
-    senderAddress,
+    contractAddress, // address
+    index, // number
+    amount, // number (Satoshi)
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || index === undefined || amount === undefined || senderAddress === undefined) {
@@ -27,9 +27,9 @@ export async function bet(args) {
 
 export async function setResult(args) {
   const { 
-    contractAddress,
-    resultIndex, 
-    senderAddress,
+    contractAddress, // address
+    resultIndex, // number
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || resultIndex === undefined || senderAddress === undefined) {
@@ -47,8 +47,8 @@ export async function setResult(args) {
 
 export async function getBetBalances(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -65,8 +65,8 @@ export async function getBetBalances(args) {
 
 export async function getVoteBalances(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -83,8 +83,8 @@ export async function getVoteBalances(args) {
 
 export async function getTotalBets(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -102,8 +102,8 @@ export async function getTotalBets(args) {
 
 export async function getTotalVotes(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -120,8 +120,8 @@ export async function getTotalVotes(args) {
 
 export async function getResult(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
@@ -138,8 +138,8 @@ export async function getResult(args) {
 
 export async function finished(args) {
   const { 
-    contractAddress,
-    senderAddress,
+    contractAddress, // address
+    senderAddress, // address
   } = args;
 
   if (contractAddress === undefined || senderAddress === undefined) {
