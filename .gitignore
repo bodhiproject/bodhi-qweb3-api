@@ -1,5 +1,4 @@
 build
-src/modules/*/node_modules
 
 # Created by https://www.gitignore.io/api/node,macos,redis,linux,windows
 
