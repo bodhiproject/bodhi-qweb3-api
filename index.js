@@ -100,7 +100,7 @@ server.get('/listunspent', (req, res, next) => {
 });
 
 /* Blockchain */
-server.post('/getblockcount', (req, res, next) => {
+server.get('/getblockcount', (req, res, next) => {
   getBlockCount()
     .then((result) => {
       console.log(result);
@@ -203,6 +203,13 @@ server.post('/setresult', (req, res, next) => {
     });
 });
 
+/**
+ * Get bet balance of a topic
+ *
+ * @param {string} contractAddress  Topic address
+ * @param {string} senderAddress    Sender address
+ * @returns {object} object containing string in output
+ */
 server.post('/betbalances', (req, res, next) => {
   getBetBalances(req.params)
     .then((result) => {
