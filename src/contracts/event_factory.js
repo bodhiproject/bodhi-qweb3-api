@@ -14,8 +14,8 @@ const EVENTNAME_ARRAY_CAPACITY = 10;
 export async function createTopic(args) {
   const { 
     oracleAddress, 
-    eventName, 
-    resultNames, 
+    eventName, // string
+    resultNames, // array
     bettingEndBlock, 
     resultSettingEndBlock,
     senderAddress,
