@@ -13,7 +13,7 @@ import { approve, allowance } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
 import { bet, setResult, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished }
-from './src/contracts/centralized_oracle.js';
+  from './src/contracts/centralized_oracle.js';
 import { vote, finalizeResult, arbitrationEndBlock, lastResultIndex } from './src/contracts/decentralized_oracle.js';
 
 const restify = require('restify');
