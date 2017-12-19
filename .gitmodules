@@ -1,9 +1,0 @@
-[submodule "jobqueue"]
-	path = src/modules/jobqueue
-	url = https://github.com/chrisli30/jobqueue.git
-[submodule "qweb3"]
-	path = src/modules/qweb3
-	url = https://github.com/bodhiproject/qweb3.js.git
-[submodule "logger"]
-	path = src/modules/logger
-	url = https://github.com/chrisli30/logger.git
