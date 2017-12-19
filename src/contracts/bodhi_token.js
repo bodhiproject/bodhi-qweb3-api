@@ -6,9 +6,9 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 export async function approve(args) {
   const { 
-    spender, 
-    value, 
-    senderAddress,
+    spender, // address
+    value, // number (Botoshi)
+    senderAddress, // address
   } = args;
 
   if (spender === undefined || value === undefined || senderAddress === undefined) {
