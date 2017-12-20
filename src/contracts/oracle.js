@@ -19,7 +19,7 @@ export async function getBetBalances(args) {
     return;
   }
 
-  const oracle = this.getOracleContract(oracleType, contractAddress);
+  const oracle = getOracleContract(oracleType, contractAddress);
   return await oracle.call('getBetBalances', {
     methodArgs: [],
     senderAddress: senderAddress,
@@ -38,7 +38,7 @@ export async function getVoteBalances(args) {
     return;
   }
 
-  const oracle = this.getOracleContract(oracleType, contractAddress);
+  const oracle = getOracleContract(oracleType, contractAddress);
   return await oracle.call('getVoteBalances', {
     methodArgs: [],
     senderAddress: senderAddress,
@@ -57,7 +57,7 @@ export async function getTotalBets(args) {
     return;
   }
 
-  const oracle = this.getOracleContract(oracleType, contractAddress);
+  const oracle = getOracleContract(oracleType, contractAddress);
   return await oracle.call('getTotalBets', {
     methodArgs: [],
     senderAddress: senderAddress,
@@ -77,7 +77,7 @@ export async function getTotalVotes(args) {
     return;
   }
 
-  const oracle = this.getOracleContract(oracleType, contractAddress);
+  const oracle = getOracleContract(oracleType, contractAddress);
   return await oracle.call('getTotalVotes', {
     methodArgs: [],
     senderAddress: senderAddress,
@@ -96,7 +96,7 @@ export async function getResult(args) {
     return;
   }
 
-  const oracle = this.getOracleContract(oracleType, contractAddress);
+  const oracle = getOracleContract(oracleType, contractAddress);
   return await oracle.call('getResult', {
     methodArgs: [],
     senderAddress: senderAddress,
@@ -115,7 +115,7 @@ export async function finished(args) {
     return;
   }
 
-  const oracle = this.getOracleContract(oracleType, contractAddress);
+  const oracle = getOracleContract(oracleType, contractAddress);
   return await oracle.call('finished', {
       methodArgs: [],
       senderAddress: senderAddress,
