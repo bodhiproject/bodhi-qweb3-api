@@ -40,7 +40,7 @@ export async function setResult(args) {
   const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
   return await oracle.send('setResult', {
     methodArgs: [resultIndex],
-    gasLimit: 3000000,
+    gasLimit: 4000000,
     senderAddress: senderAddress,
   });
 }
