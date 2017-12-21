@@ -7,7 +7,7 @@ import utils from './src/modules/qweb3/src/utils';
 import Contracts from './config/contracts';
 import Topic from './src/models/topic';
 import logger from './src/modules/logger';
-import { getBlockCount, getTransactionReceipt } from './src/contracts/blockchain.js';
+import { getBlockCount, getTransactionReceipt, searchLogs } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
 import { approve, allowance } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
@@ -114,6 +114,17 @@ server.get('/getblockcount', (req, res, next) => {
 
 server.post('/gettransactionreceipt', (req, res, next) => {
   getTransactionReceipt(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/searchlogs', (req, res, next) => {
+  searchLogs(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });

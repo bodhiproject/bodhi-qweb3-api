@@ -1,4 +1,5 @@
 import Config from '../../config/config';
+import Contracts from '../../config/contracts';
 
 const Qweb3 = require('../modules/qweb3/index');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
