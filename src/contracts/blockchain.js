@@ -18,3 +18,27 @@ export async function getTransactionReceipt(args) {
 
   return await qweb3.getTransactionReceipt(transactionId);
 }
+
+export async function searchLogs(args) {
+  let {
+    fromBlock, // number
+    toBlock, // number
+    addresses, // string array
+    topics // string array
+  } = args;
+
+  if (fromBlock === undefined || toBlock === undefined) {
+    throw new TypeError('fromBlock and toBlock need to be defined');
+  }
+
+  if (addresses === undefined) {
+    addresses = [];
+  }
+
+  if (topics === undefined) {
+    topics = [];
+  }
+
+  const contract = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+  return await contract.searchLogs(fromBlock, toBlock, addresses, topics);
+}
