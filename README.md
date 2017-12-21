@@ -4,11 +4,24 @@ An open source local API server for interacting with the Bodhi-Core platform and
 ## Get Started
 
 ### 1. Clone Project
-1. `git clone https://github.com/bodhiproject/bodhi-api.git`
-2. `npm install`
+SSH: 
+```
+git clone git@github.com:bodhiproject/bodhi-api.git
+```
+or HTTPS: 
+```
+git clone https://github.com/bodhiproject/bodhi-api.git
+```
 
-### 2. Run Project
-`npm start`
+### 2. Install dependencies 
+```
+npm install
+```
+
+### 3. Run Project
+```
+npm start
+```
 
 ## Development
 
