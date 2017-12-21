@@ -1,6 +1,5 @@
-# bodhi-server
-An open source blockchain explorer for monitoring Bodhi platform
-
+# Bodhi-API
+An open source local API server for interacting with the Bodhi-Core platform and Qtum blockchain.
 
 ## Get Started
 
@@ -8,16 +7,8 @@ An open source blockchain explorer for monitoring Bodhi platform
 1. `git clone https://github.com/bodhiproject/bodhi-api.git`
 2. `npm install`
 
-### 2. Install Redis
-1. Install Redis `apt-get install redis-server`
-2. Start Redis `redis-server --daemonize yes`
-  '--daemonize yes' means running in background
-3. Check if the process started or not:
-  `ps aux | grep redis-server` 
-
-### 3. Run Project
+### 2. Run Project
 `npm start`
-
 
 ## Development
 
