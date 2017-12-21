@@ -3,7 +3,7 @@ An open source local API server for interacting with the Bodhi-Core platform and
 
 ## Get Started
 
-### 1. Clone Project
+### 1. Clone project
 SSH: 
 ```
 git clone git@github.com:bodhiproject/bodhi-api.git
@@ -13,14 +13,32 @@ or HTTPS:
 git clone https://github.com/bodhiproject/bodhi-api.git
 ```
 
-### 2. Install dependencies 
+### 2. Install submodules
 ```
-npm install
+cd bodhi-api
+git submodule update --init
 ```
 
-### 3. Run Project
+### 3. Install npm-recursive-install
+```
+npm install -g recursive-install
+```
+
+### 4. Install dependencies 
+```
+npm-recursive-install
+```
+
+### 5. Run project
 ```
 npm start
+```
+
+### 6. Run Qtum daemon
+In order to actually call the Qtum blockchain you will need to start the Qtum daemon. You will need to download the latest [Qtum binary](https://github.com/qtumproject/qtum/releases) first.
+```
+cd qtum-x.xx.xx/bin
+./qtumd -testnet -logevents -printtoconsole -rpcuser=bodhi -rpcpassword=bodhi
 ```
 
 ## Development
