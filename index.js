@@ -4,7 +4,7 @@ import promise from 'bluebird';
 
 import Config from './config/config';
 const Blockchain = require('./src/contracts/blockchain.js');
-import { listUnspent } from './src/contracts/wallet.js';
+const Wallet = require('./src/contracts/wallet.js');
 import { approve, allowance, balanceOf } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
 const TopicEvent = require('./src/contracts/topic_event.js');
@@ -44,7 +44,7 @@ server.post('/isconnected', (req, res, next) => {
 
 /* Wallet */
 server.get('/listunspent', (req, res, next) => {
-  listUnspent()
+  Wallet.listUnspent()
     .then((result) => {
       console.log(result);
       res.send({result});

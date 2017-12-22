@@ -42,6 +42,6 @@ const Blockchain = {
 
     return await qweb3Client.searchLogs(fromBlock, toBlock, addresses, topics);
   }
-}
+};
 
 module.exports = Blockchain;
