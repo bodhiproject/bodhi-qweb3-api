@@ -22,6 +22,7 @@ export async function invalidateOracle(args) {
   const oracle = getOracleContract(oracleType, contractAddress);
   return await oracle.send('invalidateOracle', {
     methodArgs: [],
+    gasLimit: 3000000,
     senderAddress: senderAddress,
   });
 }

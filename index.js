@@ -8,7 +8,7 @@ import { listUnspent } from './src/contracts/wallet.js';
 import { approve, allowance, balanceOf } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
-import { getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
+import { invalidateOracle, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
   from './src/contracts/oracle.js';
 import { bet, setResult } from './src/contracts/centralized_oracle.js';
 import { vote, finalizeResult, arbitrationEndBlock, lastResultIndex } from './src/contracts/decentralized_oracle.js';
@@ -157,20 +157,9 @@ server.post('/didwithdraw', (req, res, next) => {
     });
 });
 
-/* CentralizedOracle */
-server.post('/bet', (req, res, next) => {
-  bet(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/setresult', (req, res, next) => {
-  setResult(req.params)
+/* Oracle */
+server.post('/invalidateoracle', (req, res, next) => {
+  invalidateOracle(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -237,6 +226,29 @@ server.post('/getresult', (req, res, next) => {
 
 server.post('/finished', (req, res, next) => {
   finished(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* CentralizedOracle */
+server.post('/bet', (req, res, next) => {
+  bet(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/setresult', (req, res, next) => {
+  setResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
