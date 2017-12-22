@@ -41,3 +41,21 @@ export async function allowance(args) {
     senderAddress: senderAddress,
   });
 }
+
+export async function balanceOf(args) {
+  const { 
+    owner, 
+    senderAddress,
+  } = args;
+
+  if (owner === undefined || senderAddress === undefined) {
+    throw new TypeError('owner and senderAddress need to be defined');
+    return;
+  }
+
+  const oracle = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+  return await oracle.call('balanceOf', {
+    methodArgs: [owner],
+    senderAddress: senderAddress,
+  });
+}
