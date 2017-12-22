@@ -22,6 +22,42 @@ export async function withdrawWinnings(args) {
   });
 }
 
+export async function calculateQtumWinnings(args) {
+  const { 
+    contractAddress, // address
+    senderAddress, // address
+  } = args;
+
+  if (contractAddress === undefined || senderAddress === undefined) {
+    throw new TypeError('contractAddress and senderAddress need to be defined');
+    return;
+  }
+
+  const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
+  return await topicEvent.call('calculateQtumContributorWinnings', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+}
+
+export async function calculateBotWinnings(args) {
+  const { 
+    contractAddress, // address
+    senderAddress, // address
+  } = args;
+
+  if (contractAddress === undefined || senderAddress === undefined) {
+    throw new TypeError('contractAddress and senderAddress need to be defined');
+    return;
+  }
+
+  const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
+  return await topicEvent.call('calculateBotContributorWinnings', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+}
+
 export async function didWithdraw(args) {
   const { 
     contractAddress, // address
