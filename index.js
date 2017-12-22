@@ -3,7 +3,7 @@ import moment from 'moment';
 import promise from 'bluebird';
 
 import Config from './config/config';
-import { getBlockCount, getTransactionReceipt, searchLogs } from './src/contracts/blockchain.js';
+const Blockchain = require('./src/contracts/blockchain.js');
 import { listUnspent } from './src/contracts/wallet.js';
 import { approve, allowance, balanceOf } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
@@ -56,7 +56,7 @@ server.get('/listunspent', (req, res, next) => {
 
 /* Blockchain */
 server.get('/getblockcount', (req, res, next) => {
-  getBlockCount()
+  Blockchain.getBlockCount()
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -67,7 +67,7 @@ server.get('/getblockcount', (req, res, next) => {
 });
 
 server.post('/gettransactionreceipt', (req, res, next) => {
-  getTransactionReceipt(req.params)
+  Blockchain.getTransactionReceipt(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -78,7 +78,7 @@ server.post('/gettransactionreceipt', (req, res, next) => {
 });
 
 server.post('/searchlogs', (req, res, next) => {
-  searchLogs(req.params)
+  Blockchain.searchLogs(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
