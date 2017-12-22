@@ -25,9 +25,9 @@ export async function approve(args) {
 
 export async function allowance(args) {
   const { 
-    owner, 
-    spender, 
-    senderAddress,
+    owner, // address
+    spender, // address
+    senderAddress, // address
   } = args;
 
   if (owner === undefined || spender === undefined || senderAddress === undefined) {
@@ -44,8 +44,8 @@ export async function allowance(args) {
 
 export async function balanceOf(args) {
   const { 
-    owner, 
-    senderAddress,
+    owner, // address
+    senderAddress, // address
   } = args;
 
   if (owner === undefined || senderAddress === undefined) {

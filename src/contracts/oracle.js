@@ -7,6 +7,25 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
 
+export async function invalidateOracle(args) {
+  const { 
+    contractAddress, // address
+    oracleType, // string
+    senderAddress, // address
+  } = args;
+
+  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+    return;
+  }
+
+  const oracle = getOracleContract(oracleType, contractAddress);
+  return await oracle.send('invalidateOracle', {
+    methodArgs: [],
+    senderAddress: senderAddress,
+  });
+}
+
 export async function getBetBalances(args) {
   const { 
     contractAddress, // address
