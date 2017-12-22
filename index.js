@@ -7,7 +7,7 @@ import { getBlockCount, getTransactionReceipt, searchLogs } from './src/contract
 import { listUnspent } from './src/contracts/wallet.js';
 import { approve, allowance, balanceOf } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
-import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
+const TopicEvent = require('./src/contracts/topic_event.js');
 import { invalidateOracle, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
   from './src/contracts/oracle.js';
 import { bet, setResult } from './src/contracts/centralized_oracle.js';
@@ -136,7 +136,7 @@ server.post('/createtopic', (req, res, next) => {
 
 /* TopicEvent */
 server.post('/withdraw', (req, res, next) => {
-  withdrawWinnings(req.params)
+  TopicEvent.withdrawWinnings(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -147,7 +147,29 @@ server.post('/withdraw', (req, res, next) => {
 });
 
 server.post('/didwithdraw', (req, res, next) => {
-  didWithdraw(req.params)
+  TopicEvent.didWithdraw(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/qtumwinnings', (req, res, next) => {
+  TopicEvent.calculateQtumWinnings(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/botwinnings', (req, res, next) => {
+  TopicEvent.calculateBotWinnings(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
