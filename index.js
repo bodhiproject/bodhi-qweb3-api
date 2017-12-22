@@ -5,7 +5,7 @@ import promise from 'bluebird';
 import Config from './config/config';
 const Blockchain = require('./src/contracts/blockchain.js');
 const Wallet = require('./src/contracts/wallet.js');
-import { approve, allowance, balanceOf } from './src/contracts/bodhi_token.js';
+const BodhiToken = require('./src/contracts/bodhi_token.js');
 import { createTopic } from './src/contracts/event_factory.js';
 const TopicEvent = require('./src/contracts/topic_event.js');
 import { invalidateOracle, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
@@ -90,7 +90,7 @@ server.post('/searchlogs', (req, res, next) => {
 
 /* BodhiToken */
 server.post('/approve', (req, res, next) => {
-  approve(req.params)
+  BodhiToken.approve(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -101,7 +101,7 @@ server.post('/approve', (req, res, next) => {
 });
 
 server.post('/allowance', (req, res, next) => {
-  allowance(req.params)
+  BodhiToken.allowance(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -112,7 +112,7 @@ server.post('/allowance', (req, res, next) => {
 });
 
 server.post('/balanceof', (req, res, next) => {
-  balanceOf(req.params)
+  BodhiToken.balanceOf(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
