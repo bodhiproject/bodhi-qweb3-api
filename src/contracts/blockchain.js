@@ -1,11 +1,10 @@
 import Config from '../../config/config';
-import Contracts from '../../config/contracts';
 
 const Qweb3 = require('../modules/qweb3/index');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+const qweb3Client = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 export async function getBlockCount() {
-  return await qweb3.getBlockCount();
+  return await qweb3Client.getBlockCount();
 }
 
 export async function getTransactionReceipt(args) {
@@ -17,7 +16,7 @@ export async function getTransactionReceipt(args) {
     throw new TypeError('transactionId need to be defined');
   }
 
-  return await qweb3.getTransactionReceipt(transactionId);
+  return await qweb3Client.getTransactionReceipt(transactionId);
 }
 
 export async function searchLogs(args) {
@@ -40,5 +39,5 @@ export async function searchLogs(args) {
     topics = [];
   }
 
-  return await qweb3.searchLogs(fromBlock, toBlock, addresses, topics);
+  return await qweb3Client.searchLogs(fromBlock, toBlock, addresses, topics);
 }
