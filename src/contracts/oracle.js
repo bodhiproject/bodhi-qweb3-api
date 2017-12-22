@@ -7,140 +7,141 @@ const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
 
-export async function invalidateOracle(args) {
-  const { 
-    contractAddress, // address
-    oracleType, // string
-    senderAddress, // address
-  } = args;
+const Oracle = {
+  invalidateOracle: async function(args) {
+    const { 
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
 
-  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-    return;
-  }
+    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+      return;
+    }
 
-  const oracle = getOracleContract(oracleType, contractAddress);
-  return await oracle.send('invalidateOracle', {
-    methodArgs: [],
-    gasLimit: 3000000,
-    senderAddress: senderAddress,
-  });
-}
+    const oracle = getOracleContract(oracleType, contractAddress);
+    return await oracle.send('invalidateOracle', {
+      methodArgs: [],
+      gasLimit: 3000000,
+      senderAddress: senderAddress,
+    });
+  },
 
-export async function getBetBalances(args) {
-  const { 
-    contractAddress, // address
-    oracleType, // string
-    senderAddress, // address
-  } = args;
+  getBetBalances: async function(args) {
+    const { 
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
 
-  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-    return;
-  }
+    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+      return;
+    }
 
-  const oracle = getOracleContract(oracleType, contractAddress);
-  return await oracle.call('getBetBalances', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-}
-
-export async function getVoteBalances(args) {
-  const { 
-    contractAddress, // address
-    oracleType, // string
-    senderAddress, // address
-  } = args;
-
-  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-    return;
-  }
-
-  const oracle = getOracleContract(oracleType, contractAddress);
-  return await oracle.call('getVoteBalances', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-}
-
-export async function getTotalBets(args) {
-  const { 
-    contractAddress, // address
-    oracleType, // string
-    senderAddress, // address
-  } = args;
-
-  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-    return;
-  }
-
-  const oracle = getOracleContract(oracleType, contractAddress);
-  return await oracle.call('getTotalBets', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-  console.log(result);
-}
-
-export async function getTotalVotes(args) {
-  const { 
-    contractAddress, // address
-    oracleType, // string
-    senderAddress, // address
-  } = args;
-
-  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-    return;
-  }
-
-  const oracle = getOracleContract(oracleType, contractAddress);
-  return await oracle.call('getTotalVotes', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-}
-
-export async function getResult(args) {
-  const { 
-    contractAddress, // address
-    oracleType, // string
-    senderAddress, // address
-  } = args;
-
-  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-    return;
-  }
-
-  const oracle = getOracleContract(oracleType, contractAddress);
-  return await oracle.call('getResult', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-}
-
-export async function finished(args) {
-  const { 
-    contractAddress, // address
-    oracleType, // string
-    senderAddress, // address
-  } = args;
-
-  if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-    return;
-  }
-
-  const oracle = getOracleContract(oracleType, contractAddress);
-  return await oracle.call('finished', {
+    const oracle = getOracleContract(oracleType, contractAddress);
+    return await oracle.call('getBetBalances', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
-}
+  },
+
+  getVoteBalances: async function(args) {
+    const { 
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = getOracleContract(oracleType, contractAddress);
+    return await oracle.call('getVoteBalances', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  getTotalBets: async function(args) {
+    const { 
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = getOracleContract(oracleType, contractAddress);
+    return await oracle.call('getTotalBets', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  getTotalVotes: async function(args) {
+    const { 
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = getOracleContract(oracleType, contractAddress);
+    return await oracle.call('getTotalVotes', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  getResult: async function(args) {
+    const { 
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = getOracleContract(oracleType, contractAddress);
+    return await oracle.call('getResult', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  finished: async function(args) {
+    const { 
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = getOracleContract(oracleType, contractAddress);
+    return await oracle.call('finished', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+};
 
 function getOracleContract(oracleType, contractAddress) {
   switch (oracleType) {
@@ -155,3 +156,5 @@ function getOracleContract(oracleType, contractAddress) {
     }
   }
 }
+
+module.exports = Oracle;

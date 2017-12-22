@@ -3,15 +3,15 @@ import moment from 'moment';
 import promise from 'bluebird';
 
 import Config from './config/config';
+
 const Blockchain = require('./src/contracts/blockchain.js');
 const Wallet = require('./src/contracts/wallet.js');
 const BodhiToken = require('./src/contracts/bodhi_token.js');
-import { createTopic } from './src/contracts/event_factory.js';
+const EventFactory = require('./src/contracts/event_factory.js');
 const TopicEvent = require('./src/contracts/topic_event.js');
-import { invalidateOracle, getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
-  from './src/contracts/oracle.js';
-import { bet, setResult } from './src/contracts/centralized_oracle.js';
-import { vote, finalizeResult, arbitrationEndBlock, lastResultIndex } from './src/contracts/decentralized_oracle.js';
+const Oracle = require('./src/contracts/oracle.js');
+const CentralizedOracle = require('./src/contracts/centralized_oracle.js');
+const DecentralizedOracle = require('./src/contracts/decentralized_oracle.js');
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
@@ -124,7 +124,7 @@ server.post('/balanceof', (req, res, next) => {
 
 /* EventFactory */
 server.post('/createtopic', (req, res, next) => {
-  createTopic(req.params)
+  EventFactory.createTopic(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -181,7 +181,7 @@ server.post('/botwinnings', (req, res, next) => {
 
 /* Oracle */
 server.post('/invalidateoracle', (req, res, next) => {
-  invalidateOracle(req.params)
+  Oracle.invalidateOracle(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -192,7 +192,7 @@ server.post('/invalidateoracle', (req, res, next) => {
 });
 
 server.post('/betbalances', (req, res, next) => {
-  getBetBalances(req.params)
+  Oracle.getBetBalances(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -203,7 +203,7 @@ server.post('/betbalances', (req, res, next) => {
 });
 
 server.post('/votebalances', (req, res, next) => {
-  getVoteBalances(req.params)
+  Oracle.getVoteBalances(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -214,7 +214,7 @@ server.post('/votebalances', (req, res, next) => {
 });
 
 server.post('/totalbets', (req, res, next) => {
-  getTotalBets(req.params)
+  Oracle.getTotalBets(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -225,7 +225,7 @@ server.post('/totalbets', (req, res, next) => {
 });
 
 server.post('/totalvotes', (req, res, next) => {
-  getTotalVotes(req.params)
+  Oracle.getTotalVotes(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -236,7 +236,7 @@ server.post('/totalvotes', (req, res, next) => {
 });
 
 server.post('/getresult', (req, res, next) => {
-  getResult(req.params)
+  Oracle.getResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -247,7 +247,7 @@ server.post('/getresult', (req, res, next) => {
 });
 
 server.post('/finished', (req, res, next) => {
-  finished(req.params)
+  Oracle.finished(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -259,7 +259,7 @@ server.post('/finished', (req, res, next) => {
 
 /* CentralizedOracle */
 server.post('/bet', (req, res, next) => {
-  bet(req.params)
+  CentralizedOracle.bet(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -270,7 +270,7 @@ server.post('/bet', (req, res, next) => {
 });
 
 server.post('/setresult', (req, res, next) => {
-  setResult(req.params)
+  CentralizedOracle.setResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -282,7 +282,7 @@ server.post('/setresult', (req, res, next) => {
 
 /* DecentralizedOracle */
 server.post('/vote', (req, res, next) => {
-  vote(req.params)
+  DecentralizedOracle.vote(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -293,7 +293,7 @@ server.post('/vote', (req, res, next) => {
 });
 
 server.post('/finalizeresult', (req, res, next) => {
-  finalizeResult(req.params)
+  DecentralizedOracle.finalizeResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -304,7 +304,7 @@ server.post('/finalizeresult', (req, res, next) => {
 });
 
 server.post('/arbitrationendblock', (req, res, next) => {
-  arbitrationEndBlock(req.params)
+  DecentralizedOracle.arbitrationEndBlock(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -315,7 +315,7 @@ server.post('/arbitrationendblock', (req, res, next) => {
 });
 
 server.post('/lastresultindex', (req, res, next) => {
-  lastResultIndex(req.params)
+  DecentralizedOracle.lastResultIndex(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
