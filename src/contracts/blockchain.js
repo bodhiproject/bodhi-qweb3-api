@@ -40,6 +40,5 @@ export async function searchLogs(args) {
     topics = [];
   }
 
-  const contract = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
-  return await contract.searchLogs(fromBlock, toBlock, addresses, topics);
+  return await qweb3.searchLogs(fromBlock, toBlock, addresses, topics);
 }
