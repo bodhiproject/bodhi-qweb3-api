@@ -3,13 +3,9 @@ import moment from 'moment';
 import promise from 'bluebird';
 
 import Config from './config/config';
-import utils from './src/modules/qweb3/src/utils';
-import Contracts from './config/contracts';
-import Topic from './src/models/topic';
-import logger from './src/modules/logger';
 import { getBlockCount, getTransactionReceipt, searchLogs } from './src/contracts/blockchain.js';
 import { listUnspent } from './src/contracts/wallet.js';
-import { approve, allowance } from './src/contracts/bodhi_token.js';
+import { approve, allowance, balanceOf } from './src/contracts/bodhi_token.js';
 import { createTopic } from './src/contracts/event_factory.js';
 import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
 import { getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
@@ -22,9 +18,6 @@ const corsMiddleware = require('restify-cors-middleware')
 
 const Qweb3 = require('./src/modules/qweb3/index');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
-const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
-
-let topicsSnapshot = [];
 
 /** Set up CORS to allow request from a different server */
 const server = restify.createServer();
@@ -37,45 +30,6 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
-
-/** List Topics from searchlog */
-server.get('/topics', (req, res, next) => {
-  if (_.isEmpty(topicsSnapshot)) {
-    const fromBlock = 0;
-    const toBlock = -1;
-    const addresses = Contracts.EventFactory.address;
-    const topics = ['null'];
-
-    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-      .then((result) => {
-          console.log(`Retrieved ${result.length} entries from searchLogs.`);
-
-          let topicArray = [];
-          _.each(result, (event, index) => {
-            console.log(event);
-
-            // Parse out logs
-            if (!_.isEmpty(event.log)) {
-              _.each(event.log, (logItem) => {
-                topicArray.push(new Topic(logItem));
-              });
-            }
-          });
-
-          res.send(200, _.map(topicArray, (topic) => topic.toJson()));
-          next();
-        },
-        (err) => {
-          console.log(err.message);
-          res.send(500, err.message);
-          next();
-        }
-      );
-  } else {
-    res.send(200, topicsSnapshot);
-    next();
-  }
-});
 
 /* Misc */
 server.post('/isconnected', (req, res, next) => {
@@ -157,6 +111,17 @@ server.post('/allowance', (req, res, next) => {
     });
 });
 
+server.post('/balanceof', (req, res, next) => {
+  balanceOf(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
 /* EventFactory */
 server.post('/createtopic', (req, res, next) => {
   createTopic(req.params)
@@ -215,13 +180,6 @@ server.post('/setresult', (req, res, next) => {
     });
 });
 
-/**
- * Get bet balance of a topic
- *
- * @param {string} contractAddress  Topic address
- * @param {string} senderAddress    Sender address
- * @returns {object} object containing string in output
- */
 server.post('/betbalances', (req, res, next) => {
   getBetBalances(req.params)
     .then((result) => {
@@ -337,75 +295,3 @@ server.post('/lastresultindex', (req, res, next) => {
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
-
-// Run schedule monitoring job on startup
-// TODO: We might want to add a switch to turn in on and off
-// scheduleMonitorJob({
-//   name: `job-searchlogs`,
-//   cb: () => {
-//     const fromBlock = 0;
-//     const toBlock = -1;
-//     const addresses = Contracts.EventFactory.address;
-//     const topics = ['null'];
-
-//     return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-//       .then((result) => {
-//         console.log(`Retrieved ${result.length} entries from searchLogs.`);
-
-//         let topicArray = [];
-//         _.each(result, (event, index) => {
-//           console.log(event);
-
-//           // Parse out logs
-//           if (!_.isEmpty(event.log)) {
-//             _.each(event.log, (logItem) => {
-//               topicArray.push(new Topic(logItem));
-//             });
-//           }
-//         });
-
-//         topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
-
-//         return promise.resolve();
-//       });
-//   },
-//   options: { interval: 10000, attempts: 3, silent: false },
-// });
-
-/**
- * [scheduleMonitorJob description]
- * @param  {[type]} params [description]
- * @return {Parse.Promise}  A promise resolved upon job completion
- */
-function scheduleMonitorJob(params) {
-  const { name, cb, options } = params;
-
-  const jobName = `${name}`;
-  const interval = (options && options.interval) || 0; // Default 0, meaning run immediately
-  const jobOptions = {
-    // Retry 3 times on failure 
-    attempts: (options && options.attempts) || 3,
-    silent: (options && options.silent) || false,
-  };
-
-  let job = JobQueue.scheduleJob({
-      jobName,
-      interval,
-      cb,
-    },
-    jobOptions,
-  );
-
-  job.on('complete', function(result) {
-    console.log('Job completed with data ', result);
-
-  }).on('failed attempt', function(errorMessage, doneAttempts) {
-    console.log('Job failed', errorMessage, doneAttempts);
-
-  }).on('failed', function(errorMessage) {
-    console.log('Job failed', errorMessage);
-
-  }).on('progress', function(progress, data) {
-    console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
-  })
-}
