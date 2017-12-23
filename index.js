@@ -280,6 +280,17 @@ server.post('/setresult', (req, res, next) => {
     });
 });
 
+server.post('/oracle', (req, res, next) => {
+  CentralizedOracle.oracle(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
 server.post('/betendblock', (req, res, next) => {
   CentralizedOracle.bettingEndBlock(req.params)
     .then((result) => {
