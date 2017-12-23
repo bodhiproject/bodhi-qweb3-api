@@ -146,6 +146,17 @@ server.post('/withdraw', (req, res, next) => {
     });
 });
 
+server.post('/status', (req, res, next) => {
+  TopicEvent.status(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
 server.post('/didwithdraw', (req, res, next) => {
   TopicEvent.didWithdraw(req.params)
     .then((result) => {

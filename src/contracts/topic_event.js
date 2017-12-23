@@ -23,6 +23,24 @@ const TopicEvent = {
     });
   },
 
+  status: async function(args) {
+    const { 
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress and senderAddress need to be defined');
+      return;
+    }
+
+    const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
+    return await topicEvent.call('status', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
   didWithdraw: async function(args) {
     const { 
       contractAddress, // address
