@@ -10,6 +10,7 @@ const DecentralizedOracle = {
       contractAddress, // address
       resultIndex, // number
       botAmount, // number (Botoshi)
+      gasLimit, // number
       senderAddress, // address
     } = args;
 
@@ -22,10 +23,14 @@ const DecentralizedOracle = {
       return;
     }
 
+    // If gasLimit is not specified, we need to make sure the vote succeeds in the event this vote will surpass the
+    // consensus threshold and will require a higher gas limit.
+    const defaultGasLimit = 2000000;
+
     const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
     return await oracle.send('vote', {
       methodArgs: [resultIndex, botAmount],
-      gasLimit: 2000000,
+      gasLimit: gasLimit || defaultGasLimit,
       senderAddress: senderAddress,
     });
   },
