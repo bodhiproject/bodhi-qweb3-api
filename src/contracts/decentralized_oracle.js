@@ -23,7 +23,7 @@ const DecentralizedOracle = {
     }
 
     const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-    return await oracle.send('voteResult', {
+    return await oracle.send('vote', {
       methodArgs: [resultIndex, botAmount],
       gasLimit: 2000000,
       senderAddress: senderAddress,
