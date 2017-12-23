@@ -111,7 +111,7 @@ server.post('/allowance', (req, res, next) => {
     });
 });
 
-server.post('/balanceof', (req, res, next) => {
+server.post('/botbalance', (req, res, next) => {
   BodhiToken.balanceOf(req.params)
     .then((result) => {
       console.log(result);

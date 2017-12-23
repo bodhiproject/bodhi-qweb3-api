@@ -41,7 +41,7 @@ const Blockchain = {
       topics = [];
     }
 
-    return await qweb3Client.searchLogs(fromBlock, toBlock, addresses, topics, ContractMetadata);
+    return await qweb3Client.searchLogs(fromBlock, toBlock, addresses, topics, ContractMetadata, true);
   }
 };
 
