@@ -28,7 +28,7 @@ const DecentralizedOracle = {
     const defaultGasLimit = 2000000;
 
     const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-    return await oracle.send('vote', {
+    return await oracle.send('voteResult', {
       methodArgs: [resultIndex, botAmount],
       gasLimit: gasLimit || defaultGasLimit,
       senderAddress: senderAddress,
