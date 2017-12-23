@@ -45,6 +45,42 @@ const CentralizedOracle = {
       senderAddress: senderAddress,
     });
   },
+
+  bettingEndBlock: async function(args) {
+    const { 
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
+    return await oracle.call('bettingEndBlock', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  resultSettingEndBlock: async function(args) {
+    const { 
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
+    return await oracle.call('resultSettingEndBlock', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
 };
 
 module.exports = CentralizedOracle;

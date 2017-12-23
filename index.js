@@ -280,6 +280,28 @@ server.post('/setresult', (req, res, next) => {
     });
 });
 
+server.post('/betendblock', (req, res, next) => {
+  CentralizedOracle.bettingEndBlock(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/resultsetendblock', (req, res, next) => {
+  CentralizedOracle.bettingEndBlock(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
 /* DecentralizedOracle */
 server.post('/vote', (req, res, next) => {
   DecentralizedOracle.vote(req.params)
