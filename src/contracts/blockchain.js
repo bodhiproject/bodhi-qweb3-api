@@ -1,5 +1,6 @@
 import Config from '../../config/config';
 
+const ContractMetadata = require('./contract_metadata');
 const Qweb3 = require('../modules/qweb3/index');
 const qweb3Client = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
@@ -40,7 +41,7 @@ const Blockchain = {
       topics = [];
     }
 
-    return await qweb3Client.searchLogs(fromBlock, toBlock, addresses, topics);
+    return await qweb3Client.searchLogs(fromBlock, toBlock, addresses, topics, ContractMetadata);
   }
 };
 
