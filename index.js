@@ -292,7 +292,7 @@ server.post('/betendblock', (req, res, next) => {
 });
 
 server.post('/resultsetendblock', (req, res, next) => {
-  CentralizedOracle.bettingEndBlock(req.params)
+  CentralizedOracle.resultSettingEndBlock(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
