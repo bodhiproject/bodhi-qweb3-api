@@ -3,28 +3,21 @@ import moment from 'moment';
 import promise from 'bluebird';
 
 import Config from './config/config';
-import utils from './src/modules/qweb3/src/utils';
-import Contracts from './config/contracts';
-import Topic from './src/models/topic';
-import logger from './src/modules/logger';
-import { getBlockCount, getTransactionReceipt } from './src/contracts/blockchain.js';
-import { listUnspent } from './src/contracts/wallet.js';
-import { approve, allowance } from './src/contracts/bodhi_token.js';
-import { createTopic } from './src/contracts/event_factory.js';
-import { withdrawWinnings, didWithdraw } from './src/contracts/topic_event.js';
-import { getBetBalances, getVoteBalances, getTotalBets, getTotalVotes, getResult, finished } 
-  from './src/contracts/oracle.js';
-import { bet, setResult } from './src/contracts/centralized_oracle.js';
-import { vote, finalizeResult, arbitrationEndBlock, lastResultIndex } from './src/contracts/decentralized_oracle.js';
+
+const Blockchain = require('./src/contracts/blockchain.js');
+const Wallet = require('./src/contracts/wallet.js');
+const BodhiToken = require('./src/contracts/bodhi_token.js');
+const EventFactory = require('./src/contracts/event_factory.js');
+const TopicEvent = require('./src/contracts/topic_event.js');
+const Oracle = require('./src/contracts/oracle.js');
+const CentralizedOracle = require('./src/contracts/centralized_oracle.js');
+const DecentralizedOracle = require('./src/contracts/decentralized_oracle.js');
 
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
 
 const Qweb3 = require('./src/modules/qweb3/index');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
-const contractEventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
-
-let topicsSnapshot = [];
 
 /** Set up CORS to allow request from a different server */
 const server = restify.createServer();
@@ -37,45 +30,6 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
-
-/** List Topics from searchlog */
-server.get('/topics', (req, res, next) => {
-  if (_.isEmpty(topicsSnapshot)) {
-    const fromBlock = 0;
-    const toBlock = -1;
-    const addresses = Contracts.EventFactory.address;
-    const topics = ['null'];
-
-    return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-      .then((result) => {
-          console.log(`Retrieved ${result.length} entries from searchLogs.`);
-
-          let topicArray = [];
-          _.each(result, (event, index) => {
-            console.log(event);
-
-            // Parse out logs
-            if (!_.isEmpty(event.log)) {
-              _.each(event.log, (logItem) => {
-                topicArray.push(new Topic(logItem));
-              });
-            }
-          });
-
-          res.send(200, _.map(topicArray, (topic) => topic.toJson()));
-          next();
-        },
-        (err) => {
-          console.log(err.message);
-          res.send(500, err.message);
-          next();
-        }
-      );
-  } else {
-    res.send(200, topicsSnapshot);
-    next();
-  }
-});
 
 /* Misc */
 server.post('/isconnected', (req, res, next) => {
@@ -90,7 +44,7 @@ server.post('/isconnected', (req, res, next) => {
 
 /* Wallet */
 server.get('/listunspent', (req, res, next) => {
-  listUnspent()
+  Wallet.listUnspent()
     .then((result) => {
       console.log(result);
       res.send({result});
@@ -102,7 +56,7 @@ server.get('/listunspent', (req, res, next) => {
 
 /* Blockchain */
 server.get('/getblockcount', (req, res, next) => {
-  getBlockCount()
+  Blockchain.getBlockCount()
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -113,7 +67,18 @@ server.get('/getblockcount', (req, res, next) => {
 });
 
 server.post('/gettransactionreceipt', (req, res, next) => {
-  getTransactionReceipt(req.params)
+  Blockchain.getTransactionReceipt(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/searchlogs', (req, res, next) => {
+  Blockchain.searchLogs(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -125,7 +90,7 @@ server.post('/gettransactionreceipt', (req, res, next) => {
 
 /* BodhiToken */
 server.post('/approve', (req, res, next) => {
-  approve(req.params)
+  BodhiToken.approve(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -136,7 +101,18 @@ server.post('/approve', (req, res, next) => {
 });
 
 server.post('/allowance', (req, res, next) => {
-  allowance(req.params)
+  BodhiToken.allowance(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/botbalance', (req, res, next) => {
+  BodhiToken.balanceOf(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -148,7 +124,7 @@ server.post('/allowance', (req, res, next) => {
 
 /* EventFactory */
 server.post('/createtopic', (req, res, next) => {
-  createTopic(req.params)
+  EventFactory.createTopic(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -160,7 +136,18 @@ server.post('/createtopic', (req, res, next) => {
 
 /* TopicEvent */
 server.post('/withdraw', (req, res, next) => {
-  withdrawWinnings(req.params)
+  TopicEvent.withdrawWinnings(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/status', (req, res, next) => {
+  TopicEvent.status(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -171,7 +158,107 @@ server.post('/withdraw', (req, res, next) => {
 });
 
 server.post('/didwithdraw', (req, res, next) => {
-  didWithdraw(req.params)
+  TopicEvent.didWithdraw(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/qtumwinnings', (req, res, next) => {
+  TopicEvent.calculateQtumWinnings(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/botwinnings', (req, res, next) => {
+  TopicEvent.calculateBotWinnings(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+/* Oracle */
+server.post('/invalidateoracle', (req, res, next) => {
+  Oracle.invalidateOracle(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/betbalances', (req, res, next) => {
+  Oracle.getBetBalances(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/votebalances', (req, res, next) => {
+  Oracle.getVoteBalances(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/totalbets', (req, res, next) => {
+  Oracle.getTotalBets(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/totalvotes', (req, res, next) => {
+  Oracle.getTotalVotes(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/getresult', (req, res, next) => {
+  Oracle.getResult(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send(200, { result });
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
+server.post('/finished', (req, res, next) => {
+  Oracle.finished(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -183,7 +270,7 @@ server.post('/didwithdraw', (req, res, next) => {
 
 /* CentralizedOracle */
 server.post('/bet', (req, res, next) => {
-  bet(req.params)
+  CentralizedOracle.bet(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -194,7 +281,7 @@ server.post('/bet', (req, res, next) => {
 });
 
 server.post('/setresult', (req, res, next) => {
-  setResult(req.params)
+  CentralizedOracle.setResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -204,15 +291,8 @@ server.post('/setresult', (req, res, next) => {
     });
 });
 
-/**
- * Get bet balance of a topic
- *
- * @param {string} contractAddress  Topic address
- * @param {string} senderAddress    Sender address
- * @returns {object} object containing string in output
- */
-server.post('/betbalances', (req, res, next) => {
-  getBetBalances(req.params)
+server.post('/oracle', (req, res, next) => {
+  CentralizedOracle.oracle(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -222,8 +302,8 @@ server.post('/betbalances', (req, res, next) => {
     });
 });
 
-server.post('/votebalances', (req, res, next) => {
-  getVoteBalances(req.params)
+server.post('/betendblock', (req, res, next) => {
+  CentralizedOracle.bettingEndBlock(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -233,41 +313,8 @@ server.post('/votebalances', (req, res, next) => {
     });
 });
 
-server.post('/totalbets', (req, res, next) => {
-  getTotalBets(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/totalvotes', (req, res, next) => {
-  getTotalVotes(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/getresult', (req, res, next) => {
-  getResult(req.params)
-    .then((result) => {
-      console.log(result);
-      res.send(200, { result });
-    }, (err) => {
-      console.log(err);
-      res.send({ error: err.message });
-    });
-});
-
-server.post('/finished', (req, res, next) => {
-  finished(req.params)
+server.post('/resultsetendblock', (req, res, next) => {
+  CentralizedOracle.resultSettingEndBlock(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -279,7 +326,7 @@ server.post('/finished', (req, res, next) => {
 
 /* DecentralizedOracle */
 server.post('/vote', (req, res, next) => {
-  vote(req.params)
+  DecentralizedOracle.vote(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -290,7 +337,7 @@ server.post('/vote', (req, res, next) => {
 });
 
 server.post('/finalizeresult', (req, res, next) => {
-  finalizeResult(req.params)
+  DecentralizedOracle.finalizeResult(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -301,7 +348,7 @@ server.post('/finalizeresult', (req, res, next) => {
 });
 
 server.post('/arbitrationendblock', (req, res, next) => {
-  arbitrationEndBlock(req.params)
+  DecentralizedOracle.arbitrationEndBlock(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -312,7 +359,7 @@ server.post('/arbitrationendblock', (req, res, next) => {
 });
 
 server.post('/lastresultindex', (req, res, next) => {
-  lastResultIndex(req.params)
+  DecentralizedOracle.lastResultIndex(req.params)
     .then((result) => {
       console.log(result);
       res.send(200, { result });
@@ -326,75 +373,3 @@ server.post('/lastresultindex', (req, res, next) => {
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
-
-// Run schedule monitoring job on startup
-// TODO: We might want to add a switch to turn in on and off
-// scheduleMonitorJob({
-//   name: `job-searchlogs`,
-//   cb: () => {
-//     const fromBlock = 0;
-//     const toBlock = -1;
-//     const addresses = Contracts.EventFactory.address;
-//     const topics = ['null'];
-
-//     return contractEventFactory.searchLogs(fromBlock, toBlock, addresses, topics)
-//       .then((result) => {
-//         console.log(`Retrieved ${result.length} entries from searchLogs.`);
-
-//         let topicArray = [];
-//         _.each(result, (event, index) => {
-//           console.log(event);
-
-//           // Parse out logs
-//           if (!_.isEmpty(event.log)) {
-//             _.each(event.log, (logItem) => {
-//               topicArray.push(new Topic(logItem));
-//             });
-//           }
-//         });
-
-//         topicsSnapshot = _.map(topicArray, (topic) => topic.toJson());
-
-//         return promise.resolve();
-//       });
-//   },
-//   options: { interval: 10000, attempts: 3, silent: false },
-// });
-
-/**
- * [scheduleMonitorJob description]
- * @param  {[type]} params [description]
- * @return {Parse.Promise}  A promise resolved upon job completion
- */
-function scheduleMonitorJob(params) {
-  const { name, cb, options } = params;
-
-  const jobName = `${name}`;
-  const interval = (options && options.interval) || 0; // Default 0, meaning run immediately
-  const jobOptions = {
-    // Retry 3 times on failure 
-    attempts: (options && options.attempts) || 3,
-    silent: (options && options.silent) || false,
-  };
-
-  let job = JobQueue.scheduleJob({
-      jobName,
-      interval,
-      cb,
-    },
-    jobOptions,
-  );
-
-  job.on('complete', function(result) {
-    console.log('Job completed with data ', result);
-
-  }).on('failed attempt', function(errorMessage, doneAttempts) {
-    console.log('Job failed', errorMessage, doneAttempts);
-
-  }).on('failed', function(errorMessage) {
-    console.log('Job failed', errorMessage);
-
-  }).on('progress', function(progress, data) {
-    console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data);
-  })
-}

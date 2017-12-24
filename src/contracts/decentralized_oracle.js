@@ -4,81 +4,90 @@ import Contracts from '../../config/contracts';
 const Qweb3 = require('../modules/qweb3/index');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
-export async function vote(args) {
-  const { 
-    contractAddress, // address
-    resultIndex, // number
-    botAmount, // number (Botoshi)
-    senderAddress, // address
-  } = args;
+const DecentralizedOracle = {
+  vote: async function(args) {
+    const { 
+      contractAddress, // address
+      resultIndex, // number
+      botAmount, // number (Botoshi)
+      gasLimit, // number
+      senderAddress, // address
+    } = args;
 
-  if (contractAddress === undefined 
-    || resultIndex === undefined 
-    || botAmount === undefined 
-    || senderAddress === undefined) 
-  {
-    throw new TypeError('contractAddress, resultIndex, botAmount, and senderAddress need to be defined');
-    return;
-  }
+    if (contractAddress === undefined 
+      || resultIndex === undefined 
+      || botAmount === undefined 
+      || senderAddress === undefined) 
+    {
+      throw new TypeError('contractAddress, resultIndex, botAmount, and senderAddress need to be defined');
+      return;
+    }
 
-  const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-  return await oracle.send('voteResult', {
-    methodArgs: [resultIndex, botAmount],
-    gasLimit: 2000000,
-    senderAddress: senderAddress,
-  });
-}
+    // If gasLimit is not specified, we need to make sure the vote succeeds in the event this vote will surpass the
+    // consensus threshold and will require a higher gas limit.
+    const defaultGasLimit = 2000000;
 
-export async function finalizeResult(args) {
-  const { 
-    contractAddress, // address
-    senderAddress, // address
-  } = args;
+    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+    return await oracle.send('voteResult', {
+      methodArgs: [resultIndex, botAmount],
+      gasLimit: gasLimit || defaultGasLimit,
+      senderAddress: senderAddress,
+    });
+  },
 
-  if (contractAddress === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress and senderAddress need to be defined');
-    return;
-  }
+  finalizeResult: async function(args) {
+    const { 
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
 
-  const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-  return await oracle.send('finalizeResult', {
-    methodArgs: [],
-    senderAddress: senderAddress,
-  });
-}
+    if (contractAddress === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress and senderAddress need to be defined');
+      return;
+    }
 
-export async function arbitrationEndBlock(args) {
-  const { 
-    contractAddress, // address
-    senderAddress, // address
-  } = args;
-
-  if (contractAddress === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress and senderAddress need to be defined');
-    return;
-  }
-
-  const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-  return await oracle.call('arbitrationEndBlock', {
+    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+    return await oracle.send('finalizeResult', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
-}
+  },
 
-export async function lastResultIndex(args) {
-  const { 
-    contractAddress, // address
-    senderAddress, // address
-  } = args;
+  arbitrationEndBlock: async function(args) {
+    const { 
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
 
-  if (contractAddress === undefined || senderAddress === undefined) {
-    throw new TypeError('contractAddress and senderAddress need to be defined');
-    return;
-  }
+    if (contractAddress === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress and senderAddress need to be defined');
+      return;
+    }
 
-  const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-  return await oracle.call('lastResultIndex', {
+    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+    return await oracle.call('arbitrationEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
-}
+  },
+
+  lastResultIndex: async function(args) {
+    const { 
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (contractAddress === undefined || senderAddress === undefined) {
+      throw new TypeError('contractAddress and senderAddress need to be defined');
+      return;
+    }
+
+    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+    return await oracle.call('lastResultIndex', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+};
+
+module.exports = DecentralizedOracle;
