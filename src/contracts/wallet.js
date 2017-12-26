@@ -1,5 +1,5 @@
 import Config from '../../config/config';
-const Qweb3 = require('qweb3');
+const Qweb3 = require('../modules/qweb3');
 
 const qClient = new Qweb3(Config.QTUM_RPC_ADDRESS);
 

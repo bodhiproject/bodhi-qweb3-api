@@ -1,6 +1,6 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-const Contract = require('qweb3/src/contract');
+const Contract = require('../modules/qweb3/src/contract');
 
 const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
 

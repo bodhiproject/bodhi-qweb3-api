@@ -1,6 +1,7 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-const Contract = require('qweb3/src/contract');
+
+const Contract = require('../modules/qweb3/src/contract');
 
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
