@@ -1,12 +1,12 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-const Qweb3 = require('../modules/qweb3/index');
+const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const BodhiToken = {
   approve: async function(args) {
-    const { 
+    const {
       spender, // address
       value, // number (Botoshi)
       senderAddress, // address
@@ -25,7 +25,7 @@ const BodhiToken = {
   },
 
   allowance: async function(args) {
-    const { 
+    const {
       owner, // address
       spender, // address
       senderAddress, // address
@@ -44,7 +44,7 @@ const BodhiToken = {
   },
 
   balanceOf: async function(args) {
-    const { 
+    const {
       owner, // address
       senderAddress, // address
     } = args;

@@ -1,8 +1,9 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-import utils from '../modules/qweb3/src/utils';
 
-const Qweb3 = require('../modules/qweb3/index');
+const utils = require('qweb3/src/utils');
+
+const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 /** @type {number} Length of string of eventName */
@@ -13,7 +14,7 @@ const EVENTNAME_ARRAY_CAPACITY = 10;
 
 const EventFactory = {
   createTopic: async function(args) {
-    const { 
+    const {
       oracleAddress, // address
       eventName, // string
       resultNames, // array
@@ -22,12 +23,12 @@ const EventFactory = {
       senderAddress, // address
     } = args;
 
-    if (oracleAddress === undefined 
-      || eventName === undefined 
-      || resultNames === undefined 
+    if (oracleAddress === undefined
+      || eventName === undefined
+      || resultNames === undefined
       || bettingEndBlock === undefined
       || resultSettingEndBlock === undefined
-      || senderAddress === undefined) 
+      || senderAddress === undefined)
     {
       throw new TypeError('oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock, and senderAddress need to be defined');
       return;

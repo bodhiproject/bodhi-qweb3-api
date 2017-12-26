@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import utils from '../modules/qweb3/src/utils';
+const utils = require('qweb3/src/utils');
 
 class Topic {
 
