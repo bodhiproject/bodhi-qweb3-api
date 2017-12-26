@@ -1,12 +1,12 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-const Qweb3 = require('../modules/qweb3/index');
+const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const DecentralizedOracle = {
   vote: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       resultIndex, // number
       botAmount, // number (Botoshi)
@@ -14,10 +14,10 @@ const DecentralizedOracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined 
-      || resultIndex === undefined 
-      || botAmount === undefined 
-      || senderAddress === undefined) 
+    if (contractAddress === undefined
+      || resultIndex === undefined
+      || botAmount === undefined
+      || senderAddress === undefined)
     {
       throw new TypeError('contractAddress, resultIndex, botAmount, and senderAddress need to be defined');
       return;
@@ -36,7 +36,7 @@ const DecentralizedOracle = {
   },
 
   finalizeResult: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
@@ -54,7 +54,7 @@ const DecentralizedOracle = {
   },
 
   arbitrationEndBlock: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
@@ -72,7 +72,7 @@ const DecentralizedOracle = {
   },
 
   lastResultIndex: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;

@@ -16,13 +16,13 @@ const DecentralizedOracle = require('./src/contracts/decentralized_oracle.js');
 const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware')
 
-const Qweb3 = require('./src/modules/qweb3/index');
+const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 /** Set up CORS to allow request from a different server */
 const server = restify.createServer();
 const cors = corsMiddleware({
-  // preflightMaxAge: 5, //Optional 
+  // preflightMaxAge: 5, //Optional
   origins: ['*'],
   // allowHeaders: ['API-Token'],
   // exposeHeaders: ['API-Token-Expiry']

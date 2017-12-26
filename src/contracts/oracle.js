@@ -1,7 +1,7 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-const Qweb3 = require('../modules/qweb3/index');
+const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const ORACLE_CENTRALIZED = 'centralized';
@@ -9,7 +9,7 @@ const ORACLE_DECENTRALIZED = 'decentralized';
 
 const Oracle = {
   invalidateOracle: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       oracleType, // string
       senderAddress, // address
@@ -29,7 +29,7 @@ const Oracle = {
   },
 
   getBetBalances: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       oracleType, // string
       senderAddress, // address
@@ -48,7 +48,7 @@ const Oracle = {
   },
 
   getVoteBalances: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       oracleType, // string
       senderAddress, // address
@@ -67,7 +67,7 @@ const Oracle = {
   },
 
   getTotalBets: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       oracleType, // string
       senderAddress, // address
@@ -86,7 +86,7 @@ const Oracle = {
   },
 
   getTotalVotes: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       oracleType, // string
       senderAddress, // address
@@ -105,7 +105,7 @@ const Oracle = {
   },
 
   getResult: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       oracleType, // string
       senderAddress, // address
@@ -124,7 +124,7 @@ const Oracle = {
   },
 
   finished: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       oracleType, // string
       senderAddress, // address

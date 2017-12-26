@@ -1,12 +1,12 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-const Qweb3 = require('../modules/qweb3/index');
+const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const TopicEvent = {
   withdrawWinnings: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
@@ -24,7 +24,7 @@ const TopicEvent = {
   },
 
   status: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
@@ -42,7 +42,7 @@ const TopicEvent = {
   },
 
   didWithdraw: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       address, // address
       senderAddress, // address
@@ -61,7 +61,7 @@ const TopicEvent = {
   },
 
   calculateQtumWinnings: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
@@ -79,7 +79,7 @@ const TopicEvent = {
   },
 
   calculateBotWinnings: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;

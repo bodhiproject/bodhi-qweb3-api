@@ -1,12 +1,12 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-const Qweb3 = require('../modules/qweb3/index');
+const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const CentralizedOracle = {
   bet: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       index, // number
       amount, // number (Satoshi)
@@ -27,7 +27,7 @@ const CentralizedOracle = {
   },
 
   setResult: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       resultIndex, // number
       senderAddress, // address
@@ -47,7 +47,7 @@ const CentralizedOracle = {
   },
 
   oracle: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
@@ -65,7 +65,7 @@ const CentralizedOracle = {
   },
 
   bettingEndBlock: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
@@ -83,7 +83,7 @@ const CentralizedOracle = {
   },
 
   resultSettingEndBlock: async function(args) {
-    const { 
+    const {
       contractAddress, // address
       senderAddress, // address
     } = args;
