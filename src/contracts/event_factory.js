@@ -34,12 +34,9 @@ const EventFactory = {
       return;
     }
 
-    // Break eventName into 10 strings of 64 chars
-    let eventNameStringArray = utils.chunkString(eventName, EVENTNAME_STR_LENGTH).slice(0, EVENTNAME_ARRAY_CAPACITY);
-
     const eventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
     return await eventFactory.send('createTopic', {
-      methodArgs: [oracleAddress, eventNameStringArray, resultNames, bettingEndBlock, resultSettingEndBlock],
+      methodArgs: [oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock],
       gasLimit: 5000000,
       senderAddress: senderAddress,
     });
