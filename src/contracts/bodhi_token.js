@@ -1,6 +1,5 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-
 const Contract = require('qweb3/src/contract');
 
 const BodhiToken = {
