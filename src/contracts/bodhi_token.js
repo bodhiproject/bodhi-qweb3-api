@@ -15,7 +15,7 @@ const BodhiToken = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+    const contract = getContract();
     return await contract.send('approve', {
       methodArgs: [spender, value],
       senderAddress: senderAddress,
@@ -34,7 +34,7 @@ const BodhiToken = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+    const contract = getContract();
     return await contract.call('allowance', {
       methodArgs: [owner, spender],
       senderAddress: senderAddress,
@@ -52,12 +52,16 @@ const BodhiToken = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+    const contract = getContract();
     return await contract.call('balanceOf', {
       methodArgs: [owner],
       senderAddress: senderAddress,
     });
   },
 };
+
+function getContract() {
+  return new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+}
 
 module.exports = BodhiToken;

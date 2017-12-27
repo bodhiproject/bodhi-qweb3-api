@@ -24,7 +24,7 @@ const EventFactory = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.EventFactory.address, Contracts.EventFactory.abi);
+    const contract = getContract();
     return await contract.send('createTopic', {
       methodArgs: [oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock],
       gasLimit: 5000000,
@@ -32,5 +32,9 @@ const EventFactory = {
     });
   }
 };
+
+function getContract() {
+  return new Contract(Config.QTUM_RPC_ADDRESS, Contracts.EventFactory.address, Contracts.EventFactory.abi);
+}
 
 module.exports = EventFactory;

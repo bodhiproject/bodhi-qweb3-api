@@ -18,7 +18,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.send('invalidateOracle', {
       methodArgs: [],
       gasLimit: 3000000,
@@ -38,7 +38,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getBetBalances', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -57,7 +57,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getVoteBalances', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -76,7 +76,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getTotalBets', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -95,7 +95,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getTotalVotes', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -114,7 +114,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getResult', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -133,7 +133,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('finished', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -141,7 +141,7 @@ const Oracle = {
   },
 };
 
-function getOracleContract(oracleType, contractAddress) {
+function getContract(oracleType, contractAddress) {
   switch (oracleType) {
     case ORACLE_CENTRALIZED: {
       return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);

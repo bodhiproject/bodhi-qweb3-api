@@ -16,7 +16,7 @@ const CentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.send('bet', {
       methodArgs: [index],
       amount: amount,
@@ -36,7 +36,7 @@ const CentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.send('setResult', {
       methodArgs: [resultIndex],
       gasLimit: 4000000,
@@ -55,7 +55,7 @@ const CentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.call('oracle', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -73,7 +73,7 @@ const CentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.call('bettingEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -91,12 +91,16 @@ const CentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.call('resultSettingEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 };
+
+function getContract(contractAddress) {
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+}
 
 module.exports = CentralizedOracle;

@@ -25,7 +25,7 @@ const DecentralizedOracle = {
     // consensus threshold and will require a higher gas limit.
     const defaultGasLimit = 2000000;
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.send('voteResult', {
       methodArgs: [resultIndex, botAmount],
       gasLimit: gasLimit || defaultGasLimit,
@@ -44,7 +44,7 @@ const DecentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.send('finalizeResult', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -62,7 +62,7 @@ const DecentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.call('arbitrationEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -80,12 +80,16 @@ const DecentralizedOracle = {
       return;
     }
 
-    const contract = new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
+    const contract = getContract(contractAddress);
     return await contract.call('lastResultIndex', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 };
+
+function getContract(contractAddress) {
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
+}
 
 module.exports = DecentralizedOracle;
