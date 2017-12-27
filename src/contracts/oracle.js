@@ -1,8 +1,6 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-
-const Qweb3 = require('qweb3');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+const Contract = require('qweb3/src/contract');
 
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
@@ -146,10 +144,10 @@ const Oracle = {
 function getOracleContract(oracleType, contractAddress) {
   switch (oracleType) {
     case ORACLE_CENTRALIZED: {
-      return new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
+      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
     }
     case ORACLE_DECENTRALIZED: {
-      return new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
     }
     default: {
       throw new TypeError('Invalid oracle type');
