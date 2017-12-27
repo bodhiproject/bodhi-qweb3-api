@@ -1,8 +1,6 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-
-const Qweb3 = require('qweb3');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+const Contract = require('qweb3/src/contract');
 
 const TopicEvent = {
   withdrawWinnings: async function(args) {
@@ -16,8 +14,8 @@ const TopicEvent = {
       return;
     }
 
-    const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
-    return await topicEvent.send('withdrawWinnings', {
+    const contract = getContract(contractAddress);
+    return await contract.send('withdrawWinnings', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -34,8 +32,8 @@ const TopicEvent = {
       return;
     }
 
-    const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
-    return await topicEvent.call('status', {
+    const contract = getContract(contractAddress);
+    return await contract.call('status', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -53,8 +51,8 @@ const TopicEvent = {
       return;
     }
 
-    const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
-    return await topicEvent.call('didWithdraw', {
+    const contract = getContract(contractAddress);
+    return await contract.call('didWithdraw', {
       methodArgs: [address],
       senderAddress: senderAddress,
     });
@@ -71,8 +69,8 @@ const TopicEvent = {
       return;
     }
 
-    const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
-    return await topicEvent.call('calculateQtumContributorWinnings', {
+    const contract = getContract(contractAddress);
+    return await contract.call('calculateQtumContributorWinnings', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -89,12 +87,16 @@ const TopicEvent = {
       return;
     }
 
-    const topicEvent = new qweb3.Contract(contractAddress, Contracts.TopicEvent.abi);
-    return await topicEvent.call('calculateBotContributorWinnings', {
+    const contract = getContract(contractAddress);
+    return await contract.call('calculateBotContributorWinnings', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 };
+
+function getContract(contractAddress) {
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.TopicEvent.abi);
+}
 
 module.exports = TopicEvent;
