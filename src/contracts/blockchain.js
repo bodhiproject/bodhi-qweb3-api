@@ -1,12 +1,12 @@
 import Config from '../../config/config';
-
 const ContractMetadata = require('./contract_metadata');
 const Qweb3 = require('qweb3');
-const qweb3Client = new Qweb3(Config.QTUM_RPC_ADDRESS);
+
+const qClient = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const Blockchain = {
   getBlockCount: async function() {
-    return await qweb3Client.getBlockCount();
+    return await qClient.getBlockCount();
   },
 
   getTransactionReceipt: async function(args) {
@@ -18,7 +18,7 @@ const Blockchain = {
       throw new TypeError('transactionId need to be defined');
     }
 
-    return await qweb3Client.getTransactionReceipt(transactionId);
+    return await qClient.getTransactionReceipt(transactionId);
   },
 
   searchLogs: async function(args) {
@@ -41,7 +41,7 @@ const Blockchain = {
       topics = [];
     }
 
-    return await qweb3Client.searchLogs(fromBlock, toBlock, addresses, topics, ContractMetadata, true);
+    return await qClient.searchLogs(fromBlock, toBlock, addresses, topics, ContractMetadata, true);
   }
 };
 
