@@ -1,8 +1,8 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
+const Contract = require('qweb3/src/contract');
 
-const Qweb3 = require('qweb3');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
 
 const BodhiToken = {
   approve: async function(args) {
@@ -17,8 +17,7 @@ const BodhiToken = {
       return;
     }
 
-    const oracle = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
-    return await oracle.send('approve', {
+    return await contract.send('approve', {
       methodArgs: [spender, value],
       senderAddress: senderAddress,
     });
@@ -36,8 +35,7 @@ const BodhiToken = {
       return;
     }
 
-    const oracle = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
-    return await oracle.call('allowance', {
+    return await contract.call('allowance', {
       methodArgs: [owner, spender],
       senderAddress: senderAddress,
     });
@@ -54,8 +52,7 @@ const BodhiToken = {
       return;
     }
 
-    const oracle = new qweb3.Contract(Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
-    return await oracle.call('balanceOf', {
+    return await contract.call('balanceOf', {
       methodArgs: [owner],
       senderAddress: senderAddress,
     });

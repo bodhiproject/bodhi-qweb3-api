@@ -1,8 +1,8 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
+const Contract = require('qweb3/src/contract');
 
-const Qweb3 = require('qweb3');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+const GAS_LIMIT_SET_RESULT = 4000000;
 
 const CentralizedOracle = {
   bet: async function(args) {
@@ -18,8 +18,8 @@ const CentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
-    return await oracle.send('bet', {
+    const contract = getContract(contractAddress);
+    return await contract.send('bet', {
       methodArgs: [index],
       amount: amount,
       senderAddress: senderAddress,
@@ -38,10 +38,10 @@ const CentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
-    return await oracle.send('setResult', {
+    const contract = getContract(contractAddress);
+    return await contract.send('setResult', {
       methodArgs: [resultIndex],
-      gasLimit: 4000000,
+      gasLimit: GAS_LIMIT_SET_RESULT,
       senderAddress: senderAddress,
     });
   },
@@ -57,8 +57,8 @@ const CentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
-    return await oracle.call('oracle', {
+    const contract = getContract(contractAddress);
+    return await contract.call('oracle', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -75,8 +75,8 @@ const CentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
-    return await oracle.call('bettingEndBlock', {
+    const contract = getContract(contractAddress);
+    return await contract.call('bettingEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -93,12 +93,16 @@ const CentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
-    return await oracle.call('resultSettingEndBlock', {
+    const contract = getContract(contractAddress);
+    return await contract.call('resultSettingEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 };
+
+function getContract(contractAddress) {
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+}
 
 module.exports = CentralizedOracle;

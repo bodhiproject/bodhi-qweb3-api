@@ -1,11 +1,10 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-
-const Qweb3 = require('qweb3');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+const Contract = require('qweb3/src/contract');
 
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
+const GAS_LIMIT_INVALIDATE_ORACLE = 3000000;
 
 const Oracle = {
   invalidateOracle: async function(args) {
@@ -20,10 +19,10 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.send('invalidateOracle', {
       methodArgs: [],
-      gasLimit: 3000000,
+      gasLimit: GAS_LIMIT_INVALIDATE_ORACLE,
       senderAddress: senderAddress,
     });
   },
@@ -40,7 +39,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getBetBalances', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -59,7 +58,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getVoteBalances', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -78,7 +77,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getTotalBets', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -97,7 +96,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getTotalVotes', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -116,7 +115,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('getResult', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -135,7 +134,7 @@ const Oracle = {
       return;
     }
 
-    const oracle = getOracleContract(oracleType, contractAddress);
+    const oracle = getContract(oracleType, contractAddress);
     return await oracle.call('finished', {
       methodArgs: [],
       senderAddress: senderAddress,
@@ -143,13 +142,13 @@ const Oracle = {
   },
 };
 
-function getOracleContract(oracleType, contractAddress) {
+function getContract(oracleType, contractAddress) {
   switch (oracleType) {
     case ORACLE_CENTRALIZED: {
-      return new qweb3.Contract(contractAddress, Contracts.CentralizedOracle.abi);
+      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
     }
     case ORACLE_DECENTRALIZED: {
-      return new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
+      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
     }
     default: {
       throw new TypeError('Invalid oracle type');

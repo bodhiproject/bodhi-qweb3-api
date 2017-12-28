@@ -1,16 +1,10 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
+const Contract = require('qweb3/src/contract');
 
-const utils = require('qweb3/src/utils');
+const GAS_LIMIT_CREATE_TOPIC = 5000000;
 
-const Qweb3 = require('qweb3');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
-
-/** @type {number} Length of string of eventName */
-const EVENTNAME_STR_LENGTH = 32;
-
-/** @type {number} Max capacity of eventName array */
-const EVENTNAME_ARRAY_CAPACITY = 10;
+const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.EventFactory.address, Contracts.EventFactory.abi);
 
 const EventFactory = {
   createTopic: async function(args) {
@@ -34,10 +28,9 @@ const EventFactory = {
       return;
     }
 
-    const eventFactory = new qweb3.Contract(Contracts.EventFactory.address, Contracts.EventFactory.abi);
-    return await eventFactory.send('createTopic', {
+    return await contract.send('createTopic', {
       methodArgs: [oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock],
-      gasLimit: 5000000,
+      gasLimit: GAS_LIMIT_CREATE_TOPIC,
       senderAddress: senderAddress,
     });
   }

@@ -1,8 +1,8 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
+const Contract = require('qweb3/src/contract');
 
-const Qweb3 = require('qweb3');
-const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
+const GAS_LIMIT_VOTE = 2000000;
 
 const DecentralizedOracle = {
   vote: async function(args) {
@@ -25,12 +25,10 @@ const DecentralizedOracle = {
 
     // If gasLimit is not specified, we need to make sure the vote succeeds in the event this vote will surpass the
     // consensus threshold and will require a higher gas limit.
-    const defaultGasLimit = 2000000;
-
-    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-    return await oracle.send('voteResult', {
+    const contract = getContract(contractAddress);
+    return await contract.send('voteResult', {
       methodArgs: [resultIndex, botAmount],
-      gasLimit: gasLimit || defaultGasLimit,
+      gasLimit: gasLimit || GAS_LIMIT_VOTE,
       senderAddress: senderAddress,
     });
   },
@@ -46,8 +44,8 @@ const DecentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-    return await oracle.send('finalizeResult', {
+    const contract = getContract(contractAddress);
+    return await contract.send('finalizeResult', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -64,8 +62,8 @@ const DecentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-    return await oracle.call('arbitrationEndBlock', {
+    const contract = getContract(contractAddress);
+    return await contract.call('arbitrationEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -82,12 +80,16 @@ const DecentralizedOracle = {
       return;
     }
 
-    const oracle = new qweb3.Contract(contractAddress, Contracts.DecentralizedOracle.abi);
-    return await oracle.call('lastResultIndex', {
+    const contract = getContract(contractAddress);
+    return await contract.call('lastResultIndex', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 };
+
+function getContract(contractAddress) {
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
+}
 
 module.exports = DecentralizedOracle;
