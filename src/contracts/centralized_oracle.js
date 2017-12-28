@@ -2,6 +2,8 @@ import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 const Contract = require('qweb3/src/contract');
 
+const GAS_LIMIT_SET_RESULT = 4000000;
+
 const CentralizedOracle = {
   bet: async function(args) {
     const {
@@ -39,7 +41,7 @@ const CentralizedOracle = {
     const contract = getContract(contractAddress);
     return await contract.send('setResult', {
       methodArgs: [resultIndex],
-      gasLimit: 4000000,
+      gasLimit: GAS_LIMIT_SET_RESULT,
       senderAddress: senderAddress,
     });
   },

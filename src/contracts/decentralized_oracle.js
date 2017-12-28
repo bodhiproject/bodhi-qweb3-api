@@ -2,6 +2,8 @@ import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 const Contract = require('qweb3/src/contract');
 
+const GAS_LIMIT_VOTE = 2000000;
+
 const DecentralizedOracle = {
   vote: async function(args) {
     const {
@@ -23,12 +25,10 @@ const DecentralizedOracle = {
 
     // If gasLimit is not specified, we need to make sure the vote succeeds in the event this vote will surpass the
     // consensus threshold and will require a higher gas limit.
-    const defaultGasLimit = 2000000;
-
     const contract = getContract(contractAddress);
     return await contract.send('voteResult', {
       methodArgs: [resultIndex, botAmount],
-      gasLimit: gasLimit || defaultGasLimit,
+      gasLimit: gasLimit || GAS_LIMIT_VOTE,
       senderAddress: senderAddress,
     });
   },

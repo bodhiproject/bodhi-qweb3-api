@@ -4,6 +4,7 @@ const Contract = require('qweb3/src/contract');
 
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
+const GAS_LIMIT_INVALIDATE_ORACLE = 3000000;
 
 const Oracle = {
   invalidateOracle: async function(args) {
@@ -21,7 +22,7 @@ const Oracle = {
     const oracle = getContract(oracleType, contractAddress);
     return await oracle.send('invalidateOracle', {
       methodArgs: [],
-      gasLimit: 3000000,
+      gasLimit: GAS_LIMIT_INVALIDATE_ORACLE,
       senderAddress: senderAddress,
     });
   },

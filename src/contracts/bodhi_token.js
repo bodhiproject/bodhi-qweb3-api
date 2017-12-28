@@ -2,6 +2,8 @@ import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 const Contract = require('qweb3/src/contract');
 
+const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+
 const BodhiToken = {
   approve: async function(args) {
     const {
@@ -15,7 +17,6 @@ const BodhiToken = {
       return;
     }
 
-    const contract = getContract();
     return await contract.send('approve', {
       methodArgs: [spender, value],
       senderAddress: senderAddress,
@@ -34,7 +35,6 @@ const BodhiToken = {
       return;
     }
 
-    const contract = getContract();
     return await contract.call('allowance', {
       methodArgs: [owner, spender],
       senderAddress: senderAddress,
@@ -52,16 +52,11 @@ const BodhiToken = {
       return;
     }
 
-    const contract = getContract();
     return await contract.call('balanceOf', {
       methodArgs: [owner],
       senderAddress: senderAddress,
     });
   },
 };
-
-function getContract() {
-  return new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
-}
 
 module.exports = BodhiToken;
