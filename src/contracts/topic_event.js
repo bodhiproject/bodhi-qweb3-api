@@ -1,7 +1,7 @@
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
 
-const Contract = require('..modules/qweb3/src/contract');
+const Contract = require('../modules/qweb3/src/contract');
 
 const TopicEvent = {
   withdrawWinnings: async function(args) {
