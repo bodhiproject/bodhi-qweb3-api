@@ -1,6 +1,8 @@
+import _ from 'lodash';
+import Contract from 'qweb3/src/contract';
+
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-const Contract = require('qweb3/src/contract');
 
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
@@ -14,9 +16,14 @@ const Oracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const oracle = getContract(oracleType, contractAddress);
@@ -34,9 +41,14 @@ const Oracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const oracle = getContract(oracleType, contractAddress);
@@ -53,9 +65,14 @@ const Oracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const oracle = getContract(oracleType, contractAddress);
@@ -72,9 +89,14 @@ const Oracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const oracle = getContract(oracleType, contractAddress);
@@ -91,9 +113,14 @@ const Oracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const oracle = getContract(oracleType, contractAddress);
@@ -110,9 +137,14 @@ const Oracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const oracle = getContract(oracleType, contractAddress);
@@ -129,9 +161,14 @@ const Oracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || oracleType === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, oracleType, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const oracle = getContract(oracleType, contractAddress);
