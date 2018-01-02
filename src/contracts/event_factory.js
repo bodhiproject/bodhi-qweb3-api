@@ -1,6 +1,8 @@
+import _ from 'lodash';
+import Contract from 'qweb3/src/contract';
+
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-const Contract = require('qweb3/src/contract');
 
 const GAS_LIMIT_CREATE_TOPIC = 5000000;
 
@@ -17,15 +19,23 @@ const EventFactory = {
       senderAddress, // address
     } = args;
 
-    if (oracleAddress === undefined
-      || eventName === undefined
-      || resultNames === undefined
-      || bettingEndBlock === undefined
-      || resultSettingEndBlock === undefined
-      || senderAddress === undefined)
-    {
-      throw new TypeError('oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(oracleAddress)) {
+      throw new TypeError('oracleAddress needs to be defined');
+    }
+    if (_.isUndefined(eventName)) {
+      throw new TypeError('eventName needs to be defined');
+    }
+    if (_.isUndefined(resultNames)) {
+      throw new TypeError('resultNames needs to be defined');
+    }
+    if (_.isUndefined(bettingEndBlock)) {
+      throw new TypeError('bettingEndBlock needs to be defined');
+    }
+    if (_.isUndefined(resultSettingEndBlock)) {
+      throw new TypeError('resultSettingEndBlock needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     return await contract.send('createTopic', {
