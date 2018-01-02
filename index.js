@@ -1,31 +1,26 @@
 import _ from 'lodash';
 import moment from 'moment';
 import promise from 'bluebird';
+import restify from 'restify';
+import corsMiddleware from 'restify-cors-middleware';
+import Qweb3 from 'qweb3';
 
 import Config from './config/config';
+import Blockchain from './src/contracts/blockchain.js';
+import Wallet from './src/contracts/wallet.js';
+import BodhiToken from './src/contracts/bodhi_token.js';
+import EventFactory from './src/contracts/event_factory.js';
+import TopicEvent from './src/contracts/topic_event.js';
+import Oracle from './src/contracts/oracle.js';
+import CentralizedOracle from './src/contracts/centralized_oracle.js';
+import DecentralizedOracle from './src/contracts/decentralized_oracle.js';
 
-const Blockchain = require('./src/contracts/blockchain.js');
-const Wallet = require('./src/contracts/wallet.js');
-const BodhiToken = require('./src/contracts/bodhi_token.js');
-const EventFactory = require('./src/contracts/event_factory.js');
-const TopicEvent = require('./src/contracts/topic_event.js');
-const Oracle = require('./src/contracts/oracle.js');
-const CentralizedOracle = require('./src/contracts/centralized_oracle.js');
-const DecentralizedOracle = require('./src/contracts/decentralized_oracle.js');
-
-const restify = require('restify');
-const corsMiddleware = require('restify-cors-middleware')
-
-const Qweb3 = require('qweb3');
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 /** Set up CORS to allow request from a different server */
 const server = restify.createServer();
 const cors = corsMiddleware({
-  // preflightMaxAge: 5, //Optional
   origins: ['*'],
-  // allowHeaders: ['API-Token'],
-  // exposeHeaders: ['API-Token-Expiry']
 });
 server.pre(cors.preflight);
 server.use(cors.actual);
