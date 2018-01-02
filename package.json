@@ -1,10 +1,11 @@
 {
   "name": "bodhi-api",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "An open source blockchain explorer for monitoring Bodhi platform",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node --inspect index.js",
+    "start": "babel-node index.js",
+    "start:debug": "babel-node --inspect index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,7 +25,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "moment": "^2.19.3",
-    "qweb3": "^0.2.1",
+    "qweb3": "^0.2.5",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.0.1"
   },
