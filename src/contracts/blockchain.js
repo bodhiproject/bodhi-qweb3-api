@@ -1,6 +1,8 @@
+import _ from 'lodash';
+import Qweb3 from 'qweb3';
+
 import Config from '../../config/config';
-const ContractMetadata = require('./contract_metadata');
-const Qweb3 = require('qweb3');
+import ContractMetadata from './contract_metadata';
 
 const qClient = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
@@ -14,8 +16,8 @@ const Blockchain = {
       transactionId, // string
     } = args;
 
-    if (transactionId === undefined) {
-      throw new TypeError('transactionId need to be defined');
+    if (_.isUndefined(transactionId)) {
+      throw new TypeError('transactionId needs to be defined');
     }
 
     return await qClient.getTransactionReceipt(transactionId);
@@ -29,8 +31,11 @@ const Blockchain = {
       topics // string array
     } = args;
 
-    if (fromBlock === undefined || toBlock === undefined) {
-      throw new TypeError('fromBlock and toBlock need to be defined');
+    if (_.isUndefined(fromBlock)) {
+      throw new TypeError('fromBlock needs to be defined');
+    }
+    if (_.isUndefined(toBlock)) {
+      throw new TypeError('toBlock needs to be defined');
     }
 
     if (addresses === undefined) {
