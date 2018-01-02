@@ -1,6 +1,6 @@
 {
   "name": "bodhi-api",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "An open source blockchain explorer for monitoring Bodhi platform",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,6 @@
     "bodhi",
     "api"
   ],
-  "author": "Chris Li",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/bodhiproject/bodhi-api/issues"
@@ -32,5 +31,23 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1"
-  }
+  },
+  "author": "bodhi.network",
+  "authors": [
+    {
+      "name": "Frank Hu",
+      "email": "frank@bodhi.network",
+      "url": "https://www.bodhi.network/"
+    },
+    {
+      "name": "Deric Walintukan",
+      "email": "deric@bodhi.network",
+      "url": "https://www.bodhi.network/"
+    },
+    {
+      "name": "Chris Li",
+      "email": "chris@bodhi.network",
+      "url": "https://www.bodhi.network/"
+    }
+  ]
 }
