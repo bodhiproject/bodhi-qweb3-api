@@ -1,6 +1,8 @@
+import _ from 'lodash';
+import Contract from 'qweb3/src/contract';
+
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-const Contract = require('qweb3/src/contract');
 
 const GAS_LIMIT_VOTE = 2000000;
 
@@ -14,13 +16,17 @@ const DecentralizedOracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined
-      || resultIndex === undefined
-      || botAmount === undefined
-      || senderAddress === undefined)
-    {
-      throw new TypeError('contractAddress, resultIndex, botAmount, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(resultIndex)) {
+      throw new TypeError('resultIndex needs to be defined');
+    }
+    if (_.isUndefined(botAmount)) {
+      throw new TypeError('botAmount needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     // If gasLimit is not specified, we need to make sure the vote succeeds in the event this vote will surpass the
@@ -39,9 +45,11 @@ const DecentralizedOracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);
@@ -57,9 +65,11 @@ const DecentralizedOracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);
@@ -75,9 +85,11 @@ const DecentralizedOracle = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);

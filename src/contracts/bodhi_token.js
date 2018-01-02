@@ -1,6 +1,8 @@
+import _ from 'lodash';
+import Contract from 'qweb3/src/contract';
+
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-const Contract = require('qweb3/src/contract');
 
 const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
 
@@ -12,9 +14,14 @@ const BodhiToken = {
       senderAddress, // address
     } = args;
 
-    if (spender === undefined || value === undefined || senderAddress === undefined) {
-      throw new TypeError('spender, value, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(spender)) {
+      throw new TypeError('spender needs to be defined');
+    }
+    if (_.isUndefined(value)) {
+      throw new TypeError('value needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     return await contract.send('approve', {
@@ -30,9 +37,14 @@ const BodhiToken = {
       senderAddress, // address
     } = args;
 
-    if (owner === undefined || spender === undefined || senderAddress === undefined) {
-      throw new TypeError('owner, spender, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(owner)) {
+      throw new TypeError('owner needs to be defined');
+    }
+    if (_.isUndefined(spender)) {
+      throw new TypeError('spender needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     return await contract.call('allowance', {
@@ -47,9 +59,11 @@ const BodhiToken = {
       senderAddress, // address
     } = args;
 
-    if (owner === undefined || senderAddress === undefined) {
-      throw new TypeError('owner and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(owner)) {
+      throw new TypeError('owner needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     return await contract.call('balanceOf', {

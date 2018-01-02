@@ -1,6 +1,8 @@
+import _ from 'lodash';
+import Contract from 'qweb3/src/contract';
+
 import Config from '../../config/config';
 import Contracts from '../../config/contracts';
-const Contract = require('qweb3/src/contract');
 
 const TopicEvent = {
   withdrawWinnings: async function(args) {
@@ -9,9 +11,11 @@ const TopicEvent = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);
@@ -27,9 +31,11 @@ const TopicEvent = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);
@@ -46,9 +52,14 @@ const TopicEvent = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || address === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress, address, and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(address)) {
+      throw new TypeError('address needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);
@@ -64,9 +75,11 @@ const TopicEvent = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);
@@ -82,9 +95,11 @@ const TopicEvent = {
       senderAddress, // address
     } = args;
 
-    if (contractAddress === undefined || senderAddress === undefined) {
-      throw new TypeError('contractAddress and senderAddress need to be defined');
-      return;
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
     }
 
     const contract = getContract(contractAddress);

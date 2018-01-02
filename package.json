@@ -1,10 +1,11 @@
 {
   "name": "bodhi-api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "An open source blockchain explorer for monitoring Bodhi platform",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node --inspect index.js --presets es2015,stage-2",
+    "start": "babel-node index.js",
+    "start:debug": "babel-node --inspect index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,20 +17,38 @@
     "bodhi",
     "api"
   ],
-  "author": "Chris Li",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/bodhiproject/bodhi-api/issues"
   },
   "homepage": "https://github.com/bodhiproject/bodhi-api#readme",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
     "bluebird": "^3.5.1",
     "moment": "^2.19.3",
-    "qweb3": "^0.2.1",
+    "qweb3": "^0.2.5",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.0.1"
-  }
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  },
+  "author": "bodhi.network",
+  "authors": [
+    {
+      "name": "Frank Hu",
+      "email": "frank@bodhi.network",
+      "url": "https://www.bodhi.network/"
+    },
+    {
+      "name": "Deric Walintukan",
+      "email": "deric@bodhi.network",
+      "url": "https://www.bodhi.network/"
+    },
+    {
+      "name": "Chris Li",
+      "email": "chris@bodhi.network",
+      "url": "https://www.bodhi.network/"
+    }
+  ]
 }
