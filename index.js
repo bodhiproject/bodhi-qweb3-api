@@ -43,6 +43,17 @@ server.post('/isconnected', (req, res, next) => {
 });
 
 /* Wallet */
+server.post('/get-account-address', (req, res, next) => {
+  Wallet.getAccountAddress(req.params)
+    .then((result) => {
+      console.log(result);
+      res.send({result});
+    }, (err) => {
+      console.log(err);
+      res.send({ error: err.message });
+    });
+});
+
 server.get('/listunspent', (req, res, next) => {
   Wallet.listUnspent()
     .then((result) => {
