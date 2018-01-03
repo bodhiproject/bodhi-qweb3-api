@@ -41,7 +41,7 @@ server.post('/isconnected', (req, res, next) => {
 server.post('/get-account-address', (req, res, next) => {
   Wallet.getAccountAddress(req.params)
     .then((result) => {
-      res.send({result});
+      res.send(200, { result });
     }, (err) => {
       res.send({ error: err.message });
     });
@@ -50,6 +50,7 @@ server.post('/get-account-address', (req, res, next) => {
 server.get('/listunspent', (req, res, next) => {
   Wallet.listUnspent()
     .then((result) => {
+      res.send(200, { result });
     }, (err) => {
       res.send({ error: err.message });
     });
