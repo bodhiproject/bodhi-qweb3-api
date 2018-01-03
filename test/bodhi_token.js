@@ -14,11 +14,13 @@ describe('BodhiToken', function() {
     it('returns a tx receipt', async function() {
       const res = await BodhiToken.approve({
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
-        value: 0,
+        value: '0',
         senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
       });
       assert.isDefined(res);
-      console.log(res);
+      assert.isDefined(res.txid);
+      assert.isDefined(res.sender);
+      assert.isDefined(res.hash160);
     });
   });
 });
