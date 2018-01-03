@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 const ContractUtils = {
-  isTxSuccessful: function(txReceipt) {
+  isTxReceipt: function(txReceipt) {
     return !_.isUndefined(txReceipt) 
       && !_.isUndefined(txReceipt.txid) 
       && !_.isUndefined(txReceipt.sender) 
