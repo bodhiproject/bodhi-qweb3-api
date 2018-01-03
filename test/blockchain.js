@@ -1,7 +1,12 @@
 import 'babel-polyfill';
-import { assert } from 'chai';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
 import Blockchain from '../src/blockchain.js';
+
+chai.use(chaiAsPromised);
+const assert = chai.assert;
+const expect = chai.expect;
 
 describe('Blockchain', function() {
 
@@ -66,6 +71,12 @@ describe('Blockchain', function() {
       assert.equal(res[0].log[1].topics[2], expected[0].log[1].topics[2]);
       assert.equal(res[0].log[1].topics[3], expected[0].log[1].topics[3]);
       assert.equal(res[0].log[1].data, expected[0].log[1].data);
+    });
+
+    it('throws if transactionId is undefined or empty', async function() {
+      expect(Blockchain.getTransactionReceipt()).to.be.rejectedWith(Error);
+      expect(Blockchain.getTransactionReceipt({ transactionId: undefined })).to.be.rejectedWith(Error);
+      expect(Blockchain.getTransactionReceipt({ transactionId: '' })).to.be.rejectedWith(Error);
     });
   });
 
