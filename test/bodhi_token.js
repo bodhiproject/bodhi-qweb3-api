@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 
 import BodhiToken from '../src/bodhi_token.js';
 import ContractMetadata from '../config/contract_metadata';
+import ContractUtils from './util/contract_utils';
 
 chai.use(chaiAsPromised);
 const assert = chai.assert;
@@ -17,10 +18,7 @@ describe('BodhiToken', function() {
         value: '0',
         senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
       });
-      assert.isDefined(res);
-      assert.isDefined(res.txid);
-      assert.isDefined(res.sender);
-      assert.isDefined(res.hash160);
+      assert.isTrue(ContractUtils.isTxSuccessful(res));
     });
   });
 });

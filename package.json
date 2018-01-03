@@ -24,6 +24,7 @@
   "homepage": "https://github.com/bodhiproject/bodhi-api#readme",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "lodash": "^4.17.4",
     "moment": "^2.19.3",
     "qweb3": "^0.2.6",
     "restify": "^6.3.4",
