@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { Contract } from 'qweb3';
 
-import Config from '../../config/config';
-import Contracts from '../../config/contracts';
+import Config from '../config/config';
+import ContractMetadata from '../config/contract_metadata';
 
 const GAS_LIMIT_SET_RESULT = 4000000;
 
@@ -123,7 +123,7 @@ const CentralizedOracle = {
 };
 
 function getContract(contractAddress) {
-  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.CentralizedOracle.abi);
 }
 
 module.exports = CentralizedOracle;

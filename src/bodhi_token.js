@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import { Contract } from 'qweb3';
 
-import Config from '../../config/config';
-import Contracts from '../../config/contracts';
+import Config from '../config/config';
+import ContractMetadata from '../config/contract_metadata';
 
-const contract = new Contract(Config.QTUM_RPC_ADDRESS, Contracts.BodhiToken.address, Contracts.BodhiToken.abi);
+const contract = new Contract(Config.QTUM_RPC_ADDRESS, ContractMetadata.BodhiToken.address, 
+  ContractMetadata.BodhiToken.abi);
 
 const BodhiToken = {
   approve: async function(args) {
