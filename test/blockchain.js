@@ -3,6 +3,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import Blockchain from '../src/blockchain.js';
+import ContractMetadata from '../config/contract_metadata';
 
 chai.use(chaiAsPromised);
 const assert = chai.assert;
@@ -80,5 +81,34 @@ describe('Blockchain', function() {
     });
   });
 
-  
+  describe('searchLogs()', function() {
+    it('returns an array of logs', async function() {
+      const res = await Blockchain.searchLogs({
+        fromBlock: 50000, 
+        toBlock: 50100, 
+        addresses: [], 
+        topics: ['c46e722c8158268af789d6a68206785f8d497869da236f87c2014c1c08fd3dec']
+      });
+      assert.isDefined(res);
+      assert.isArray(res);
+    });
+
+    it('throws if fromBlock is not a number', async function() {
+      expect(Blockchain.searchLogs({
+        fromBlock: 'a', 
+        toBlock: 50100, 
+        addresses: [], 
+        topics: ['c46e722c8158268af789d6a68206785f8d497869da236f87c2014c1c08fd3dec']
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if toBlock is not a number', async function() {
+      expect(Blockchain.searchLogs({
+        fromBlock: 50000, 
+        toBlock: 'a', 
+        addresses: [], 
+        topics: ['c46e722c8158268af789d6a68206785f8d497869da236f87c2014c1c08fd3dec'],
+      })).to.be.rejectedWith(Error);
+    });
+  });
 });
