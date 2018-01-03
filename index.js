@@ -41,10 +41,8 @@ server.post('/isconnected', (req, res, next) => {
 server.post('/get-account-address', (req, res, next) => {
   Wallet.getAccountAddress(req.params)
     .then((result) => {
-      console.log(result);
       res.send({result});
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -52,10 +50,7 @@ server.post('/get-account-address', (req, res, next) => {
 server.get('/listunspent', (req, res, next) => {
   Wallet.listUnspent()
     .then((result) => {
-      console.log(result);
-      res.send({result});
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -64,10 +59,8 @@ server.get('/listunspent', (req, res, next) => {
 server.get('/getblockcount', (req, res, next) => {
   Blockchain.getBlockCount()
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -75,10 +68,8 @@ server.get('/getblockcount', (req, res, next) => {
 server.post('/gettransactionreceipt', (req, res, next) => {
   Blockchain.getTransactionReceipt(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -86,10 +77,8 @@ server.post('/gettransactionreceipt', (req, res, next) => {
 server.post('/searchlogs', (req, res, next) => {
   Blockchain.searchLogs(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -98,10 +87,8 @@ server.post('/searchlogs', (req, res, next) => {
 server.post('/approve', (req, res, next) => {
   BodhiToken.approve(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -109,10 +96,8 @@ server.post('/approve', (req, res, next) => {
 server.post('/allowance', (req, res, next) => {
   BodhiToken.allowance(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -120,10 +105,8 @@ server.post('/allowance', (req, res, next) => {
 server.post('/botbalance', (req, res, next) => {
   BodhiToken.balanceOf(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -132,10 +115,8 @@ server.post('/botbalance', (req, res, next) => {
 server.post('/createtopic', (req, res, next) => {
   EventFactory.createTopic(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -144,10 +125,8 @@ server.post('/createtopic', (req, res, next) => {
 server.post('/withdraw', (req, res, next) => {
   TopicEvent.withdrawWinnings(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -155,10 +134,8 @@ server.post('/withdraw', (req, res, next) => {
 server.post('/status', (req, res, next) => {
   TopicEvent.status(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -166,10 +143,8 @@ server.post('/status', (req, res, next) => {
 server.post('/didwithdraw', (req, res, next) => {
   TopicEvent.didWithdraw(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -177,10 +152,8 @@ server.post('/didwithdraw', (req, res, next) => {
 server.post('/qtumwinnings', (req, res, next) => {
   TopicEvent.calculateQtumWinnings(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -188,10 +161,8 @@ server.post('/qtumwinnings', (req, res, next) => {
 server.post('/botwinnings', (req, res, next) => {
   TopicEvent.calculateBotWinnings(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -200,10 +171,8 @@ server.post('/botwinnings', (req, res, next) => {
 server.post('/invalidateoracle', (req, res, next) => {
   Oracle.invalidateOracle(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -211,10 +180,8 @@ server.post('/invalidateoracle', (req, res, next) => {
 server.post('/betbalances', (req, res, next) => {
   Oracle.getBetBalances(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -222,10 +189,8 @@ server.post('/betbalances', (req, res, next) => {
 server.post('/votebalances', (req, res, next) => {
   Oracle.getVoteBalances(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -233,10 +198,8 @@ server.post('/votebalances', (req, res, next) => {
 server.post('/totalbets', (req, res, next) => {
   Oracle.getTotalBets(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -244,10 +207,8 @@ server.post('/totalbets', (req, res, next) => {
 server.post('/totalvotes', (req, res, next) => {
   Oracle.getTotalVotes(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -255,10 +216,8 @@ server.post('/totalvotes', (req, res, next) => {
 server.post('/getresult', (req, res, next) => {
   Oracle.getResult(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -266,10 +225,8 @@ server.post('/getresult', (req, res, next) => {
 server.post('/finished', (req, res, next) => {
   Oracle.finished(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -278,10 +235,8 @@ server.post('/finished', (req, res, next) => {
 server.post('/bet', (req, res, next) => {
   CentralizedOracle.bet(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -300,10 +255,8 @@ server.post('/setresult', (req, res, next) => {
 server.post('/oracle', (req, res, next) => {
   CentralizedOracle.oracle(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -311,10 +264,8 @@ server.post('/oracle', (req, res, next) => {
 server.post('/betendblock', (req, res, next) => {
   CentralizedOracle.bettingEndBlock(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -322,10 +273,8 @@ server.post('/betendblock', (req, res, next) => {
 server.post('/resultsetendblock', (req, res, next) => {
   CentralizedOracle.resultSettingEndBlock(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -334,10 +283,8 @@ server.post('/resultsetendblock', (req, res, next) => {
 server.post('/vote', (req, res, next) => {
   DecentralizedOracle.vote(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -345,10 +292,8 @@ server.post('/vote', (req, res, next) => {
 server.post('/finalizeresult', (req, res, next) => {
   DecentralizedOracle.finalizeResult(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -356,10 +301,8 @@ server.post('/finalizeresult', (req, res, next) => {
 server.post('/arbitrationendblock', (req, res, next) => {
   DecentralizedOracle.arbitrationEndBlock(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
@@ -367,10 +310,8 @@ server.post('/arbitrationendblock', (req, res, next) => {
 server.post('/lastresultindex', (req, res, next) => {
   DecentralizedOracle.lastResultIndex(req.params)
     .then((result) => {
-      console.log(result);
       res.send(200, { result });
     }, (err) => {
-      console.log(err);
       res.send({ error: err.message });
     });
 });
