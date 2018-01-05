@@ -1,18 +1,18 @@
 import 'babel-polyfill';
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import Chai from 'chai';
+import ChaiAsPromised from 'chai-as-promised';
 import Web3Utils from 'web3-utils';
 import BigNumber from 'bignumber.js';
 
 import BodhiToken from '../src/bodhi_token.js';
-import ContractMetadata from '../config/contract_metadata';
 import ContractUtils from './util/contract_utils';
 
-chai.use(chaiAsPromised);
-const assert = chai.assert;
-const expect = chai.expect;
+Chai.use(ChaiAsPromised);
+const assert = Chai.assert;
+const expect = Chai.expect;
 
 describe('BodhiToken', function() {
+  
   describe('approve()', function() {
     it('returns a tx receipt', async function() {
       const res = await BodhiToken.approve({

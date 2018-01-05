@@ -1,13 +1,12 @@
 import 'babel-polyfill';
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import Chai from 'chai';
+import ChaiAsPromised from 'chai-as-promised';
 
 import Blockchain from '../src/blockchain.js';
-import ContractMetadata from '../config/contract_metadata';
 
-chai.use(chaiAsPromised);
-const assert = chai.assert;
-const expect = chai.expect;
+Chai.use(ChaiAsPromised);
+const assert = Chai.assert;
+const expect = Chai.expect;
 
 describe('Blockchain', function() {
 
