@@ -3,7 +3,7 @@ import moment from 'moment';
 import promise from 'bluebird';
 import restify from 'restify';
 import corsMiddleware from 'restify-cors-middleware';
-import { Qweb3 } from 'qweb3';
+import Qweb3 from 'qweb3';
 
 import Config from './config/config';
 import Blockchain from './src/contracts/blockchain.js';
