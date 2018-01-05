@@ -2,7 +2,6 @@ import 'babel-polyfill';
 import Chai from 'chai';
 import ChaiAsPromised from 'chai-as-promised';
 import Web3Utils from 'web3-utils';
-import BigNumber from 'bignumber.js';
 
 import BodhiToken from '../src/bodhi_token.js';
 import ContractUtils from './util/contract_utils';

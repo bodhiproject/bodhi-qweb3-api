@@ -2,7 +2,6 @@ import 'babel-polyfill';
 import Chai from 'chai';
 import ChaiAsPromised from 'chai-as-promised';
 import Web3Utils from 'web3-utils';
-import BigNumber from 'bignumber.js';
 
 import CentralizedOracle from '../src/centralized_oracle.js';
 import ContractUtils from './util/contract_utils';
