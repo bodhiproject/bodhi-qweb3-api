@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 
 import CentralizedOracle from '../src/centralized_oracle.js';
 import ContractUtils from './util/contract_utils';
+import TestConfig from './config/test_config';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
@@ -19,7 +20,7 @@ describe('CentralizedOracle', function() {
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
         index: 1,
         amount: 1,
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isTrue(ContractUtils.isTxReceipt(res));
     });
@@ -28,7 +29,7 @@ describe('CentralizedOracle', function() {
       expect(CentralizedOracle.bet({
         index: 1,
         amount: 1,
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -36,7 +37,7 @@ describe('CentralizedOracle', function() {
       expect(CentralizedOracle.bet({
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
         amount: 1,
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -44,7 +45,7 @@ describe('CentralizedOracle', function() {
       expect(CentralizedOracle.bet({
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
         index: 1,
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -62,7 +63,7 @@ describe('CentralizedOracle', function() {
       const res = await CentralizedOracle.setResult({
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
         resultIndex: 1,
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isTrue(ContractUtils.isTxReceipt(res));
     });
@@ -70,14 +71,14 @@ describe('CentralizedOracle', function() {
     it('throws if contractAddress is undefined', async function() {
       expect(CentralizedOracle.setResult({
         resultIndex: 1,
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if resultIndex is undefined', async function() {
       expect(CentralizedOracle.setResult({
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -93,7 +94,7 @@ describe('CentralizedOracle', function() {
     it('returns the oracle', async function() {
       const res = await CentralizedOracle.oracle({
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
       assert.equal(res[0], '17e7888aa7412a735f336d2f6d784caefabb6fa3');
@@ -101,7 +102,7 @@ describe('CentralizedOracle', function() {
 
     it('throws if contractAddress is undefined', async function() {
       expect(CentralizedOracle.oracle({
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -116,7 +117,7 @@ describe('CentralizedOracle', function() {
     it('returns the bettingEndBlock', async function() {
       const res = await CentralizedOracle.bettingEndBlock({
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
       assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res[0])));
@@ -124,7 +125,7 @@ describe('CentralizedOracle', function() {
 
     it('throws if contractAddress is undefined', async function() {
       expect(CentralizedOracle.bettingEndBlock({
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -139,7 +140,7 @@ describe('CentralizedOracle', function() {
     it('returns the resultSettingEndBlock', async function() {
       const res = await CentralizedOracle.resultSettingEndBlock({
         contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
       assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res[0])));
@@ -147,7 +148,7 @@ describe('CentralizedOracle', function() {
 
     it('throws if contractAddress is undefined', async function() {
       expect(CentralizedOracle.resultSettingEndBlock({
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 

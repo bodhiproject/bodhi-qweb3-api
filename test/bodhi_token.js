@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 
 import BodhiToken from '../src/bodhi_token.js';
 import ContractUtils from './util/contract_utils';
+import TestConfig from './config/test_config';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
@@ -18,7 +19,7 @@ describe('BodhiToken', function() {
       const res = await BodhiToken.approve({
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
         value: '0',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isTrue(ContractUtils.isTxReceipt(res));
     });
@@ -26,14 +27,14 @@ describe('BodhiToken', function() {
     it('throws if spender is undefined', async function() {
       expect(BodhiToken.approve({
         value: '0',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if value is undefined', async function() {
       expect(BodhiToken.approve({
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -50,7 +51,7 @@ describe('BodhiToken', function() {
       const res = await BodhiToken.allowance({
         owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res.remaining);
       assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res.remaining)));
@@ -59,14 +60,14 @@ describe('BodhiToken', function() {
     it('throws if owner is undefined', async function() {
       expect(BodhiToken.allowance({
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if spender is undefined', async function() {
       expect(BodhiToken.allowance({
         owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
@@ -82,7 +83,7 @@ describe('BodhiToken', function() {
     it('returns the allowance', async function() {
       const res = await BodhiToken.balanceOf({
         owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res.balance);
       assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res.balance)));
@@ -90,7 +91,7 @@ describe('BodhiToken', function() {
 
     it('throws if owner is undefined', async function() {
       expect(BodhiToken.balanceOf({
-        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
