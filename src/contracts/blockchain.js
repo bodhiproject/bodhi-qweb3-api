@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Qweb3 } from 'qweb3';
+import Qweb3 from 'qweb3';
 
 import Config from '../../config/config';
 import ContractMetadata from './contract_metadata';
