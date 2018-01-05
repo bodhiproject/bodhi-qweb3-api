@@ -2,6 +2,7 @@ import 'babel-polyfill';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Web3Utils from 'web3-utils';
+import BigNumber from 'bignumber.js';
 
 import BodhiToken from '../src/bodhi_token.js';
 import ContractMetadata from '../config/contract_metadata';
@@ -24,7 +25,6 @@ describe('BodhiToken', function() {
 
     it('throws if spender is undefined', async function() {
       expect(BodhiToken.approve({
-        spender: undefined,
         value: '0',
         senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
       })).to.be.rejectedWith(Error);
@@ -33,7 +33,6 @@ describe('BodhiToken', function() {
     it('throws if value is undefined', async function() {
       expect(BodhiToken.approve({
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
-        value: undefined,
         senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
       })).to.be.rejectedWith(Error);
     });
@@ -42,12 +41,11 @@ describe('BodhiToken', function() {
       expect(BodhiToken.approve({
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
         value: '0',
-        senderAddress: undefined,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe.only('allowance()', function() {
+  describe('allowance()', function() {
     it('returns the allowance', async function() {
       const res = await BodhiToken.allowance({
         owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
@@ -55,7 +53,51 @@ describe('BodhiToken', function() {
         senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
       });
       assert.isDefined(res.remaining);
-      assert.isTrue(Web3Utils.isBigNumber(res.remaining));
+      assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res.remaining)));
+    });
+
+    it('throws if owner is undefined', async function() {
+      expect(BodhiToken.allowance({
+        spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
+        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if spender is undefined', async function() {
+      expect(BodhiToken.allowance({
+        owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(BodhiToken.allowance({
+        owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
+  describe('balanceOf()', function() {
+    it('returns the allowance', async function() {
+      const res = await BodhiToken.balanceOf({
+        owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+      });
+      assert.isDefined(res.balance);
+      assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res.balance)));
+    });
+
+    it('throws if owner is undefined', async function() {
+      expect(BodhiToken.balanceOf({
+        senderAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(BodhiToken.balanceOf({
+        owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+      })).to.be.rejectedWith(Error);
     });
   });
 });
