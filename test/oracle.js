@@ -5,7 +5,6 @@ import ChaiAsPromised from 'chai-as-promised';
 import Web3Utils from 'web3-utils';
 
 import Oracle from '../src/oracle';
-import ContractUtils from './util/contract_utils';
 import TestConfig from './config/test_config';
 
 Chai.use(ChaiAsPromised);
