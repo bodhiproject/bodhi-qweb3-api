@@ -54,7 +54,7 @@ describe('BodhiToken', function() {
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res.remaining);
-      assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res.remaining)));
+      assert.isTrue(Web3Utils.isBN(res.remaining));
     });
 
     it('throws if owner is undefined', async function() {
@@ -86,7 +86,7 @@ describe('BodhiToken', function() {
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res.balance);
-      assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res.balance)));
+      assert.isTrue(Web3Utils.isBN(res.balance));
     });
 
     it('throws if owner is undefined', async function() {

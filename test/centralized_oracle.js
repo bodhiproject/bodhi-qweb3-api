@@ -120,7 +120,7 @@ describe('CentralizedOracle', function() {
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
-      assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res[0])));
+      assert.isTrue(Web3Utils.isBN(res[0]));
     });
 
     it('throws if contractAddress is undefined', async function() {
@@ -143,7 +143,7 @@ describe('CentralizedOracle', function() {
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
-      assert.isTrue(Web3Utils.isBigNumber(new BigNumber(res[0])));
+      assert.isTrue(Web3Utils.isBN(res[0]));
     });
 
     it('throws if contractAddress is undefined', async function() {
