@@ -13,4 +13,17 @@ const expect = Chai.expect;
 
 describe('EventFactory', function() {
 
+  describe('createTopic()', async function() {
+    it('returns a tx receipt', async function() {
+      const res = await EventFactory.createTopic({
+        oracleAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
+        eventName: 'The quick brown fox jumped over the lazy dog?',
+        resultNames: ['yes', 'no'],
+        bettingEndBlock: 'C350',
+        resultSettingEndBlock: 'C738',
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isTrue(ContractUtils.isTxReceipt(res));
+    });
+  });
 });
