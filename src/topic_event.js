@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { Contract } from 'qweb3';
 
-import Config from '../../config/config';
-import Contracts from '../../config/contracts';
+import Config from '../config/config';
+import ContractMetadata from '../config/contract_metadata';
 
 const TopicEvent = {
   withdrawWinnings: async function(args) {
@@ -111,7 +111,7 @@ const TopicEvent = {
 };
 
 function getContract(contractAddress) {
-  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.TopicEvent.abi);
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.TopicEvent.abi);
 }
 
 module.exports = TopicEvent;

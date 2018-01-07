@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Qweb3 from 'qweb3';
 
-import Config from '../../config/config';
+import Config from '../config/config';
 
 const qClient = new Qweb3(Config.QTUM_RPC_ADDRESS);
 

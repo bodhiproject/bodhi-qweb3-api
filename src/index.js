@@ -5,15 +5,15 @@ import restify from 'restify';
 import corsMiddleware from 'restify-cors-middleware';
 import Qweb3 from 'qweb3';
 
-import Config from './config/config';
-import Blockchain from './src/contracts/blockchain.js';
-import Wallet from './src/contracts/wallet.js';
-import BodhiToken from './src/contracts/bodhi_token.js';
-import EventFactory from './src/contracts/event_factory.js';
-import TopicEvent from './src/contracts/topic_event.js';
-import Oracle from './src/contracts/oracle.js';
-import CentralizedOracle from './src/contracts/centralized_oracle.js';
-import DecentralizedOracle from './src/contracts/decentralized_oracle.js';
+import Config from '../config/config';
+import Blockchain from './blockchain.js';
+import Wallet from './wallet.js';
+import BodhiToken from './bodhi_token.js';
+import EventFactory from './event_factory.js';
+import TopicEvent from './topic_event.js';
+import Oracle from './oracle.js';
+import CentralizedOracle from './centralized_oracle.js';
+import DecentralizedOracle from './decentralized_oracle.js';
 
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 

@@ -1,45 +1,18 @@
 import _ from 'lodash';
 import { Contract } from 'qweb3';
 
-import Config from '../../config/config';
-import Contracts from '../../config/contracts';
+import Config from '../config/config';
+import ContractMetadata from '../config/contract_metadata';
 
-const GAS_LIMIT_SET_RESULT = 4000000;
+const GAS_LIMIT_VOTE = 2000000;
 
-const CentralizedOracle = {
-  bet: async function(args) {
-    const {
-      contractAddress, // address
-      index, // number
-      amount, // number (Satoshi)
-      senderAddress, // address
-    } = args;
-
-    if (_.isUndefined(contractAddress)) {
-      throw new TypeError('contractAddress needs to be defined');
-    }
-    if (_.isUndefined(index)) {
-      throw new TypeError('index needs to be defined');
-    }
-    if (_.isUndefined(amount)) {
-      throw new TypeError('amount needs to be defined');
-    }
-    if (_.isUndefined(senderAddress)) {
-      throw new TypeError('senderAddress needs to be defined');
-    }
-
-    const contract = getContract(contractAddress);
-    return await contract.send('bet', {
-      methodArgs: [index],
-      amount: amount,
-      senderAddress: senderAddress,
-    });
-  },
-
-  setResult: async function(args) {
+const DecentralizedOracle = {
+  vote: async function(args) {
     const {
       contractAddress, // address
       resultIndex, // number
+      botAmount, // number (Botoshi)
+      gasLimit, // number
       senderAddress, // address
     } = args;
 
@@ -49,19 +22,24 @@ const CentralizedOracle = {
     if (_.isUndefined(resultIndex)) {
       throw new TypeError('resultIndex needs to be defined');
     }
+    if (_.isUndefined(botAmount)) {
+      throw new TypeError('botAmount needs to be defined');
+    }
     if (_.isUndefined(senderAddress)) {
       throw new TypeError('senderAddress needs to be defined');
     }
 
+    // If gasLimit is not specified, we need to make sure the vote succeeds in the event this vote will surpass the
+    // consensus threshold and will require a higher gas limit.
     const contract = getContract(contractAddress);
-    return await contract.send('setResult', {
-      methodArgs: [resultIndex],
-      gasLimit: GAS_LIMIT_SET_RESULT,
+    return await contract.send('voteResult', {
+      methodArgs: [resultIndex, botAmount],
+      gasLimit: gasLimit || GAS_LIMIT_VOTE,
       senderAddress: senderAddress,
     });
   },
 
-  oracle: async function(args) {
+  finalizeResult: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -75,13 +53,13 @@ const CentralizedOracle = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('oracle', {
+    return await contract.send('finalizeResult', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 
-  bettingEndBlock: async function(args) {
+  arbitrationEndBlock: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -95,13 +73,13 @@ const CentralizedOracle = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('bettingEndBlock', {
+    return await contract.call('arbitrationEndBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 
-  resultSettingEndBlock: async function(args) {
+  lastResultIndex: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -115,7 +93,7 @@ const CentralizedOracle = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('resultSettingEndBlock', {
+    return await contract.call('lastResultIndex', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -123,7 +101,7 @@ const CentralizedOracle = {
 };
 
 function getContract(contractAddress) {
-  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.DecentralizedOracle.abi);
 }
 
-module.exports = CentralizedOracle;
+module.exports = DecentralizedOracle;

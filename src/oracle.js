@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { Contract } from 'qweb3';
 
-import Config from '../../config/config';
-import Contracts from '../../config/contracts';
+import Config from '../config/config';
+import ContractMetadata from '../config/contract_metadata';
 
 const ORACLE_CENTRALIZED = 'centralized';
 const ORACLE_DECENTRALIZED = 'decentralized';
@@ -182,10 +182,10 @@ const Oracle = {
 function getContract(oracleType, contractAddress) {
   switch (oracleType) {
     case ORACLE_CENTRALIZED: {
-      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.CentralizedOracle.abi);
+      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.CentralizedOracle.abi);
     }
     case ORACLE_DECENTRALIZED: {
-      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, Contracts.DecentralizedOracle.abi);
+      return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.DecentralizedOracle.abi);
     }
     default: {
       throw new TypeError('Invalid oracle type');
