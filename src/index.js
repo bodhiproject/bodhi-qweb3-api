@@ -33,7 +33,7 @@ server.on('after', function (req, res, route, err) {
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 /* Misc */
-server.post('/isconnected', (req, res, next) => {
+server.post('/is-connected', (req, res, next) => {
   qweb3.isConnected()
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -52,7 +52,7 @@ server.post('/get-account-address', (req, res, next) => {
     });
 });
 
-server.get('/listunspent', (req, res, next) => {
+server.get('/list-unspent', (req, res, next) => {
   Wallet.listUnspent()
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -62,7 +62,7 @@ server.get('/listunspent', (req, res, next) => {
 });
 
 /* Blockchain */
-server.get('/getblockcount', (req, res, next) => {
+server.get('/get-block-count', (req, res, next) => {
   Blockchain.getBlockCount()
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -71,7 +71,7 @@ server.get('/getblockcount', (req, res, next) => {
     });
 });
 
-server.post('/gettransactionreceipt', (req, res, next) => {
+server.post('/get-transaction-receipt', (req, res, next) => {
   Blockchain.getTransactionReceipt(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -80,7 +80,7 @@ server.post('/gettransactionreceipt', (req, res, next) => {
     });
 });
 
-server.post('/searchlogs', (req, res, next) => {
+server.post('/search-logs', (req, res, next) => {
   Blockchain.searchLogs(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -108,7 +108,7 @@ server.post('/allowance', (req, res, next) => {
     });
 });
 
-server.post('/botbalance', (req, res, next) => {
+server.post('/bot-balance', (req, res, next) => {
   BodhiToken.balanceOf(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -118,7 +118,7 @@ server.post('/botbalance', (req, res, next) => {
 });
 
 /* EventFactory */
-server.post('/createtopic', (req, res, next) => {
+server.post('/create-topic', (req, res, next) => {
   EventFactory.createTopic(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -146,7 +146,7 @@ server.post('/status', (req, res, next) => {
     });
 });
 
-server.post('/didwithdraw', (req, res, next) => {
+server.post('/did-withdraw', (req, res, next) => {
   TopicEvent.didWithdraw(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -155,7 +155,8 @@ server.post('/didwithdraw', (req, res, next) => {
     });
 });
 
-server.post('/qtumwinnings', (req, res, next) => {
+// TODO: calculate winnings
+server.post('/winnings', (req, res, next) => {
   TopicEvent.calculateQtumWinnings(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -164,17 +165,8 @@ server.post('/qtumwinnings', (req, res, next) => {
     });
 });
 
-server.post('/botwinnings', (req, res, next) => {
-  TopicEvent.calculateBotWinnings(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
 /* Oracle */
-server.post('/invalidateoracle', (req, res, next) => {
+server.post('/invalidate-oracle', (req, res, next) => {
   Oracle.invalidateOracle(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -183,7 +175,7 @@ server.post('/invalidateoracle', (req, res, next) => {
     });
 });
 
-server.post('/betbalances', (req, res, next) => {
+server.post('/bet-balances', (req, res, next) => {
   Oracle.getBetBalances(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -192,7 +184,7 @@ server.post('/betbalances', (req, res, next) => {
     });
 });
 
-server.post('/votebalances', (req, res, next) => {
+server.post('/vote-balances', (req, res, next) => {
   Oracle.getVoteBalances(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -201,7 +193,7 @@ server.post('/votebalances', (req, res, next) => {
     });
 });
 
-server.post('/totalbets', (req, res, next) => {
+server.post('/total-bets', (req, res, next) => {
   Oracle.getTotalBets(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -210,7 +202,7 @@ server.post('/totalbets', (req, res, next) => {
     });
 });
 
-server.post('/totalvotes', (req, res, next) => {
+server.post('/total-votes', (req, res, next) => {
   Oracle.getTotalVotes(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -219,8 +211,8 @@ server.post('/totalvotes', (req, res, next) => {
     });
 });
 
-server.post('/getresult', (req, res, next) => {
-  Oracle.getResult(req.params)
+server.post('/get-result', (req, res, next) => {
+  Oracle.resultIndex(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
@@ -247,7 +239,7 @@ server.post('/bet', (req, res, next) => {
     });
 });
 
-server.post('/setresult', (req, res, next) => {
+server.post('/set-result', (req, res, next) => {
   CentralizedOracle.setResult(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -274,7 +266,7 @@ server.post('/bet-start-block', (req, res, next) => {
     });
 });
 
-server.post('/betendblock', (req, res, next) => {
+server.post('/bet-end-block', (req, res, next) => {
   CentralizedOracle.bettingEndBlock(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -292,7 +284,7 @@ server.post('/result-set-start-block', (req, res, next) => {
     });
 });
 
-server.post('/resultsetendblock', (req, res, next) => {
+server.post('/result-set-end-block', (req, res, next) => {
   CentralizedOracle.resultSettingEndBlock(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -311,7 +303,7 @@ server.post('/vote', (req, res, next) => {
     });
 });
 
-server.post('/finalizeresult', (req, res, next) => {
+server.post('/finalize-result', (req, res, next) => {
   DecentralizedOracle.finalizeResult(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -320,7 +312,7 @@ server.post('/finalizeresult', (req, res, next) => {
     });
 });
 
-server.post('/arbitrationendblock', (req, res, next) => {
+server.post('/arbitration-end-block', (req, res, next) => {
   DecentralizedOracle.arbitrationEndBlock(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
@@ -329,7 +321,7 @@ server.post('/arbitrationendblock', (req, res, next) => {
     });
 });
 
-server.post('/lastresultindex', (req, res, next) => {
+server.post('/last-result-index', (req, res, next) => {
   DecentralizedOracle.lastResultIndex(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
