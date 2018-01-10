@@ -160,6 +160,31 @@ describe('CentralizedOracle', function() {
     });
   });
 
+  describe('resultSettingStartBlock()', function() {
+    const address = 'd78f96ea55ad0c8a283b6d759f39cda34a7c5b10';
+
+    it('returns the resultSettingStartBlock', async function() {
+      const res = await CentralizedOracle.resultSettingStartBlock({
+        contractAddress: address,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(CentralizedOracle.resultSettingStartBlock({
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(CentralizedOracle.resultSettingStartBlock({
+        contractAddress: address,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
   describe('resultSettingEndBlock()', function() {
     it('returns the resultSettingEndBlock', async function() {
       const res = await CentralizedOracle.resultSettingEndBlock({

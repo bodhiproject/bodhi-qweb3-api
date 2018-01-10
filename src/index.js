@@ -280,6 +280,15 @@ server.post('/betendblock', (req, res, next) => {
     });
 });
 
+server.post('/result-set-start-block', (req, res, next) => {
+  CentralizedOracle.resultSettingStartBlock(req.params)
+    .then((result) => {
+      res.send(200, { result });
+    }, (err) => {
+      res.send({ error: err.message });
+    });
+});
+
 server.post('/resultsetendblock', (req, res, next) => {
   CentralizedOracle.resultSettingEndBlock(req.params)
     .then((result) => {

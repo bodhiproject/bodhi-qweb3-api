@@ -121,6 +121,26 @@ const CentralizedOracle = {
     });
   },
 
+  resultSettingStartBlock: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('resultSettingStartBlock', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
   resultSettingEndBlock: async function(args) {
     const {
       contractAddress, // address
