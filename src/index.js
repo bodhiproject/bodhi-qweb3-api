@@ -2,7 +2,6 @@ import _ from 'lodash';
 import moment from 'moment';
 import promise from 'bluebird';
 import restify from 'restify';
-import bunyan from 'bunyan';
 import corsMiddleware from 'restify-cors-middleware';
 import Qweb3 from 'qweb3';
 
@@ -27,15 +26,9 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
-server.on('after', restify.plugins.auditLogger({
-  log: bunyan.createLogger({
-    name: 'bodhi-api',
-    stream: process.stdout
-  }),
-  event: 'after',
-  server: server,
-  printLog: true
-}));
+server.on('after', function (req, res, route, err) {
+  console.log(`${route.methods[0]} ${route.spec.path} ${res.statusCode} ${res._body.error ? res._body.error : ''}`);
+});
 
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
@@ -45,7 +38,7 @@ server.post('/isconnected', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -55,7 +48,7 @@ server.post('/get-account-address', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -64,7 +57,7 @@ server.get('/listunspent', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -74,7 +67,7 @@ server.get('/getblockcount', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -83,7 +76,7 @@ server.post('/gettransactionreceipt', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -92,7 +85,7 @@ server.post('/searchlogs', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -102,7 +95,7 @@ server.post('/approve', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -111,7 +104,7 @@ server.post('/allowance', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -120,7 +113,7 @@ server.post('/botbalance', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -130,7 +123,7 @@ server.post('/createtopic', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -140,7 +133,7 @@ server.post('/withdraw', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -149,7 +142,7 @@ server.post('/status', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -158,7 +151,7 @@ server.post('/didwithdraw', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -167,7 +160,7 @@ server.post('/qtumwinnings', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -176,7 +169,7 @@ server.post('/botwinnings', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -186,7 +179,7 @@ server.post('/invalidateoracle', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -195,7 +188,7 @@ server.post('/betbalances', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -204,7 +197,7 @@ server.post('/votebalances', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -213,7 +206,7 @@ server.post('/totalbets', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -222,7 +215,7 @@ server.post('/totalvotes', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -231,7 +224,7 @@ server.post('/getresult', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -240,7 +233,7 @@ server.post('/finished', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -250,7 +243,7 @@ server.post('/bet', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -259,7 +252,7 @@ server.post('/setresult', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -268,7 +261,7 @@ server.post('/oracle', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -277,7 +270,7 @@ server.post('/bet-start-block', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -286,7 +279,7 @@ server.post('/betendblock', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -295,7 +288,7 @@ server.post('/result-set-start-block', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -304,7 +297,7 @@ server.post('/resultsetendblock', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -314,7 +307,7 @@ server.post('/vote', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -323,7 +316,7 @@ server.post('/finalizeresult', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -332,7 +325,7 @@ server.post('/arbitrationendblock', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -341,7 +334,7 @@ server.post('/lastresultindex', (req, res, next) => {
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
-      onRequestError(res, result, next);
+      onRequestError(res, err, next);
     });
 });
 
@@ -356,6 +349,6 @@ function onRequestSuccess(res, result, next) {
 }
 
 function onRequestError(res, err, next) {
-  res.send({ error: err.message });
+  res.send(500, { error: err.message });
   next();
 }
