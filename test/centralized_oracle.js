@@ -112,6 +112,31 @@ describe('CentralizedOracle', function() {
     });
   });
 
+  describe('bettingStartBlock()', function() {
+    const address = '';
+
+    it('returns the bettingStartBlock', async function() {
+      const res = await CentralizedOracle.bettingStartBlock({
+        contractAddress: address,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(CentralizedOracle.bettingStartBlock({
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(CentralizedOracle.bettingStartBlock({
+        contractAddress: address,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
   describe('bettingEndBlock()', function() {
     it('returns the bettingEndBlock', async function() {
       const res = await CentralizedOracle.bettingEndBlock({
