@@ -26,7 +26,7 @@
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
     "moment": "^2.19.3",
-    "qweb3": "^0.2.6",
+    "qweb3": "^0.3.1",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.0.1",
     "web3-utils": "^1.0.0-beta.26"
