@@ -27,7 +27,7 @@ server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
 server.on('after', function (req, res, route, err) {
-  console.log(`${route.methods[0]} ${route.spec.path} ${res.statusCode} ${res._body.error ? res._body.error : ''}`);
+  console.log(`${route.methods[0]} ${route.spec.path} ${res.statusCode}`);
 });
 
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
