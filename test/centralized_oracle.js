@@ -113,7 +113,7 @@ describe('CentralizedOracle', function() {
   });
 
   describe('bettingStartBlock()', function() {
-    const address = '';
+    const address = 'd78f96ea55ad0c8a283b6d759f39cda34a7c5b10';
 
     it('returns the bettingStartBlock', async function() {
       const res = await CentralizedOracle.bettingStartBlock({
