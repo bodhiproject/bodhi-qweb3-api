@@ -14,8 +14,10 @@ const EventFactory = {
     const {
       oracleAddress, // address
       eventName, // string
-      resultNames, // array
+      resultNames, // string array
+      bettingStartBlock, // number
       bettingEndBlock, // number
+      resultSettingStartBlock, // number
       resultSettingEndBlock, // number
       senderAddress, // address
     } = args;
@@ -29,8 +31,14 @@ const EventFactory = {
     if (_.isUndefined(resultNames)) {
       throw new TypeError('resultNames needs to be defined');
     }
+    if (_.isUndefined(bettingStartBlock)) {
+      throw new TypeError('bettingStartBlock needs to be defined');
+    }
     if (_.isUndefined(bettingEndBlock)) {
       throw new TypeError('bettingEndBlock needs to be defined');
+    }
+    if (_.isUndefined(resultSettingStartBlock)) {
+      throw new TypeError('resultSettingStartBlock needs to be defined');
     }
     if (_.isUndefined(resultSettingEndBlock)) {
       throw new TypeError('resultSettingEndBlock needs to be defined');
@@ -40,7 +48,8 @@ const EventFactory = {
     }
 
     return await contract.send('createTopic', {
-      methodArgs: [oracleAddress, eventName, resultNames, bettingEndBlock, resultSettingEndBlock],
+      methodArgs: [oracleAddress, eventName, resultNames, bettingStartBlock, bettingEndBlock, resultSettingStartBlock, 
+        resultSettingEndBlock],
       gasLimit: GAS_LIMIT_CREATE_TOPIC,
       senderAddress: senderAddress,
     });

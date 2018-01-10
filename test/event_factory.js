@@ -17,8 +17,10 @@ describe('EventFactory', function() {
         oracleAddress: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
         eventName: 'The quick brown fox jumped over the lazy dog?',
         resultNames: ['yes', 'no'],
-        bettingEndBlock: 'C350',
-        resultSettingEndBlock: 'C738',
+        bettingStartBlock: 65815,
+        bettingEndBlock: 65835,
+        resultSettingStartBlock: 65836,
+        resultSettingEndBlock: 66000,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isTrue(ContractUtils.isTxReceipt(res));
