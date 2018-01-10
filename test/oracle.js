@@ -11,6 +11,9 @@ Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
 const expect = Chai.expect;
 
+const CENTRALIZED = 'centralized';
+const DECENTRALIZED = 'decentralized';
+
 describe('Oracle', function() {
 
   describe('getBetBalances()', function() {
@@ -157,37 +160,35 @@ describe('Oracle', function() {
     });
   });
 
-  describe('getResult()', function() {
-    const contractAddress = '6ad02305f3518aeddb914f218e13d3e985ef587a';
-    const oracleType = 'decentralized';
+  describe('resultIndex()', function() {
+    const contractAddress = 'd78f96ea55ad0c8a283b6d759f39cda34a7c5b10';
+    const oracleType = CENTRALIZED;
 
-    it('returns the index, result name, and isValid flag', async function() {
-      const res = await Oracle.getResult({
+    it('returns the resultIndex', async function() {
+      const res = await Oracle.resultIndex({
         contractAddress: contractAddress,
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isTrue(Web3Utils.isBN(res[0]));
-      assert.isString(res[1]);
-      assert.isBoolean(res[2]);
     });
 
     it('throws if contractAddress is undefined', async function() {
-      expect(Oracle.getResult({
+      expect(Oracle.resultIndex({
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if oracleType is undefined', async function() {
-      expect(Oracle.getResult({
+      expect(Oracle.resultIndex({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
-      expect(Oracle.getResult({
+      expect(Oracle.resultIndex({
         contractAddress: contractAddress,
         oracleType: oracleType,
       })).to.be.rejectedWith(Error);

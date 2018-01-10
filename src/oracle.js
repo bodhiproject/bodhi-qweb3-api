@@ -130,7 +130,7 @@ const Oracle = {
     });
   },
 
-  getResult: async function(args) {
+  resultIndex: async function(args) {
     const {
       contractAddress, // address
       oracleType, // string
@@ -148,7 +148,7 @@ const Oracle = {
     }
 
     const oracle = getContract(oracleType, contractAddress);
-    return await oracle.call('getResult', {
+    return await oracle.call('resultIndex', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
