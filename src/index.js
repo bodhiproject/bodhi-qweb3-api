@@ -262,6 +262,15 @@ server.post('/oracle', (req, res, next) => {
     });
 });
 
+server.post('/bet-start-block', (req, res, next) => {
+  CentralizedOracle.bettingStartBlock(req.params)
+    .then((result) => {
+      res.send(200, { result });
+    }, (err) => {
+      res.send({ error: err.message });
+    });
+});
+
 server.post('/betendblock', (req, res, next) => {
   CentralizedOracle.bettingEndBlock(req.params)
     .then((result) => {
