@@ -154,6 +154,30 @@ const Oracle = {
     });
   },
 
+  consensusThreshold: async function(args) {
+    const {
+      contractAddress, // address
+      oracleType, // string
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(oracleType)) {
+      throw new TypeError('oracleType needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const oracle = getContract(oracleType, contractAddress);
+    return await oracle.call('consensusThreshold', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
   finished: async function(args) {
     const {
       contractAddress, // address

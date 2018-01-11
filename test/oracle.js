@@ -15,11 +15,10 @@ const CENTRALIZED = 'centralized';
 const DECENTRALIZED = 'decentralized';
 
 describe('Oracle', function() {
+  const contractAddress = 'a5b27c03e76d4cf10928120439fa96181f07520c';
+  const oracleType = CENTRALIZED;
 
   describe('getBetBalances()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'centralized';
-
     it('returns the bet balances', async function() {
       const res = await Oracle.getBetBalances({
         contractAddress: contractAddress,
@@ -53,9 +52,6 @@ describe('Oracle', function() {
   });
 
   describe('getVoteBalances()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'decentralized';
-
     it('returns the vote balances', async function() {
       const res = await Oracle.getVoteBalances({
         contractAddress: contractAddress,
@@ -89,9 +85,6 @@ describe('Oracle', function() {
   });
 
   describe('getTotalBets()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'centralized';
-
     it('returns the total bets', async function() {
       const res = await Oracle.getTotalBets({
         contractAddress: contractAddress,
@@ -125,9 +118,6 @@ describe('Oracle', function() {
   });
 
   describe('getTotalVotes()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'decentralized';
-
     it('returns the total votes', async function() {
       const res = await Oracle.getTotalVotes({
         contractAddress: contractAddress,
@@ -161,9 +151,6 @@ describe('Oracle', function() {
   });
 
   describe('resultIndex()', function() {
-    const contractAddress = 'd78f96ea55ad0c8a283b6d759f39cda34a7c5b10';
-    const oracleType = CENTRALIZED;
-
     it('returns the resultIndex', async function() {
       const res = await Oracle.resultIndex({
         contractAddress: contractAddress,
@@ -196,10 +183,40 @@ describe('Oracle', function() {
     });
   });
 
-  describe('finished()', function() {
-    const contractAddress = '6ad02305f3518aeddb914f218e13d3e985ef587a';
-    const oracleType = 'decentralized';
+  describe('consensusThreshold()', function() {
+    it('returns the consensusThreshold', async function() {
+      const res = await Oracle.consensusThreshold({
+        contractAddress: contractAddress,
+        oracleType: oracleType,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+    });
 
+    it('throws if contractAddress is undefined', async function() {
+      expect(Oracle.consensusThreshold({
+        oracleType: oracleType,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if oracleType is undefined', async function() {
+      expect(Oracle.consensusThreshold({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(Oracle.consensusThreshold({
+        contractAddress: contractAddress,
+        oracleType: oracleType,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
+  describe('finished()', function() {
     it('returns the finished flag', async function() {
       const res = await Oracle.finished({
         contractAddress: contractAddress,

@@ -220,6 +220,15 @@ server.post('/get-result', (req, res, next) => {
     });
 });
 
+server.post('/consensus-threshold', (req, res, next) => {
+  Oracle.consensusThreshold(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
 server.post('/finished', (req, res, next) => {
   Oracle.finished(req.params)
     .then((result) => {
