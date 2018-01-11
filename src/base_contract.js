@@ -4,8 +4,8 @@ import { Contract } from 'qweb3';
 import Config from '../config/config';
 import ContractMetadata from '../config/contract_metadata';
 
-const TopicEvent = {
-  withdrawWinnings: async function(args) {
+const BaseContract = {
+  version: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -19,13 +19,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.send('withdrawWinnings', {
+    return await contract.call('version', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 
-  totalQtumValue: async function(args) {
+  resultIndex: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -39,13 +39,33 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('totalQtumValue', {
+    return await contract.call('resultIndex', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+  
+  getBetBalances: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('getBetBalances', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 
-  totalBotValue: async function(args) {
+  getVoteBalances: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -59,13 +79,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('totalBotValue', {
+    return await contract.call('getVoteBalances', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 
-  getFinalResult: async function(args) {
+  getTotalBets: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -79,13 +99,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('getFinalResult', {
+    return await contract.call('getTotalBets', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
   },
 
-  status: async function(args) {
+  getTotalVotes: async function(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -99,51 +119,7 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('status', {
-      methodArgs: [],
-      senderAddress: senderAddress,
-    });
-  },
-
-  didWithdraw: async function(args) {
-    const {
-      contractAddress, // address
-      address, // address
-      senderAddress, // address
-    } = args;
-
-    if (_.isUndefined(contractAddress)) {
-      throw new TypeError('contractAddress needs to be defined');
-    }
-    if (_.isUndefined(address)) {
-      throw new TypeError('address needs to be defined');
-    }
-    if (_.isUndefined(senderAddress)) {
-      throw new TypeError('senderAddress needs to be defined');
-    }
-
-    const contract = getContract(contractAddress);
-    return await contract.call('didWithdraw', {
-      methodArgs: [address],
-      senderAddress: senderAddress,
-    });
-  },
-
-  calculateWinnings: async function(args) {
-    const {
-      contractAddress, // address
-      senderAddress, // address
-    } = args;
-
-    if (_.isUndefined(contractAddress)) {
-      throw new TypeError('contractAddress needs to be defined');
-    }
-    if (_.isUndefined(senderAddress)) {
-      throw new TypeError('senderAddress needs to be defined');
-    }
-
-    const contract = getContract(contractAddress);
-    return await contract.call('calculateWinnings', {
+    return await contract.call('getTotalVotes', {
       methodArgs: [],
       senderAddress: senderAddress,
     });
@@ -151,7 +127,7 @@ const TopicEvent = {
 };
 
 function getContract(contractAddress) {
-  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.TopicEvent.abi);
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.BaseContract.abi);
 }
 
-module.exports = TopicEvent;
+module.exports = BaseContract;

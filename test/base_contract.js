@@ -1,44 +1,22 @@
+import _ from 'lodash';
 import 'babel-polyfill';
 import Chai from 'chai';
 import ChaiAsPromised from 'chai-as-promised';
 import Web3Utils from 'web3-utils';
 
-import TopicEvent from '../src/topic_event';
-import ContractUtils from './util/contract_utils';
+import BaseContract from '../src/base_contract';
 import TestConfig from './config/test_config';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
 const expect = Chai.expect;
 
-describe('TopicEvent', function() {
+describe('BaseContract', function() {
   const contractAddress = 'e4ba4d301d4c22d2634a3d8e23c47b7e9e4ef4df';
 
-  describe('withdrawWinnings()', function() {
-    it('returns a tx receipt', async function() {
-      const res = await TopicEvent.withdrawWinnings({
-        contractAddress: contractAddress,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
-      assert.isTrue(ContractUtils.isTxReceipt(res));
-    });
-
-    it('throws if contractAddress is undefined', async function() {
-      expect(TopicEvent.withdrawWinnings({
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if senderAddress is undefined', async function() {
-      expect(TopicEvent.withdrawWinnings({
-        contractAddress: contractAddress,
-      })).to.be.rejectedWith(Error);
-    });
-  });
-
-  describe('totalQtumValue()', function() {
-    it('returns the totalQtumValue', async function() {
-      const res = await TopicEvent.totalQtumValue({
+  describe('version()', function() {
+    it('returns the version', async function() {
+      const res = await BaseContract.version({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
@@ -47,21 +25,21 @@ describe('TopicEvent', function() {
     });
 
     it('throws if contractAddress is undefined', async function() {
-      expect(TopicEvent.totalQtumValue({
+      expect(BaseContract.version({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
-      expect(TopicEvent.totalQtumValue({
+      expect(BaseContract.version({
         contractAddress: contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('totalBotValue()', function() {
-    it('returns the totalBotValue', async function() {
-      const res = await TopicEvent.totalBotValue({
+  describe('resultIndex()', function() {
+    it('returns the resultIndex', async function() {
+      const res = await BaseContract.resultIndex({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
@@ -70,121 +48,105 @@ describe('TopicEvent', function() {
     });
 
     it('throws if contractAddress is undefined', async function() {
-      expect(TopicEvent.totalBotValue({
+      expect(BaseContract.resultIndex({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
-      expect(TopicEvent.totalBotValue({
+      expect(BaseContract.resultIndex({
         contractAddress: contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('getFinalResult()', function() {
-    it('returns the final result and valid flag', async function() {
-      const res = await TopicEvent.getFinalResult({
+  describe('getBetBalances()', function() {
+    it('returns the bet balances', async function() {
+      const res = await BaseContract.getBetBalances({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
-      assert.isTrue(Web3Utils.isBN(res[0]));
-      assert.isDefined(res[1]);
-      assert.isBoolean(res[1]);
+      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
     });
 
     it('throws if contractAddress is undefined', async function() {
-      expect(TopicEvent.getFinalResult({
+      expect(BaseContract.getBetBalances({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
-      expect(TopicEvent.getFinalResult({
+      expect(BaseContract.getBetBalances({
         contractAddress: contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('status()', function() {
-    it('returns the status', async function() {
-      const res = await TopicEvent.status({
+  describe('getVoteBalances()', function() {
+    it('returns the vote balances', async function() {
+      const res = await BaseContract.getVoteBalances({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
-      assert.isTrue(Web3Utils.isBN(res[0]));
+      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
     });
 
     it('throws if contractAddress is undefined', async function() {
-      expect(TopicEvent.status({
+      expect(BaseContract.getVoteBalances({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
-      expect(TopicEvent.status({
+      expect(BaseContract.getVoteBalances({
         contractAddress: contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('didWithdraw()', function() {
-    const address = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-    
-    it('returns the didWithdraw flag', async function() {
-      const res = await TopicEvent.didWithdraw({
+  describe('getTotalBets()', function() {
+    it('returns the total bets', async function() {
+      const res = await BaseContract.getTotalBets({
         contractAddress: contractAddress,
-        address: address,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
-      assert.isBoolean(res[0]);
+      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
     });
 
     it('throws if contractAddress is undefined', async function() {
-      expect(TopicEvent.didWithdraw({
-        address: address,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if address is undefined', async function() {
-      expect(TopicEvent.didWithdraw({
-        contractAddress: contractAddress,
+      expect(BaseContract.getTotalBets({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
-      expect(TopicEvent.didWithdraw({
+      expect(BaseContract.getTotalBets({
         contractAddress: contractAddress,
-        address: address,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('calculateWinnings()', function() {
-    it('returns the BOT and QTUM winnings', async function() {
-      const res = await TopicEvent.calculateWinnings({
+  describe('getTotalVotes()', function() {
+    it('returns the total votes', async function() {
+      const res = await BaseContract.getTotalVotes({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
-      assert.isDefined(res[1]);
-      assert.isTrue(Web3Utils.isBN(res[0]));
-      assert.isTrue(Web3Utils.isBN(res[1]));
+      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
     });
 
     it('throws if contractAddress is undefined', async function() {
-      expect(TopicEvent.calculateWinnings({
+      expect(BaseContract.getTotalVotes({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
-      expect(TopicEvent.calculateWinnings({
+      expect(BaseContract.getTotalVotes({
         contractAddress: contractAddress,
       })).to.be.rejectedWith(Error);
     });

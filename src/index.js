@@ -6,14 +6,15 @@ import corsMiddleware from 'restify-cors-middleware';
 import Qweb3 from 'qweb3';
 
 import Config from '../config/config';
-import Blockchain from './blockchain.js';
-import Wallet from './wallet.js';
-import BodhiToken from './bodhi_token.js';
-import EventFactory from './event_factory.js';
-import TopicEvent from './topic_event.js';
-import Oracle from './oracle.js';
-import CentralizedOracle from './centralized_oracle.js';
-import DecentralizedOracle from './decentralized_oracle.js';
+import Blockchain from './blockchain';
+import Wallet from './wallet';
+import BodhiToken from './bodhi_token';
+import BaseContract from './base_contract';
+import EventFactory from './event_factory';
+import TopicEvent from './topic_event';
+import Oracle from './oracle';
+import CentralizedOracle from './centralized_oracle';
+import DecentralizedOracle from './decentralized_oracle';
 
 const server = restify.createServer({
   name: 'bodhi-api'
@@ -27,7 +28,11 @@ server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
 server.on('after', function (req, res, route, err) {
-  console.log(`${route.methods[0]} ${route.spec.path} ${res.statusCode}`);
+  if (route) {
+    console.log(`${route.methods[0]} ${route.spec.path} ${res.statusCode}`);
+  } else {
+    console.log(`${err.message}`);
+  }
 });
 
 const qweb3 = new Qweb3(Config.QTUM_RPC_ADDRESS);
@@ -117,6 +122,61 @@ server.post('/bot-balance', (req, res, next) => {
     });
 });
 
+/* BaseContract */
+server.post('/version', (req, res, next) => {
+  BaseContract.version(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
+server.post('/get-result', (req, res, next) => {
+  BaseContract.resultIndex(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
+server.post('/bet-balances', (req, res, next) => {
+  BaseContract.getBetBalances(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
+server.post('/vote-balances', (req, res, next) => {
+  BaseContract.getVoteBalances(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
+server.post('/total-bets', (req, res, next) => {
+  BaseContract.getTotalBets(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
+server.post('/total-votes', (req, res, next) => {
+  BaseContract.getTotalVotes(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
 /* EventFactory */
 server.post('/create-topic', (req, res, next) => {
   EventFactory.createTopic(req.params)
@@ -130,15 +190,6 @@ server.post('/create-topic', (req, res, next) => {
 /* TopicEvent */
 server.post('/withdraw', (req, res, next) => {
   TopicEvent.withdrawWinnings(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
-server.post('/topic-version', (req, res, next) => {
-  TopicEvent.version(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
@@ -201,62 +252,8 @@ server.post('/winnings', (req, res, next) => {
 });
 
 /* Oracle */
-server.post('/bet-balances', (req, res, next) => {
-  Oracle.getBetBalances(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
-server.post('/vote-balances', (req, res, next) => {
-  Oracle.getVoteBalances(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
-server.post('/total-bets', (req, res, next) => {
-  Oracle.getTotalBets(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
-server.post('/total-votes', (req, res, next) => {
-  Oracle.getTotalVotes(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
-server.post('/oracle-version', (req, res, next) => {
-  Oracle.version(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
 server.post('/event-address', (req, res, next) => {
   Oracle.eventAddress(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
-server.post('/get-result', (req, res, next) => {
-  Oracle.resultIndex(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
