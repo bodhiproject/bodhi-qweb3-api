@@ -150,6 +150,39 @@ describe('Oracle', function() {
     });
   });
 
+  describe('eventAddress()', function() {
+    it('returns the eventAddress', async function() {
+      const res = await Oracle.eventAddress({
+        contractAddress: contractAddress,
+        oracleType: oracleType,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(_.isString(res[0]));
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(Oracle.eventAddress({
+        oracleType: oracleType,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if oracleType is undefined', async function() {
+      expect(Oracle.eventAddress({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(Oracle.eventAddress({
+        contractAddress: contractAddress,
+        oracleType: oracleType,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
   describe('resultIndex()', function() {
     it('returns the resultIndex', async function() {
       const res = await Oracle.resultIndex({
