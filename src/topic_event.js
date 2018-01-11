@@ -25,6 +25,66 @@ const TopicEvent = {
     });
   },
 
+  totalQtumValue: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('totalQtumValue', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  totalBotValue: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('totalBotValue', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  getFinalResult: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('getFinalResult', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
   status: async function(args) {
     const {
       contractAddress, // address

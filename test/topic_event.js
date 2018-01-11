@@ -15,8 +15,6 @@ describe('TopicEvent', function() {
   const contractAddress = 'e4ba4d301d4c22d2634a3d8e23c47b7e9e4ef4df';
 
   describe('withdrawWinnings()', function() {
-    const contractAddress = 'ec1c7a01c24b97dd26611c31733ee36365f8a485';
-
     it('returns a tx receipt', async function() {
       const res = await TopicEvent.withdrawWinnings({
         contractAddress: contractAddress,
@@ -38,9 +36,78 @@ describe('TopicEvent', function() {
     });
   });
 
-  describe('status()', function() {
-    const contractAddress = 'ec1c7a01c24b97dd26611c31733ee36365f8a485';
+  describe('totalQtumValue()', function() {
+    it('returns the totalQtumValue', async function() {
+      const res = await TopicEvent.totalQtumValue({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+    });
 
+    it('throws if contractAddress is undefined', async function() {
+      expect(TopicEvent.totalQtumValue({
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(TopicEvent.totalQtumValue({
+        contractAddress: contractAddress,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
+  describe('totalBotValue()', function() {
+    it('returns the totalBotValue', async function() {
+      const res = await TopicEvent.totalBotValue({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(TopicEvent.totalBotValue({
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(TopicEvent.totalBotValue({
+        contractAddress: contractAddress,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
+  describe('getFinalResult()', function() {
+    it('returns the final result and valid flag', async function() {
+      const res = await TopicEvent.getFinalResult({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+      assert.isDefined(res[1]);
+      assert.isBoolean(res[1]);
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(TopicEvent.getFinalResult({
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(TopicEvent.getFinalResult({
+        contractAddress: contractAddress,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
+  describe('status()', function() {
     it('returns the status', async function() {
       const res = await TopicEvent.status({
         contractAddress: contractAddress,
@@ -64,7 +131,6 @@ describe('TopicEvent', function() {
   });
 
   describe('didWithdraw()', function() {
-    const contractAddress = 'ec1c7a01c24b97dd26611c31733ee36365f8a485';
     const address = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
     
     it('returns the didWithdraw flag', async function() {

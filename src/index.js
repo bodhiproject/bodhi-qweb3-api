@@ -137,6 +137,33 @@ server.post('/withdraw', (req, res, next) => {
     });
 });
 
+server.post('/total-qtum-value', (req, res, next) => {
+  TopicEvent.totalQtumValue(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
+server.post('/total-bot-value', (req, res, next) => {
+  TopicEvent.totalBotValue(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
+server.post('/final-result', (req, res, next) => {
+  TopicEvent.getFinalResult(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
 server.post('/status', (req, res, next) => {
   TopicEvent.status(req.params)
     .then((result) => {
