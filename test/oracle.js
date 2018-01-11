@@ -150,6 +150,40 @@ describe('Oracle', function() {
     });
   });
 
+  describe('version()', function() {
+    it('returns the version', async function() {
+      const res = await Oracle.version({
+        contractAddress: contractAddress,
+        oracleType: oracleType,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      console.log(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(Oracle.version({
+        oracleType: oracleType,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if oracleType is undefined', async function() {
+      expect(Oracle.version({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(Oracle.version({
+        contractAddress: contractAddress,
+        oracleType: oracleType,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
   describe('eventAddress()', function() {
     it('returns the eventAddress', async function() {
       const res = await Oracle.eventAddress({

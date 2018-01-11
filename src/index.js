@@ -211,6 +211,15 @@ server.post('/total-votes', (req, res, next) => {
     });
 });
 
+server.post('/oracle-version', (req, res, next) => {
+  Oracle.version(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
 server.post('/event-address', (req, res, next) => {
   Oracle.eventAddress(req.params)
     .then((result) => {
