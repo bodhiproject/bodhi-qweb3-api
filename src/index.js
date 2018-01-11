@@ -137,6 +137,15 @@ server.post('/withdraw', (req, res, next) => {
     });
 });
 
+server.post('/topic-version', (req, res, next) => {
+  TopicEvent.version(req.params)
+    .then((result) => {
+      onRequestSuccess(res, result, next);
+    }, (err) => {
+      onRequestError(res, err, next);
+    });
+});
+
 server.post('/total-qtum-value', (req, res, next) => {
   TopicEvent.totalQtumValue(req.params)
     .then((result) => {

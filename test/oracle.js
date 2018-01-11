@@ -158,7 +158,6 @@ describe('Oracle', function() {
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
-      console.log(res[0]);
       assert.isTrue(Web3Utils.isBN(res[0]));
     });
 

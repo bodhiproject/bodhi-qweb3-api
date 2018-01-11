@@ -25,6 +25,26 @@ const TopicEvent = {
     });
   },
 
+  version: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('version', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
   totalQtumValue: async function(args) {
     const {
       contractAddress, // address

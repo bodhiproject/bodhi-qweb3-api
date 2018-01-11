@@ -36,6 +36,29 @@ describe('TopicEvent', function() {
     });
   });
 
+  describe('version()', function() {
+    it('returns the version', async function() {
+      const res = await TopicEvent.version({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(TopicEvent.version({
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(TopicEvent.version({
+        contractAddress: contractAddress,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
   describe('totalQtumValue()', function() {
     it('returns the totalQtumValue', async function() {
       const res = await TopicEvent.totalQtumValue({
