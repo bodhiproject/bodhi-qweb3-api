@@ -12,11 +12,12 @@ const assert = Chai.assert;
 const expect = Chai.expect;
 
 describe('CentralizedOracle', function() {
+  const address = 'd78f96ea55ad0c8a283b6d759f39cda34a7c5b10';
 
   describe('bet()', function() {
     it('returns a tx receipt', async function() {
       const res = await CentralizedOracle.bet({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         index: 1,
         amount: 1,
         senderAddress: TestConfig.SENDER_ADDRESS,
@@ -34,7 +35,7 @@ describe('CentralizedOracle', function() {
 
     it('throws if index is undefined', async function() {
       expect(CentralizedOracle.bet({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         amount: 1,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
@@ -42,7 +43,7 @@ describe('CentralizedOracle', function() {
 
     it('throws if amount is undefined', async function() {
       expect(CentralizedOracle.bet({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         index: 1,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
@@ -50,7 +51,7 @@ describe('CentralizedOracle', function() {
 
     it('throws if senderAddress is undefined', async function() {
       expect(CentralizedOracle.bet({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         index: 1,
         amount: 1,
       })).to.be.rejectedWith(Error);
@@ -60,7 +61,7 @@ describe('CentralizedOracle', function() {
   describe('setResult()', function() {
     it('returns a tx receipt', async function() {
       const res = await CentralizedOracle.setResult({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         resultIndex: 1,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
@@ -76,14 +77,14 @@ describe('CentralizedOracle', function() {
 
     it('throws if resultIndex is undefined', async function() {
       expect(CentralizedOracle.setResult({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
     it('throws if senderAddress is undefined', async function() {
       expect(CentralizedOracle.setResult({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         resultIndex: 1,
       })).to.be.rejectedWith(Error);
     });
@@ -92,7 +93,7 @@ describe('CentralizedOracle', function() {
   describe('oracle()', function() {
     it('returns the oracle', async function() {
       const res = await CentralizedOracle.oracle({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
@@ -107,14 +108,12 @@ describe('CentralizedOracle', function() {
 
     it('throws if senderAddress is undefined', async function() {
       expect(CentralizedOracle.oracle({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
       })).to.be.rejectedWith(Error);
     });
   });
 
   describe('bettingStartBlock()', function() {
-    const address = 'd78f96ea55ad0c8a283b6d759f39cda34a7c5b10';
-
     it('returns the bettingStartBlock', async function() {
       const res = await CentralizedOracle.bettingStartBlock({
         contractAddress: address,
@@ -140,7 +139,7 @@ describe('CentralizedOracle', function() {
   describe('bettingEndBlock()', function() {
     it('returns the bettingEndBlock', async function() {
       const res = await CentralizedOracle.bettingEndBlock({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
@@ -155,14 +154,12 @@ describe('CentralizedOracle', function() {
 
     it('throws if senderAddress is undefined', async function() {
       expect(CentralizedOracle.bettingEndBlock({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
       })).to.be.rejectedWith(Error);
     });
   });
 
   describe('resultSettingStartBlock()', function() {
-    const address = 'd78f96ea55ad0c8a283b6d759f39cda34a7c5b10';
-
     it('returns the resultSettingStartBlock', async function() {
       const res = await CentralizedOracle.resultSettingStartBlock({
         contractAddress: address,
@@ -188,7 +185,7 @@ describe('CentralizedOracle', function() {
   describe('resultSettingEndBlock()', function() {
     it('returns the resultSettingEndBlock', async function() {
       const res = await CentralizedOracle.resultSettingEndBlock({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
         senderAddress: TestConfig.SENDER_ADDRESS,
       });
       assert.isDefined(res[0]);
@@ -203,7 +200,7 @@ describe('CentralizedOracle', function() {
 
     it('throws if senderAddress is undefined', async function() {
       expect(CentralizedOracle.resultSettingEndBlock({
-        contractAddress: '814e63497adb7eae5cc217c71d564ee437fb1973',
+        contractAddress: address,
       })).to.be.rejectedWith(Error);
     });
   });
