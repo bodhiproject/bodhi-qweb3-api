@@ -12,6 +12,7 @@ const assert = Chai.assert;
 const expect = Chai.expect;
 
 describe('TopicEvent', function() {
+  const contractAddress = 'e4ba4d301d4c22d2634a3d8e23c47b7e9e4ef4df';
 
   describe('withdrawWinnings()', function() {
     const contractAddress = 'ec1c7a01c24b97dd26611c31733ee36365f8a485';
@@ -94,6 +95,31 @@ describe('TopicEvent', function() {
       expect(TopicEvent.didWithdraw({
         contractAddress: contractAddress,
         address: address,
+      })).to.be.rejectedWith(Error);
+    });
+  });
+
+  describe('calculateWinnings()', function() {
+    it('returns the BOT and QTUM winnings', async function() {
+      const res = await TopicEvent.calculateWinnings({
+        contractAddress: contractAddress,
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      });
+      assert.isDefined(res[0]);
+      assert.isDefined(res[1]);
+      assert.isTrue(Web3Utils.isBN(res[0]));
+      assert.isTrue(Web3Utils.isBN(res[1]));
+    });
+
+    it('throws if contractAddress is undefined', async function() {
+      expect(TopicEvent.calculateWinnings({
+        senderAddress: TestConfig.SENDER_ADDRESS,
+      })).to.be.rejectedWith(Error);
+    });
+
+    it('throws if senderAddress is undefined', async function() {
+      expect(TopicEvent.calculateWinnings({
+        contractAddress: contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });

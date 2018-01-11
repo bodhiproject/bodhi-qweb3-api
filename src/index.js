@@ -155,9 +155,8 @@ server.post('/did-withdraw', (req, res, next) => {
     });
 });
 
-// TODO: calculate winnings
 server.post('/winnings', (req, res, next) => {
-  TopicEvent.calculateQtumWinnings(req.params)
+  TopicEvent.calculateWinnings(req.params)
     .then((result) => {
       onRequestSuccess(res, result, next);
     }, (err) => {
@@ -166,15 +165,6 @@ server.post('/winnings', (req, res, next) => {
 });
 
 /* Oracle */
-server.post('/invalidate-oracle', (req, res, next) => {
-  Oracle.invalidateOracle(req.params)
-    .then((result) => {
-      onRequestSuccess(res, result, next);
-    }, (err) => {
-      onRequestError(res, err, next);
-    });
-});
-
 server.post('/bet-balances', (req, res, next) => {
   Oracle.getBetBalances(req.params)
     .then((result) => {
