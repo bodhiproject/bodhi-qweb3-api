@@ -24,7 +24,7 @@ before_install:
 install:
   - tar -xvzf qtum-0.14.13-x86_64-linux-gnu.tar.gz
   - npm install
-  - mkdir /home/travis/build/bodhiproject/bodhi-api/test/data/.qtum
+  - mkdir -p /home/travis/build/bodhiproject/bodhi-api/test/data/.qtum
 
 script:
   - cd qtum-0.14.13/bin; ./qtumd -testnet -logevents -rpcuser=bodhi -rpcpassword=bodhi -datadir=/home/travis/build/bodhiproject/bodhi-api/test/data/.qtum & 
