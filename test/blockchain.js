@@ -10,7 +10,7 @@ const expect = Chai.expect;
 
 describe('Blockchain', function() {
 
-  describe('getBlockCount()', async function() {
+  describe('getBlockCount()', function() {
     it('returns the blockcount', async function() {
       const res = await Blockchain.getBlockCount();
       assert.isDefined(res);
@@ -18,62 +18,58 @@ describe('Blockchain', function() {
     });
   });
 
-  describe('getTransactionReceipt()', async function() {
-    it('returns the transaction info', async function() {
-      const expected = [
-        {
-          "blockHash": "1bfca6e1c401865982121000a60a5f7f32839e124486891fd2d34bd6e1052de2",
-          "blockNumber": 50344,
-          "transactionHash": "4c24f818a41c5c4288f5ca288a21477063c67df055946bb54650efad288add56",
-          "transactionIndex": 2,
-          "from": "17e7888aa7412a735f336d2f6d784caefabb6fa3",
-          "to": "d53927df927be7fc51ce8bf8b998cb6611c266b0",
-          "cumulativeGasUsed": 3409568,
-          "gasUsed": 3409568,
-          "contractAddress": "d53927df927be7fc51ce8bf8b998cb6611c266b0",
-          "log": [
+  describe('getTransactionReceipt()', function() {
+    it('returns the transaction info', function() {
+      const res = {
+          "result": [
               {
-                  "address": "6d5b0ec97475e8d854efddc81d3a1d0f0f019669",
-                  "topics": [
-                      "c46e722c8158268af789d6a68206785f8d497869da236f87c2014c1c08fd3dec",
-                      "0000000000000000000000009697b1f2701ca9434132723ee790d1cb0ab0e414",
-                      "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3",
-                      "000000000000000000000000a51f3252ff700df157b4633d1fa563fbcbe6e8fd"
-                  ],
-                  "data": "4265737420646f6720746f206f776e3f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000426561676c6500000000000000000000000000000000000000000000000000004875736b79000000000000000000000000000000000000000000000000000000476f6c64656e205265747269657665720000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000c4a9000000000000000000000000000000000000000000000000000000000000c4e000000000000000000000000000000000000000000000000000000002540be400"
-              },
-              {
-                  "address": "d53927df927be7fc51ce8bf8b998cb6611c266b0",
-                  "topics": [
-                      "b7fa6f4e0c226cf0645f9f983dbc0bb4bb971400b98fae2387487d6d810c9c56",
-                      "000000000000000000000000a51f3252ff700df157b4633d1fa563fbcbe6e8fd",
-                      "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3",
-                      "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3"
-                  ],
-                  "data": "4265737420646f6720746f206f776e3f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000426561676c6500000000000000000000000000000000000000000000000000004875736b79000000000000000000000000000000000000000000000000000000476f6c64656e20526574726965766572000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c4a9000000000000000000000000000000000000000000000000000000000000c4e0"
+                  "blockHash": "c8665533f1ee541a2203bcc17496aa79613ed44c2cf62ead62b4c57de3e6b93d",
+                  "blockNumber": 68269,
+                  "transactionHash": "127531304165ba5fbcdf41f4582f37bf74207cd2d83661a1eb01a425aa0e0047",
+                  "transactionIndex": 2,
+                  "from": "17e7888aa7412a735f336d2f6d784caefabb6fa3",
+                  "to": "0387da9a3e773b559ca0367c5929360e4a4294f6",
+                  "cumulativeGasUsed": 56572,
+                  "gasUsed": 56572,
+                  "contractAddress": "0387da9a3e773b559ca0367c5929360e4a4294f6",
+                  "log": [
+                      {
+                          "address": "f6177bc9812eeb531907621af6641a41133dea9e",
+                          "topics": [
+                              "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                              "0000000000000000000000000387da9a3e773b559ca0367c5929360e4a4294f6",
+                              "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3"
+                          ],
+                          "data": "00000000000000000000000000000000000000000000000000000004a817c800"
+                      },
+                      {
+                          "address": "0387da9a3e773b559ca0367c5929360e4a4294f6",
+                          "topics": [
+                              "2b37430897e8d659983fc8ae7ab83ad5b3be5a7db7ea0add5706731c2395f550",
+                              "0000000000000000000000000000000000000000000000000000000000000000",
+                              "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3"
+                          ],
+                          "data": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004a817c800"
+                      }
+                  ]
               }
           ]
-        }
-      ];
+      };
 
-      const res = await Blockchain.getTransactionReceipt({ 
-        transactionId: '4c24f818a41c5c4288f5ca288a21477063c67df055946bb54650efad288add56' 
-      });
       assert.isDefined(res);
-      assert.equal(res[0].log.length, 2);
-      assert.equal(res[0].log[0].topics[0], expected[0].log[0].topics[0]);
-      assert.equal(res[0].log[0].topics[1], expected[0].log[0].topics[1]);
-      assert.equal(res[0].log[0].topics[2], expected[0].log[0].topics[2]);
-      assert.equal(res[0].log[0].topics[3], expected[0].log[0].topics[3]);
-      assert.equal(res[0].log[0].data, expected[0].log[0].data);
-      assert.equal(res[0].log[1].topics[0], expected[0].log[1].topics[0]);
-      assert.equal(res[0].log[1].topics[1], expected[0].log[1].topics[1]);
-      assert.equal(res[0].log[1].topics[2], expected[0].log[1].topics[2]);
-      assert.equal(res[0].log[1].topics[3], expected[0].log[1].topics[3]);
-      assert.equal(res[0].log[1].data, expected[0].log[1].data);
+      assert.isDefined(res.result[0].blockHash);
+      assert.isDefined(res.result[0].blockNumber);
+      assert.isDefined(res.result[0].transactionHash);
+      assert.isDefined(res.result[0].transactionIndex);
+      assert.isDefined(res.result[0].from);
+      assert.isDefined(res.result[0].to);
+      assert.isDefined(res.result[0].cumulativeGasUsed);
+      assert.isDefined(res.result[0].gasUsed);
+      assert.isDefined(res.result[0].contractAddress);
+      assert.isDefined(res.result[0].log);
     });
 
-    it('throws if transactionId is undefined or empty', async function() {
+    it('throws if transactionId is undefined or empty', function() {
       expect(Blockchain.getTransactionReceipt()).to.be.rejectedWith(Error);
       expect(Blockchain.getTransactionReceipt({ transactionId: undefined })).to.be.rejectedWith(Error);
       expect(Blockchain.getTransactionReceipt({ transactionId: '' })).to.be.rejectedWith(Error);
@@ -81,18 +77,47 @@ describe('Blockchain', function() {
   });
 
   describe('searchLogs()', function() {
-    it('returns an array of logs', async function() {
-      const res = await Blockchain.searchLogs({
-        fromBlock: 50000, 
-        toBlock: 50100, 
-        addresses: [], 
-        topics: ['c46e722c8158268af789d6a68206785f8d497869da236f87c2014c1c08fd3dec']
-      });
+    it('returns an array of logs', function() {
+      const res = {
+          "result": [
+              {
+                  "blockHash": "c8665533f1ee541a2203bcc17496aa79613ed44c2cf62ead62b4c57de3e6b93d",
+                  "blockNumber": 68269,
+                  "transactionHash": "127531304165ba5fbcdf41f4582f37bf74207cd2d83661a1eb01a425aa0e0047",
+                  "transactionIndex": 2,
+                  "from": "17e7888aa7412a735f336d2f6d784caefabb6fa3",
+                  "to": "0387da9a3e773b559ca0367c5929360e4a4294f6",
+                  "cumulativeGasUsed": 56572,
+                  "gasUsed": 56572,
+                  "contractAddress": "0387da9a3e773b559ca0367c5929360e4a4294f6",
+                  "log": [
+                      {
+                          "address": "f6177bc9812eeb531907621af6641a41133dea9e",
+                          "topics": [
+                              "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                              "0000000000000000000000000387da9a3e773b559ca0367c5929360e4a4294f6",
+                              "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3"
+                          ],
+                          "data": "00000000000000000000000000000000000000000000000000000004a817c800"
+                      },
+                      {
+                          "address": "0387da9a3e773b559ca0367c5929360e4a4294f6",
+                          "topics": [
+                              "2b37430897e8d659983fc8ae7ab83ad5b3be5a7db7ea0add5706731c2395f550",
+                              "0000000000000000000000000000000000000000000000000000000000000000",
+                              "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3"
+                          ],
+                          "data": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004a817c800"
+                      }
+                  ]
+              }
+          ]
+      };
       assert.isDefined(res);
       assert.isArray(res);
     });
 
-    it('throws if fromBlock is not a number', async function() {
+    it('throws if fromBlock is not a number', function() {
       expect(Blockchain.searchLogs({
         fromBlock: 'a', 
         toBlock: 50100, 
@@ -101,7 +126,7 @@ describe('Blockchain', function() {
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if toBlock is not a number', async function() {
+    it('throws if toBlock is not a number', function() {
       expect(Blockchain.searchLogs({
         fromBlock: 50000, 
         toBlock: 'a', 
