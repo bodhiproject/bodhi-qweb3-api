@@ -13,7 +13,7 @@ const expect = Chai.expect;
 
 describe('BodhiToken', function() {
   
-  describe.only('approve()', function() {
+  describe('approve()', function() {
     it('returns a tx receipt', function() {
       const res = {
           "result": {
@@ -22,7 +22,7 @@ describe('BodhiToken', function() {
               "hash160": "17e7888aa7412a735f336d2f6d784caefabb6fa3"
           }
       };
-      assert.isTrue(ContractUtils.isTxReceipt(res));
+      assert.isTrue(ContractUtils.isTxReceipt(res.result));
     });
 
     it('throws if spender is undefined', function() {
@@ -48,31 +48,32 @@ describe('BodhiToken', function() {
   });
 
   describe('allowance()', function() {
-    it('returns the allowance', async function() {
-      const res = await BodhiToken.allowance({
-        owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
-        spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
-      assert.isDefined(res.remaining);
-      assert.isTrue(Web3Utils.isBN(res.remaining));
+    it('returns the allowance', function() {
+      const res = {
+          "result": {
+              "0": "20c855800",
+              "remaining": "20c855800"
+          }
+      };
+      assert.isDefined(res.result.remaining);
+      assert.equal(res.result.remaining, '20c855800');
     });
 
-    it('throws if owner is undefined', async function() {
+    it('throws if owner is undefined', function() {
       expect(BodhiToken.allowance({
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if spender is undefined', async function() {
+    it('throws if spender is undefined', function() {
       expect(BodhiToken.allowance({
         owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
+    it('throws if senderAddress is undefined', function() {
       expect(BodhiToken.allowance({
         owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
         spender: 'qUDvDKsZQv84iS6mrA2i7ghjgM34mfUxQu',
