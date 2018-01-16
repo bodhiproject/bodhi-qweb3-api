@@ -6,6 +6,7 @@ import Web3Utils from 'web3-utils';
 import BodhiToken from '../src/bodhi_token.js';
 import ContractUtils from './util/contract_utils';
 import TestConfig from './config/test_config';
+import Mocks from './mocks';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
@@ -15,14 +16,8 @@ describe('BodhiToken', function() {
   
   describe('approve()', function() {
     it('returns a tx receipt', function() {
-      const res = {
-          "result": {
-              "txid": "f6735da8217312a12e45e9801f5c4be1c4c39c325e0f335abfb63023044612cd",
-              "sender": "qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy",
-              "hash160": "17e7888aa7412a735f336d2f6d784caefabb6fa3"
-          }
-      };
-      assert.isTrue(ContractUtils.isTxReceipt(res.result));
+      const res = Mocks.approve.result;
+      assert.isTrue(ContractUtils.isTxReceipt(res));
     });
 
     it('throws if spender is undefined', function() {
@@ -49,14 +44,9 @@ describe('BodhiToken', function() {
 
   describe('allowance()', function() {
     it('returns the allowance', function() {
-      const res = {
-          "result": {
-              "0": "20c855800",
-              "remaining": "20c855800"
-          }
-      };
-      assert.isDefined(res.result.remaining);
-      assert.equal(res.result.remaining, '20c855800');
+      const res = Mocks.allowance.result;
+      assert.isDefined(res.remaining);
+      assert.isTrue(Web3Utils.isHex(res.remaining));
     });
 
     it('throws if owner is undefined', function() {
@@ -82,22 +72,19 @@ describe('BodhiToken', function() {
   });
 
   describe('balanceOf()', function() {
-    it('returns the allowance', async function() {
-      const res = await BodhiToken.balanceOf({
-        owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
+    it('returns the allowance', function() {
+      const res = Mocks.balanceOf.result;
       assert.isDefined(res.balance);
-      assert.isTrue(Web3Utils.isBN(res.balance));
+      assert.isTrue(Web3Utils.isHex(res.balance));
     });
 
-    it('throws if owner is undefined', async function() {
+    it('throws if owner is undefined', function() {
       expect(BodhiToken.balanceOf({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
+    it('throws if senderAddress is undefined', function() {
       expect(BodhiToken.balanceOf({
         owner: 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy',
       })).to.be.rejectedWith(Error);
