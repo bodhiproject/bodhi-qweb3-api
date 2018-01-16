@@ -6,6 +6,7 @@ import Web3Utils from 'web3-utils';
 
 import Oracle from '../src/oracle';
 import TestConfig from './config/test_config';
+import Mocks from './mocks';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
@@ -19,31 +20,27 @@ describe('Oracle', function() {
   const oracleType = CENTRALIZED;
 
   describe('eventAddress()', function() {
-    it('returns the eventAddress', async function() {
-      const res = await Oracle.eventAddress({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
+    it('returns the eventAddress', function() {
+      const res = Mocks.eventAddress.result;
       assert.isDefined(res[0]);
       assert.isTrue(_.isString(res[0]));
     });
 
-    it('throws if contractAddress is undefined', async function() {
+    it('throws if contractAddress is undefined', function() {
       expect(Oracle.eventAddress({
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if oracleType is undefined', async function() {
+    it('throws if oracleType is undefined', function() {
       expect(Oracle.eventAddress({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
+    it('throws if senderAddress is undefined', function() {
       expect(Oracle.eventAddress({
         contractAddress: contractAddress,
         oracleType: oracleType,
@@ -52,31 +49,27 @@ describe('Oracle', function() {
   });
 
   describe('consensusThreshold()', function() {
-    it('returns the consensusThreshold', async function() {
-      const res = await Oracle.consensusThreshold({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
+    it('returns the consensusThreshold', function() {
+      const res = Mocks.consensusThreshold.result;
       assert.isDefined(res[0]);
-      assert.isTrue(Web3Utils.isBN(res[0]));
+      assert.isTrue(Web3Utils.isHex(res[0]));
     });
 
-    it('throws if contractAddress is undefined', async function() {
+    it('throws if contractAddress is undefined', function() {
       expect(Oracle.consensusThreshold({
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if oracleType is undefined', async function() {
+    it('throws if oracleType is undefined', function() {
       expect(Oracle.consensusThreshold({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
+    it('throws if senderAddress is undefined', function() {
       expect(Oracle.consensusThreshold({
         contractAddress: contractAddress,
         oracleType: oracleType,
@@ -85,30 +78,27 @@ describe('Oracle', function() {
   });
 
   describe('finished()', function() {
-    it('returns the finished flag', async function() {
-      const res = await Oracle.finished({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
+    it('returns the finished flag', function() {
+      const res = Mocks.finished.result;
+      assert.isDefined(res[0]);
       assert.isBoolean(res[0]);
     });
 
-    it('throws if contractAddress is undefined', async function() {
+    it('throws if contractAddress is undefined', function() {
       expect(Oracle.finished({
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if oracleType is undefined', async function() {
+    it('throws if oracleType is undefined', function() {
       expect(Oracle.finished({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
+    it('throws if senderAddress is undefined', function() {
       expect(Oracle.finished({
         contractAddress: contractAddress,
         oracleType: oracleType,

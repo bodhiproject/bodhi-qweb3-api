@@ -12,8 +12,8 @@ const assert = Chai.assert;
 
 describe('EventFactory', function() {
 
-  describe('createTopic()', async function() {
-    it('returns a tx receipt', async function() {
+  describe('createTopic()', function() {
+    it('returns a tx receipt', function() {
       const res = Mocks.createTopic.result;
       assert.isTrue(ContractUtils.isTxReceipt(res));
     });
