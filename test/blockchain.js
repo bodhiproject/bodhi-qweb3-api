@@ -3,6 +3,7 @@ import Chai from 'chai';
 import ChaiAsPromised from 'chai-as-promised';
 
 import Blockchain from '../src/blockchain.js';
+import Mocks from './mocks';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
@@ -20,54 +21,20 @@ describe('Blockchain', function() {
 
   describe('getTransactionReceipt()', function() {
     it('returns the transaction info', function() {
-      const res = {
-          "result": [
-              {
-                  "blockHash": "c8665533f1ee541a2203bcc17496aa79613ed44c2cf62ead62b4c57de3e6b93d",
-                  "blockNumber": 68269,
-                  "transactionHash": "127531304165ba5fbcdf41f4582f37bf74207cd2d83661a1eb01a425aa0e0047",
-                  "transactionIndex": 2,
-                  "from": "17e7888aa7412a735f336d2f6d784caefabb6fa3",
-                  "to": "0387da9a3e773b559ca0367c5929360e4a4294f6",
-                  "cumulativeGasUsed": 56572,
-                  "gasUsed": 56572,
-                  "contractAddress": "0387da9a3e773b559ca0367c5929360e4a4294f6",
-                  "log": [
-                      {
-                          "address": "f6177bc9812eeb531907621af6641a41133dea9e",
-                          "topics": [
-                              "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-                              "0000000000000000000000000387da9a3e773b559ca0367c5929360e4a4294f6",
-                              "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3"
-                          ],
-                          "data": "00000000000000000000000000000000000000000000000000000004a817c800"
-                      },
-                      {
-                          "address": "0387da9a3e773b559ca0367c5929360e4a4294f6",
-                          "topics": [
-                              "2b37430897e8d659983fc8ae7ab83ad5b3be5a7db7ea0add5706731c2395f550",
-                              "0000000000000000000000000000000000000000000000000000000000000000",
-                              "00000000000000000000000017e7888aa7412a735f336d2f6d784caefabb6fa3"
-                          ],
-                          "data": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004a817c800"
-                      }
-                  ]
-              }
-          ]
-      };
+      const res = Mocks.getTransactionReceipt.result;
 
       assert.isDefined(res);
-      assert.isDefined(res.result[0].blockHash);
-      assert.isDefined(res.result[0].blockNumber);
-      assert.isDefined(res.result[0].transactionHash);
-      assert.isDefined(res.result[0].transactionIndex);
-      assert.isDefined(res.result[0].from);
-      assert.isDefined(res.result[0].to);
-      assert.isDefined(res.result[0].cumulativeGasUsed);
-      assert.isDefined(res.result[0].gasUsed);
-      assert.isDefined(res.result[0].contractAddress);
-      assert.isDefined(res.result[0].log);
-      assert.isArray(res.result[0].log);
+      assert.isDefined(res[0].blockHash);
+      assert.isDefined(res[0].blockNumber);
+      assert.isDefined(res[0].transactionHash);
+      assert.isDefined(res[0].transactionIndex);
+      assert.isDefined(res[0].from);
+      assert.isDefined(res[0].to);
+      assert.isDefined(res[0].cumulativeGasUsed);
+      assert.isDefined(res[0].gasUsed);
+      assert.isDefined(res[0].contractAddress);
+      assert.isDefined(res[0].log);
+      assert.isArray(res[0].log);
     });
 
     it('throws if transactionId is undefined or empty', function() {
@@ -79,42 +46,19 @@ describe('Blockchain', function() {
 
   describe('searchLogs()', function() {
     it('returns an array of logs', function() {
-      const res = {
-          "result": [
-              {
-                  "blockHash": "2aca546e5adb3a6e2ac38c5cba81f2ce40097a8982d8b6ef37795729048c48f3",
-                  "blockNumber": 68245,
-                  "transactionHash": "e5ffaafc8cf5a239750075ac1866537bc3999561e2bbd7012bc80b24e0338cbb",
-                  "transactionIndex": 2,
-                  "from": "17e7888aa7412a735f336d2f6d784caefabb6fa3",
-                  "to": "97c781c612ad23f4049f253bd52ac2889855f2da",
-                  "cumulativeGasUsed": 43448,
-                  "gasUsed": 43448,
-                  "contractAddress": "97c781c612ad23f4049f253bd52ac2889855f2da",
-                  "log": [
-                      {
-                          "0": "2",
-                          "_finalResultIndex": "2",
-                          "_version": "0",
-                          "_eventAddress": "0387da9a3e773b559ca0367c5929360e4a4294f6",
-                          "_eventName": "FinalResultSet"
-                      }
-                  ]
-              }
-          ]
-      };
+      const res = Mocks.searchLogs.result;
       assert.isDefined(res);
-      assert.isDefined(res.result[0].blockHash);
-      assert.isDefined(res.result[0].blockNumber);
-      assert.isDefined(res.result[0].transactionHash);
-      assert.isDefined(res.result[0].transactionIndex);
-      assert.isDefined(res.result[0].from);
-      assert.isDefined(res.result[0].to);
-      assert.isDefined(res.result[0].cumulativeGasUsed);
-      assert.isDefined(res.result[0].gasUsed);
-      assert.isDefined(res.result[0].contractAddress);
-      assert.isDefined(res.result[0].log);
-      assert.isArray(res.result[0].log);
+      assert.isDefined(res[0].blockHash);
+      assert.isDefined(res[0].blockNumber);
+      assert.isDefined(res[0].transactionHash);
+      assert.isDefined(res[0].transactionIndex);
+      assert.isDefined(res[0].from);
+      assert.isDefined(res[0].to);
+      assert.isDefined(res[0].cumulativeGasUsed);
+      assert.isDefined(res[0].gasUsed);
+      assert.isDefined(res[0].contractAddress);
+      assert.isDefined(res[0].log);
+      assert.isArray(res[0].log);
     });
 
     it('throws if fromBlock is not a number', function() {
