@@ -6,6 +6,7 @@ import Web3Utils from 'web3-utils';
 
 import BaseContract from '../src/base_contract';
 import TestConfig from './config/test_config';
+import Mocks from './mocks';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
@@ -16,13 +17,9 @@ describe('BaseContract', function() {
 
   describe('version()', function() {
     it('returns the version', function() {
-      const res = {
-          "result": {
-              "0": "0"
-          }
-      };
-      assert.isDefined(res.result[0]);
-      assert.equal(res.result[0], 0);
+      const res = Mocks.version.result;
+      assert.isDefined(res[0]);
+      assert.equal(res[0], 0);
     });
 
     it('throws if contractAddress is undefined', function() {
@@ -40,13 +37,9 @@ describe('BaseContract', function() {
 
   describe('resultIndex()', function() {
     it('returns the resultIndex', function() {
-      const res = {
-          "result": {
-              "0": "ff"
-          }
-      };
-      assert.isDefined(res.result[0]);
-      assert.equal(res.result[0], 'ff');
+      const res = Mocks.resultIndex.result;
+      assert.isDefined(res[0]);
+      assert.isTrue(Web3Utils.isHex(res[0]));
     });
 
     it('throws if contractAddress is undefined', function() {
@@ -64,25 +57,11 @@ describe('BaseContract', function() {
 
   describe('getBetBalances()', function() {
     it('returns the bet balances', function() {
-      const res = {
-          "result": {
-              "0": [
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0"
-              ]
-          }
-      };
-      assert.isDefined(res.result[0]);
-      assert.isTrue(_.every(res.result[0], 0));
+      const res = Mocks.getBetBalances.result;
+      assert.isDefined(res[0]);
+      assert.isTrue(_.every(res[0], (item) => { 
+        return Web3Utils.isHex(item);
+      }));
     });
 
     it('throws if contractAddress is undefined', function() {
@@ -100,25 +79,11 @@ describe('BaseContract', function() {
 
   describe('getVoteBalances()', function() {
     it('returns the vote balances', function() {
-      const res = {
-          "result": {
-              "0": [
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0"
-              ]
-          }
-      };
-      assert.isDefined(res.result[0]);
-      assert.isTrue(_.every(res.result[0], 0));
+      const res = Mocks.getVoteBalances.result;
+      assert.isDefined(res[0]);
+      assert.isTrue(_.every(res[0], (item) => {
+        return Web3Utils.isHex(item);
+      }));
     });
 
     it('throws if contractAddress is undefined', function() {
@@ -136,25 +101,11 @@ describe('BaseContract', function() {
 
   describe('getTotalBets()', function() {
     it('returns the total bets', function() {
-      const res = {
-          "result": {
-              "0": [
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0"
-              ]
-          }
-      };
-      assert.isDefined(res.result[0]);
-      assert.isTrue(_.every(res.result[0], 0));
+      const res = Mocks.getTotalBets.result;
+      assert.isDefined(res[0]);
+      assert.isTrue(_.every(res[0], (item) => {
+        return Web3Utils.isHex(item);
+      }));
     });
 
     it('throws if contractAddress is undefined', function() {
@@ -172,25 +123,11 @@ describe('BaseContract', function() {
 
   describe('getTotalVotes()', function() {
     it('returns the total votes', async function() {
-      const res = {
-          "result": {
-              "0": [
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0",
-                  "0"
-              ]
-          }
-      };
-      assert.isDefined(res.result[0]);
-      assert.isTrue(_.every(res.result[0], 0));
+      const res = Mocks.getTotalVotes.result;
+      assert.isDefined(res[0]);
+      assert.isTrue(_.every(res[0], (item) => {
+        return Web3Utils.isHex(item);
+      }));
     });
 
     it('throws if contractAddress is undefined', function() {
