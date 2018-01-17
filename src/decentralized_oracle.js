@@ -4,7 +4,7 @@ import { Contract } from 'qweb3';
 import Config from '../config/config';
 import ContractMetadata from '../config/contract_metadata';
 
-const GAS_LIMIT_VOTE = 2000000;
+const GAS_LIMIT_VOTE = 1500000;
 
 const DecentralizedOracle = {
   vote: async function(args) {

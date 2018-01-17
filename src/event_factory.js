@@ -4,7 +4,7 @@ import { Contract } from 'qweb3';
 import Config from '../config/config';
 import ContractMetadata from '../config/contract_metadata';
 
-const GAS_LIMIT_CREATE_TOPIC = 5000000;
+const GAS_LIMIT_CREATE_TOPIC = 3500000;
 
 const contract = new Contract(Config.QTUM_RPC_ADDRESS, ContractMetadata.EventFactory.address, 
   ContractMetadata.EventFactory.abi);

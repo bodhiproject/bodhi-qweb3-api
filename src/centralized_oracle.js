@@ -4,7 +4,7 @@ import { Contract } from 'qweb3';
 import Config from '../config/config';
 import ContractMetadata from '../config/contract_metadata';
 
-const GAS_LIMIT_SET_RESULT = 4000000;
+const GAS_LIMIT_SET_RESULT = 1500000;
 
 const CentralizedOracle = {
   bet: async function(args) {
