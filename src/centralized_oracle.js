@@ -81,6 +81,26 @@ const CentralizedOracle = {
     });
   },
 
+  bettingStartBlock: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('bettingStartBlock', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
   bettingEndBlock: async function(args) {
     const {
       contractAddress, // address
@@ -96,6 +116,26 @@ const CentralizedOracle = {
 
     const contract = getContract(contractAddress);
     return await contract.call('bettingEndBlock', {
+      methodArgs: [],
+      senderAddress: senderAddress,
+    });
+  },
+
+  resultSettingStartBlock: async function(args) {
+    const {
+      contractAddress, // address
+      senderAddress, // address
+    } = args;
+
+    if (_.isUndefined(contractAddress)) {
+      throw new TypeError('contractAddress needs to be defined');
+    }
+    if (_.isUndefined(senderAddress)) {
+      throw new TypeError('senderAddress needs to be defined');
+    }
+
+    const contract = getContract(contractAddress);
+    return await contract.call('resultSettingStartBlock', {
       methodArgs: [],
       senderAddress: senderAddress,
     });

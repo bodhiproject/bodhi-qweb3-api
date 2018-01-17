@@ -6,188 +6,71 @@ import Web3Utils from 'web3-utils';
 
 import Oracle from '../src/oracle';
 import TestConfig from './config/test_config';
+import Mocks from './mock/oracle';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
 const expect = Chai.expect;
 
+const CENTRALIZED = 'centralized';
+const DECENTRALIZED = 'decentralized';
+
 describe('Oracle', function() {
+  const contractAddress = 'a5b27c03e76d4cf10928120439fa96181f07520c';
+  const oracleType = CENTRALIZED;
 
-  describe('getBetBalances()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'centralized';
-
-    it('returns the bet balances', async function() {
-      const res = await Oracle.getBetBalances({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
+  describe('eventAddress()', function() {
+    it('returns the eventAddress', function() {
+      const res = Mocks.eventAddress.result;
       assert.isDefined(res[0]);
-      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
+      assert.isTrue(_.isString(res[0]));
     });
 
-    it('throws if contractAddress is undefined', async function() {
-      expect(Oracle.getBetBalances({
+    it('throws if contractAddress is undefined', function() {
+      expect(Oracle.eventAddress({
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if oracleType is undefined', async function() {
-      expect(Oracle.getBetBalances({
+    it('throws if oracleType is undefined', function() {
+      expect(Oracle.eventAddress({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
-      expect(Oracle.getBetBalances({
+    it('throws if senderAddress is undefined', function() {
+      expect(Oracle.eventAddress({
         contractAddress: contractAddress,
         oracleType: oracleType,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('getVoteBalances()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'decentralized';
-
-    it('returns the vote balances', async function() {
-      const res = await Oracle.getVoteBalances({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
+  describe('consensusThreshold()', function() {
+    it('returns the consensusThreshold', function() {
+      const res = Mocks.consensusThreshold.result;
       assert.isDefined(res[0]);
-      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
+      assert.isTrue(Web3Utils.isHex(res[0]));
     });
 
-    it('throws if contractAddress is undefined', async function() {
-      expect(Oracle.getVoteBalances({
+    it('throws if contractAddress is undefined', function() {
+      expect(Oracle.consensusThreshold({
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if oracleType is undefined', async function() {
-      expect(Oracle.getVoteBalances({
+    it('throws if oracleType is undefined', function() {
+      expect(Oracle.consensusThreshold({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
-      expect(Oracle.getVoteBalances({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-      })).to.be.rejectedWith(Error);
-    });
-  });
-
-  describe('getTotalBets()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'centralized';
-
-    it('returns the total bets', async function() {
-      const res = await Oracle.getTotalBets({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
-      assert.isDefined(res[0]);
-      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
-    });
-
-    it('throws if contractAddress is undefined', async function() {
-      expect(Oracle.getTotalBets({
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if oracleType is undefined', async function() {
-      expect(Oracle.getTotalBets({
-        contractAddress: contractAddress,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if senderAddress is undefined', async function() {
-      expect(Oracle.getTotalBets({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-      })).to.be.rejectedWith(Error);
-    });
-  });
-
-  describe('getTotalVotes()', function() {
-    const contractAddress = '0aa8e66621e66b3c2e42c33048f550232dde6d54';
-    const oracleType = 'decentralized';
-
-    it('returns the total votes', async function() {
-      const res = await Oracle.getTotalVotes({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
-      assert.isDefined(res[0]);
-      assert.isTrue(_.every(res[0], (item) => { return Web3Utils.isBN(item); }));
-    });
-
-    it('throws if contractAddress is undefined', async function() {
-      expect(Oracle.getTotalVotes({
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if oracleType is undefined', async function() {
-      expect(Oracle.getTotalVotes({
-        contractAddress: contractAddress,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if senderAddress is undefined', async function() {
-      expect(Oracle.getTotalVotes({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-      })).to.be.rejectedWith(Error);
-    });
-  });
-
-  describe('getResult()', function() {
-    const contractAddress = '6ad02305f3518aeddb914f218e13d3e985ef587a';
-    const oracleType = 'decentralized';
-
-    it('returns the index, result name, and isValid flag', async function() {
-      const res = await Oracle.getResult({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
-      assert.isTrue(Web3Utils.isBN(res[0]));
-      assert.isString(res[1]);
-      assert.isBoolean(res[2]);
-    });
-
-    it('throws if contractAddress is undefined', async function() {
-      expect(Oracle.getResult({
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if oracleType is undefined', async function() {
-      expect(Oracle.getResult({
-        contractAddress: contractAddress,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      })).to.be.rejectedWith(Error);
-    });
-
-    it('throws if senderAddress is undefined', async function() {
-      expect(Oracle.getResult({
+    it('throws if senderAddress is undefined', function() {
+      expect(Oracle.consensusThreshold({
         contractAddress: contractAddress,
         oracleType: oracleType,
       })).to.be.rejectedWith(Error);
@@ -195,33 +78,27 @@ describe('Oracle', function() {
   });
 
   describe('finished()', function() {
-    const contractAddress = '6ad02305f3518aeddb914f218e13d3e985ef587a';
-    const oracleType = 'decentralized';
-
-    it('returns the finished flag', async function() {
-      const res = await Oracle.finished({
-        contractAddress: contractAddress,
-        oracleType: oracleType,
-        senderAddress: TestConfig.SENDER_ADDRESS,
-      });
+    it('returns the finished flag', function() {
+      const res = Mocks.finished.result;
+      assert.isDefined(res[0]);
       assert.isBoolean(res[0]);
     });
 
-    it('throws if contractAddress is undefined', async function() {
+    it('throws if contractAddress is undefined', function() {
       expect(Oracle.finished({
         oracleType: oracleType,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if oracleType is undefined', async function() {
+    it('throws if oracleType is undefined', function() {
       expect(Oracle.finished({
         contractAddress: contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', async function() {
+    it('throws if senderAddress is undefined', function() {
       expect(Oracle.finished({
         contractAddress: contractAddress,
         oracleType: oracleType,
