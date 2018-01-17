@@ -7,7 +7,7 @@ import { Decoder } from 'qweb3';
 import CentralizedOracle from '../src/centralized_oracle.js';
 import ContractUtils from './util/contract_utils';
 import TestConfig from './config/test_config';
-import Mocks from './mocks';
+import Mocks from './mock/centralized_oracle';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;

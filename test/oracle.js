@@ -6,7 +6,7 @@ import Web3Utils from 'web3-utils';
 
 import Oracle from '../src/oracle';
 import TestConfig from './config/test_config';
-import Mocks from './mocks';
+import Mocks from './mock/oracle';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;

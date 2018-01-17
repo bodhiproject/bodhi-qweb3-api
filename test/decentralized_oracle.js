@@ -6,7 +6,7 @@ import Web3Utils from 'web3-utils';
 import DecentralizedOracle from '../src/decentralized_oracle';
 import ContractUtils from './util/contract_utils';
 import TestConfig from './config/test_config';
-import Mocks from './mocks';
+import Mocks from './mock/decentralized_oracle';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;

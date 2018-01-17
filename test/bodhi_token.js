@@ -6,7 +6,7 @@ import Web3Utils from 'web3-utils';
 import BodhiToken from '../src/bodhi_token.js';
 import ContractUtils from './util/contract_utils';
 import TestConfig from './config/test_config';
-import Mocks from './mocks';
+import Mocks from './mock/bodhi_token';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;

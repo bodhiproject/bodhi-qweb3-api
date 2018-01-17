@@ -3,7 +3,7 @@ import Chai from 'chai';
 import ChaiAsPromised from 'chai-as-promised';
 
 import Blockchain from '../src/blockchain.js';
-import Mocks from './mocks';
+import Mocks from './mock/blockchain';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;

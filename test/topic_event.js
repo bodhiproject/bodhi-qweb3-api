@@ -6,7 +6,7 @@ import Web3Utils from 'web3-utils';
 import TopicEvent from '../src/topic_event';
 import ContractUtils from './util/contract_utils';
 import TestConfig from './config/test_config';
-import Mocks from './mocks';
+import Mocks from './mock/topic_event';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;

@@ -5,7 +5,7 @@ import ChaiAsPromised from 'chai-as-promised';
 import EventFactory from '../src/event_factory';
 import ContractUtils from './util/contract_utils';
 import TestConfig from './config/test_config';
-import Mocks from './mocks';
+import Mocks from './mock/event_factory';
 
 Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
