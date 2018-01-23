@@ -30,3 +30,10 @@ In order to actually call the Qtum blockchain you will need to start the Qtum da
 cd qtum-x.xx.xx/bin
 ./qtumd -testnet -logevents -printtoconsole -rpcuser=bodhi -rpcpassword=bodhi
 ```
+
+## Commands
+
+### Fixing lint issues
+```
+npm run lint:fix
+```
