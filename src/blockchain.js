@@ -7,11 +7,11 @@ import ContractMetadata from '../config/contract_metadata';
 const qClient = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const Blockchain = {
-  getBlockCount: async function() {
-    return await qClient.getBlockCount();
+  async getBlockCount() {
+    return qClient.getBlockCount();
   },
 
-  getTransactionReceipt: async function(args) {
+  async getTransactionReceipt(args) {
     const {
       transactionId, // string
     } = args;
@@ -20,15 +20,17 @@ const Blockchain = {
       throw new TypeError('transactionId needs to be defined');
     }
 
-    return await qClient.getTransactionReceipt(transactionId);
+    return qClient.getTransactionReceipt(transactionId);
   },
 
-  searchLogs: async function(args) {
-    let {
+  async searchLogs(args) {
+    const {
       fromBlock, // number
       toBlock, // number
+    } = args;
+    let {
       addresses, // string array
-      topics // string array
+      topics, // string array
     } = args;
 
     if (_.isUndefined(fromBlock)) {
@@ -46,8 +48,8 @@ const Blockchain = {
       topics = [];
     }
 
-    return await qClient.searchLogs(fromBlock, toBlock, addresses, topics, ContractMetadata, true);
-  }
+    return qClient.searchLogs(fromBlock, toBlock, addresses, topics, ContractMetadata, true);
+  },
 };
 
 module.exports = Blockchain;

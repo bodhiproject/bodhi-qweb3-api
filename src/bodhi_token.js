@@ -4,11 +4,13 @@ import { Contract } from 'qweb3';
 import Config from '../config/config';
 import ContractMetadata from '../config/contract_metadata';
 
-const contract = new Contract(Config.QTUM_RPC_ADDRESS, ContractMetadata.BodhiToken.address, 
-  ContractMetadata.BodhiToken.abi);
+const contract = new Contract(
+  Config.QTUM_RPC_ADDRESS, ContractMetadata.BodhiToken.address,
+  ContractMetadata.BodhiToken.abi,
+);
 
 const BodhiToken = {
-  approve: async function(args) {
+  async approve(args) {
     const {
       spender, // address
       value, // number (Botoshi)
@@ -25,13 +27,13 @@ const BodhiToken = {
       throw new TypeError('senderAddress needs to be defined');
     }
 
-    return await contract.send('approve', {
+    return contract.send('approve', {
       methodArgs: [spender, value],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  allowance: async function(args) {
+  async allowance(args) {
     const {
       owner, // address
       spender, // address
@@ -48,13 +50,13 @@ const BodhiToken = {
       throw new TypeError('senderAddress needs to be defined');
     }
 
-    return await contract.call('allowance', {
+    return contract.call('allowance', {
       methodArgs: [owner, spender],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  balanceOf: async function(args) {
+  async balanceOf(args) {
     const {
       owner, // address
       senderAddress, // address
@@ -67,9 +69,9 @@ const BodhiToken = {
       throw new TypeError('senderAddress needs to be defined');
     }
 
-    return await contract.call('balanceOf', {
+    return contract.call('balanceOf', {
       methodArgs: [owner],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 };

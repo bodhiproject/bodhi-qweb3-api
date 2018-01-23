@@ -6,7 +6,7 @@ import Config from '../config/config';
 const qClient = new Qweb3(Config.QTUM_RPC_ADDRESS);
 
 const Wallet = {
-  getAccountAddress: async function(args) {
+  async getAccountAddress(args) {
     const {
       accountName, // string
     } = args;
@@ -15,11 +15,11 @@ const Wallet = {
       throw new TypeError('accountName needs to be defined');
     }
 
-    return await qClient.getAccountAddress(accountName);
+    return qClient.getAccountAddress(accountName);
   },
 
-  listUnspent: async function() {
-    return await qClient.listUnspent();
+  async listUnspent() {
+    return qClient.listUnspent();
   },
 };
 

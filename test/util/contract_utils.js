@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
 const ContractUtils = {
-  isTxReceipt: function(txReceipt) {
-    return !_.isUndefined(txReceipt) 
-      && !_.isUndefined(txReceipt.txid) 
-      && !_.isUndefined(txReceipt.sender) 
+  isTxReceipt(txReceipt) {
+    return !_.isUndefined(txReceipt)
+      && !_.isUndefined(txReceipt.txid)
+      && !_.isUndefined(txReceipt.sender)
       && !_.isUndefined(txReceipt.hash160);
   },
 };

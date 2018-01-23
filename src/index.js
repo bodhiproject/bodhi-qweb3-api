@@ -1,6 +1,3 @@
-import _ from 'lodash';
-import moment from 'moment';
-import promise from 'bluebird';
 import restify from 'restify';
 import corsMiddleware from 'restify-cors-middleware';
 import Qweb3 from 'qweb3';
@@ -16,8 +13,18 @@ import Oracle from './oracle';
 import CentralizedOracle from './centralized_oracle';
 import DecentralizedOracle from './decentralized_oracle';
 
+function onRequestSuccess(res, result, next) {
+  res.send(200, { result });
+  next();
+}
+
+function onRequestError(res, err, next) {
+  res.send(500, { error: err.message });
+  next();
+}
+
 const server = restify.createServer({
-  name: 'bodhi-api'
+  name: 'bodhi-api',
 });
 
 // Set up CORS to allow request from a different server
@@ -27,7 +34,7 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.bodyParser({ mapParams: true }));
-server.on('after', function (req, res, route, err) {
+server.on('after', (req, res, route, err) => {
   if (route) {
     console.log(`${route.methods[0]} ${route.spec.path} ${res.statusCode}`);
   } else {
@@ -381,16 +388,6 @@ server.post('/last-result-index', (req, res, next) => {
 });
 
 /** Start API server */
-server.listen(8080, function() {
+server.listen(8080, () => {
   console.log('%s listening at %s', server.name, server.url);
 });
-
-function onRequestSuccess(res, result, next) {
-  res.send(200, { result });
-  next();
-}
-
-function onRequestError(res, err, next) {
-  res.send(500, { error: err.message });
-  next();
-}

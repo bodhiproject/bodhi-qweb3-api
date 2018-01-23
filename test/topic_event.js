@@ -12,70 +12,70 @@ Chai.use(ChaiAsPromised);
 const assert = Chai.assert;
 const expect = Chai.expect;
 
-describe('TopicEvent', function() {
+describe('TopicEvent', () => {
   const contractAddress = 'e4ba4d301d4c22d2634a3d8e23c47b7e9e4ef4df';
 
-  describe('withdrawWinnings()', function() {
-    it('returns a tx receipt', function() {
+  describe('withdrawWinnings()', () => {
+    it('returns a tx receipt', () => {
       const res = Mocks.withdrawWinnings.result;
       assert.isTrue(ContractUtils.isTxReceipt(res));
     });
 
-    it('throws if contractAddress is undefined', function() {
+    it('throws if contractAddress is undefined', () => {
       expect(TopicEvent.withdrawWinnings({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', function() {
+    it('throws if senderAddress is undefined', () => {
       expect(TopicEvent.withdrawWinnings({
-        contractAddress: contractAddress,
+        contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('totalQtumValue()', function() {
-    it('returns the totalQtumValue', function() {
+  describe('totalQtumValue()', () => {
+    it('returns the totalQtumValue', () => {
       const res = Mocks.totalQtumValue.result;
       assert.isDefined(res[0]);
       assert.isTrue(Web3Utils.isHex(res[0]));
     });
 
-    it('throws if contractAddress is undefined', function() {
+    it('throws if contractAddress is undefined', () => {
       expect(TopicEvent.totalQtumValue({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', function() {
+    it('throws if senderAddress is undefined', () => {
       expect(TopicEvent.totalQtumValue({
-        contractAddress: contractAddress,
+        contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('totalBotValue()', function() {
-    it('returns the totalBotValue', function() {
+  describe('totalBotValue()', () => {
+    it('returns the totalBotValue', () => {
       const res = Mocks.totalBotValue.result;
       assert.isDefined(res[0]);
       assert.isTrue(Web3Utils.isHex(res[0]));
     });
 
-    it('throws if contractAddress is undefined', function() {
+    it('throws if contractAddress is undefined', () => {
       expect(TopicEvent.totalBotValue({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', function() {
+    it('throws if senderAddress is undefined', () => {
       expect(TopicEvent.totalBotValue({
-        contractAddress: contractAddress,
+        contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('getFinalResult()', function() {
-    it('returns the final result and valid flag', function() {
+  describe('getFinalResult()', () => {
+    it('returns the final result and valid flag', () => {
       const res = Mocks.getFinalResult.result;
       assert.isDefined(res[0]);
       assert.isTrue(Web3Utils.isHex(res[0]));
@@ -83,72 +83,72 @@ describe('TopicEvent', function() {
       assert.isBoolean(res[1]);
     });
 
-    it('throws if contractAddress is undefined', function() {
+    it('throws if contractAddress is undefined', () => {
       expect(TopicEvent.getFinalResult({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', function() {
+    it('throws if senderAddress is undefined', () => {
       expect(TopicEvent.getFinalResult({
-        contractAddress: contractAddress,
+        contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('status()', function() {
-    it('returns the status', function() {
+  describe('status()', () => {
+    it('returns the status', () => {
       const res = Mocks.status.result;
       assert.isDefined(res[0]);
       assert.isTrue(Web3Utils.isHex(res[0]));
     });
 
-    it('throws if contractAddress is undefined', function() {
+    it('throws if contractAddress is undefined', () => {
       expect(TopicEvent.status({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', function() {
+    it('throws if senderAddress is undefined', () => {
       expect(TopicEvent.status({
-        contractAddress: contractAddress,
+        contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('didWithdraw()', function() {
+  describe('didWithdraw()', () => {
     const address = 'qKjn4fStBaAtwGiwueJf9qFxgpbAvf1xAy';
-    
-    it('returns the didWithdraw flag', function() {
+
+    it('returns the didWithdraw flag', () => {
       const res = Mocks.didWithdraw.result;
       assert.isDefined(res[0]);
       assert.isBoolean(res[0]);
     });
 
-    it('throws if contractAddress is undefined', function() {
+    it('throws if contractAddress is undefined', () => {
       expect(TopicEvent.didWithdraw({
-        address: address,
+        address,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if address is undefined', function() {
+    it('throws if address is undefined', () => {
       expect(TopicEvent.didWithdraw({
-        contractAddress: contractAddress,
+        contractAddress,
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', function() {
+    it('throws if senderAddress is undefined', () => {
       expect(TopicEvent.didWithdraw({
-        contractAddress: contractAddress,
-        address: address,
+        contractAddress,
+        address,
       })).to.be.rejectedWith(Error);
     });
   });
 
-  describe('calculateWinnings()', function() {
-    it('returns the BOT and QTUM winnings', function() {
+  describe('calculateWinnings()', () => {
+    it('returns the BOT and QTUM winnings', () => {
       const res = Mocks.calculateWinnings.result;
       assert.isDefined(res[0]);
       assert.isTrue(Web3Utils.isHex(res[0]));
@@ -156,15 +156,15 @@ describe('TopicEvent', function() {
       assert.isTrue(Web3Utils.isHex(res[1]));
     });
 
-    it('throws if contractAddress is undefined', function() {
+    it('throws if contractAddress is undefined', () => {
       expect(TopicEvent.calculateWinnings({
         senderAddress: TestConfig.SENDER_ADDRESS,
       })).to.be.rejectedWith(Error);
     });
 
-    it('throws if senderAddress is undefined', function() {
+    it('throws if senderAddress is undefined', () => {
       expect(TopicEvent.calculateWinnings({
-        contractAddress: contractAddress,
+        contractAddress,
       })).to.be.rejectedWith(Error);
     });
   });

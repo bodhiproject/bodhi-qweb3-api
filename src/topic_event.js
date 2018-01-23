@@ -4,8 +4,12 @@ import { Contract } from 'qweb3';
 import Config from '../config/config';
 import ContractMetadata from '../config/contract_metadata';
 
+function getContract(contractAddress) {
+  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.TopicEvent.abi);
+}
+
 const TopicEvent = {
-  withdrawWinnings: async function(args) {
+  async withdrawWinnings(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -19,13 +23,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.send('withdrawWinnings', {
+    return contract.send('withdrawWinnings', {
       methodArgs: [],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  totalQtumValue: async function(args) {
+  async totalQtumValue(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -39,13 +43,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('totalQtumValue', {
+    return contract.call('totalQtumValue', {
       methodArgs: [],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  totalBotValue: async function(args) {
+  async totalBotValue(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -59,13 +63,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('totalBotValue', {
+    return contract.call('totalBotValue', {
       methodArgs: [],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  getFinalResult: async function(args) {
+  async getFinalResult(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -79,13 +83,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('getFinalResult', {
+    return contract.call('getFinalResult', {
       methodArgs: [],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  status: async function(args) {
+  async status(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -99,13 +103,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('status', {
+    return contract.call('status', {
       methodArgs: [],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  didWithdraw: async function(args) {
+  async didWithdraw(args) {
     const {
       contractAddress, // address
       address, // address
@@ -123,13 +127,13 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('didWithdraw', {
+    return contract.call('didWithdraw', {
       methodArgs: [address],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 
-  calculateWinnings: async function(args) {
+  async calculateWinnings(args) {
     const {
       contractAddress, // address
       senderAddress, // address
@@ -143,15 +147,11 @@ const TopicEvent = {
     }
 
     const contract = getContract(contractAddress);
-    return await contract.call('calculateWinnings', {
+    return contract.call('calculateWinnings', {
       methodArgs: [],
-      senderAddress: senderAddress,
+      senderAddress,
     });
   },
 };
-
-function getContract(contractAddress) {
-  return new Contract(Config.QTUM_RPC_ADDRESS, contractAddress, ContractMetadata.TopicEvent.abi);
-}
 
 module.exports = TopicEvent;
