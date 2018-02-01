@@ -1,3 +1,5 @@
+### DEPRECATED. Bodhi-API is now part of [Bodhi-GraphQL](https://github.com/bodhiproject/bodhi-graphql).
+
 # Bodhi-API
 An open source local API server for interacting with the Bodhi-Core platform and Qtum blockchain.
 
